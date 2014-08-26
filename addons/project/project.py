@@ -227,7 +227,11 @@ class project(osv.osv):
     _columns = {
         'active': fields.boolean('Active', help="If the active field is set to False, it will allow you to hide the project without removing it."),
         'sequence': fields.integer('Sequence', help="Gives the sequence order when displaying a list of Projects."),
-        'analytic_account_id': fields.many2one('account.analytic.account', 'Contract/Analytic', help="Link this project to an analytic account if you need financial management on projects. It enables you to connect projects with budgets, planning, cost and revenue analysis, timesheets on projects, etc.", ondelete="cascade", required=True),
+        'analytic_account_id': fields.many2one(
+            'account.analytic.account', 'Contract/Analytic',
+            help="Link this project to an analytic account if you need financial management on projects. "
+                 "It enables you to connect projects with budgets, planning, cost and revenue analysis, timesheets on projects, etc.",
+            ondelete="cascade", required=True, auto_join=True),
         'members': fields.many2many('res.users', 'project_user_rel', 'project_id', 'uid', 'Project Members',
             help="Project's members are users who can have an access to the tasks related to this project.", states={'close':[('readonly',True)], 'cancelled':[('readonly',True)]}),
         'tasks': fields.one2many('project.task', 'project_id', "Task Activities"),
@@ -778,7 +782,7 @@ class task(osv.osv):
         'project_id': _get_default_project_id,
         'date_last_stage_update': fields.datetime.now,
         'kanban_state': 'normal',
-        'priority': '1',
+        'priority': '0',
         'progress': 0,
         'sequence': 10,
         'active': True,
@@ -787,8 +791,8 @@ class task(osv.osv):
         'company_id': lambda self, cr, uid, ctx=None: self.pool.get('res.company')._company_default_get(cr, uid, 'project.task', context=ctx),
         'partner_id': lambda self, cr, uid, ctx=None: self._get_default_partner(cr, uid, context=ctx),
     }
-    _order = "priority, sequence, date_start, name, id"
-    
+    _order = "priority desc, sequence, date_start, name, id"
+
     def _check_recursion(self, cr, uid, ids, context=None):
         for id in ids:
             visited_branch = set()
