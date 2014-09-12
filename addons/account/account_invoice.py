@@ -21,6 +21,7 @@
 
 import itertools
 from lxml import etree
+import pdb
 
 from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
@@ -186,25 +187,25 @@ class account_invoice(models.Model):
             partial_lines += line
         self.payment_ids = (lines - partial_lines).sorted()
 
-    name = fields.Char(string='Reference/Description', index=True,
+    name = fields.Char(string='Odnośnik/Opis', index=True,
         readonly=True, states={'draft': [('readonly', False)]})
-    origin = fields.Char(string='Source Document',
+    origin = fields.Char(string='Źródło dokumentu',
         help="Reference of the document that produced this invoice.",
         readonly=True, states={'draft': [('readonly', False)]})
     supplier_invoice_number = fields.Char(string='Supplier Invoice Number',
         help="The reference of this invoice as provided by the supplier.",
         readonly=True, states={'draft': [('readonly', False)]})
     type = fields.Selection([
-            ('out_invoice','Customer Invoice'),
-            ('in_invoice','Supplier Invoice'),
-            ('out_refund','Customer Refund'),
-            ('in_refund','Supplier Refund'),
+            ('out_invoice','Faktura klienta'),
+            ('in_invoice','Faktura dostawcy'),
+            ('out_refund','Refundacja klienta'),
+            ('in_refund','Refundacja dostawcy'),
         ], string='Type', readonly=True, index=True, change_default=True,
         default=lambda self: self._context.get('type', 'out_invoice'),
         track_visibility='always')
 
-    number = fields.Char(related='move_id.name', store=True, readonly=True, copy=False)
-    internal_number = fields.Char(string='Invoice Number', readonly=True,
+    number = fields.Char(related='move_id.name', store=True, readonly=True, copy=False, string='Numer')
+    internal_number = fields.Char(string='Numer faktury', readonly=True,
         default=False, copy=False,
         help="Unique number of the invoice, computed automatically when the invoice is created.")
     reference = fields.Char(string='Invoice Reference',
@@ -212,15 +213,15 @@ class account_invoice(models.Model):
     reference_type = fields.Selection('_get_reference_type', string='Payment Reference',
         required=True, readonly=True, states={'draft': [('readonly', False)]},
         default='none')
-    comment = fields.Text('Additional Information')
+    comment = fields.Text('Dodatkowe informacje')
 
     state = fields.Selection([
-            ('draft','Draft'),
+            ('draft','Projekt'),
             ('proforma','Pro-forma'),
             ('proforma2','Pro-forma'),
-            ('open','Open'),
-            ('paid','Paid'),
-            ('cancel','Cancelled'),
+            ('open','Otwarta'),
+            ('paid','Zapłacona'),
+            ('cancel','Anulowana'),
         ], string='Status', index=True, readonly=True, default='draft',
         track_visibility='onchange', copy=False,
         help=" * The 'Draft' status is used when a user is encoding a new and unconfirmed Invoice.\n"
@@ -230,20 +231,20 @@ class account_invoice(models.Model):
              " * The 'Cancelled' status is used when user cancel invoice.")
     sent = fields.Boolean(readonly=True, default=False, copy=False,
         help="It indicates that the invoice has been sent.")
-    date_invoice = fields.Date(string='Invoice Date',
+    date_invoice = fields.Date(string='Data faktury',
         readonly=True, states={'draft': [('readonly', False)]}, index=True,
         help="Keep empty to use the current date", copy=False)
-    date_due = fields.Date(string='Due Date',
+    date_due = fields.Date(string='Termin',
         readonly=True, states={'draft': [('readonly', False)]}, index=True, copy=False,
         help="If you use payment terms, the due date will be computed automatically at the generation "
              "of accounting entries. The payment term may compute several due dates, for example 50% "
              "now and 50% in one month, but if you want to force a due date, make sure that the payment "
              "term is not set on the invoice. If you keep the payment term and the due date empty, it "
              "means direct payment.")
-    partner_id = fields.Many2one('res.partner', string='Partner', change_default=True,
+    partner_id = fields.Many2one('res.partner', string='Klient', change_default=True,
         required=True, readonly=True, states={'draft': [('readonly', False)]},
         track_visibility='always')
-    payment_term = fields.Many2one('account.payment.term', string='Payment Terms',
+    payment_term = fields.Many2one('account.payment.term', string='Warunki patności',
         readonly=True, states={'draft': [('readonly', False)]},
         help="If you use payment terms, the due date will be computed automatically at the generation "
              "of accounting entries. If you keep the payment term and the due date empty, it means direct payment. "
@@ -253,32 +254,32 @@ class account_invoice(models.Model):
         help="Keep empty to use the period of the validation(invoice) date.",
         readonly=True, states={'draft': [('readonly', False)]})
 
-    account_id = fields.Many2one('account.account', string='Account',
+    account_id = fields.Many2one('account.account', string='Konto',
         required=True, readonly=True, states={'draft': [('readonly', False)]},
         help="The partner account used for this invoice.")
-    invoice_line = fields.One2many('account.invoice.line', 'invoice_id', string='Invoice Lines',
+    invoice_line = fields.One2many('account.invoice.line', 'invoice_id', string='Pozycje faktury',
         readonly=True, states={'draft': [('readonly', False)]}, copy=True)
     tax_line = fields.One2many('account.invoice.tax', 'invoice_id', string='Tax Lines',
         readonly=True, states={'draft': [('readonly', False)]}, copy=True)
-    move_id = fields.Many2one('account.move', string='Journal Entry',
+    move_id = fields.Many2one('account.move', string='Zapis dziennika',
         readonly=True, index=True, ondelete='restrict', copy=False,
         help="Link to the automatically generated Journal Items.")
 
-    amount_untaxed = fields.Float(string='Subtotal', digits=dp.get_precision('Account'),
+    amount_untaxed = fields.Float(string='Suma netto', digits=dp.get_precision('Account'),
         store=True, readonly=True, compute='_compute_amount', track_visibility='always')
-    amount_tax = fields.Float(string='Tax', digits=dp.get_precision('Account'),
+    amount_tax = fields.Float(string='Podatek', digits=dp.get_precision('Account'),
         store=True, readonly=True, compute='_compute_amount')
-    amount_total = fields.Float(string='Total', digits=dp.get_precision('Account'),
+    amount_total = fields.Float(string='Razem', digits=dp.get_precision('Account'),
         store=True, readonly=True, compute='_compute_amount')
 
-    currency_id = fields.Many2one('res.currency', string='Currency',
+    currency_id = fields.Many2one('res.currency', string='Waluta',
         required=True, readonly=True, states={'draft': [('readonly', False)]},
         default=_default_currency, track_visibility='always')
-    journal_id = fields.Many2one('account.journal', string='Journal',
+    journal_id = fields.Many2one('account.journal', string='Dziennik',
         required=True, readonly=True, states={'draft': [('readonly', False)]},
         default=_default_journal,
         domain="[('type', 'in', {'out_invoice': ['sale'], 'out_refund': ['sale_refund'], 'in_refund': ['purchase_refund'], 'in_invoice': ['purchase']}.get(type, [])), ('company_id', '=', company_id)]")
-    company_id = fields.Many2one('res.company', string='Company', change_default=True,
+    company_id = fields.Many2one('res.company', string='Firma', change_default=True,
         required=True, readonly=True, states={'draft': [('readonly', False)]},
         default=lambda self: self.env['res.company']._company_default_get('account.invoice'))
     check_total = fields.Float(string='Verification Total', digits=dp.get_precision('Account'),
@@ -287,23 +288,23 @@ class account_invoice(models.Model):
     reconciled = fields.Boolean(string='Paid/Reconciled',
         store=True, readonly=True, compute='_compute_reconciled',
         help="It indicates that the invoice has been paid and the journal entry of the invoice has been reconciled with one or several journal entries of payment.")
-    partner_bank_id = fields.Many2one('res.partner.bank', string='Bank Account',
+    partner_bank_id = fields.Many2one('res.partner.bank', string='Konto bankowe',
         help='Bank Account Number to which the invoice will be paid. A Company bank account if this is a Customer Invoice or Supplier Refund, otherwise a Partner bank account number.',
         readonly=True, states={'draft': [('readonly', False)]})
 
     move_lines = fields.Many2many('account.move.line', string='Entry Lines',
         compute='_compute_move_lines')
-    residual = fields.Float(string='Balance', digits=dp.get_precision('Account'),
+    residual = fields.Float(string='Bilans', digits=dp.get_precision('Account'),
         compute='_compute_residual', store=True,
         help="Remaining amount due.")
-    payment_ids = fields.Many2many('account.move.line', string='Payments',
+    payment_ids = fields.Many2many('account.move.line', string='Płatności',
         compute='_compute_payments')
     move_name = fields.Char(string='Journal Entry', readonly=True,
         states={'draft': [('readonly', False)]}, copy=False)
-    user_id = fields.Many2one('res.users', string='Salesperson', track_visibility='onchange',
+    user_id = fields.Many2one('res.users', string='Sprzedawca', track_visibility='onchange',
         readonly=True, states={'draft': [('readonly', False)]},
         default=lambda self: self.env.user)
-    fiscal_position = fields.Many2one('account.fiscal.position', string='Fiscal Position',
+    fiscal_position = fields.Many2one('account.fiscal.position', string='Obszar podatkowy',
         readonly=True, states={'draft': [('readonly', False)]})
     commercial_partner_id = fields.Many2one('res.partner', string='Commercial Entity',
         related='partner_id.commercial_partner_id', store=True, readonly=True,
@@ -1244,36 +1245,36 @@ class account_invoice_line(models.Model):
         else:
             return self.env['ir.property'].get('property_account_expense_categ', 'product.category')
 
-    name = fields.Text(string='Description', required=True)
-    origin = fields.Char(string='Source Document',
+    name = fields.Text(string='Opis', required=True)
+    origin = fields.Char(string='Dokument źródłowy',
         help="Reference of the document that produced this invoice.")
     sequence = fields.Integer(string='Sequence', default=10,
         help="Gives the sequence of this line when displaying the invoice.")
     invoice_id = fields.Many2one('account.invoice', string='Invoice Reference',
         ondelete='cascade', index=True)
-    uos_id = fields.Many2one('product.uom', string='Unit of Measure',
+    uos_id = fields.Many2one('product.uom', string='Jednostka miary',
         ondelete='set null', index=True)
-    product_id = fields.Many2one('product.product', string='Product',
+    product_id = fields.Many2one('product.product', string='Produkt',
         ondelete='set null', index=True)
-    account_id = fields.Many2one('account.account', string='Account',
+    account_id = fields.Many2one('account.account', string='Konto',
         required=True, domain=[('type', 'not in', ['view', 'closed'])],
         default=_default_account,
         help="The income or expense account related to the selected product.")
-    price_unit = fields.Float(string='Unit Price', required=True,
+    price_unit = fields.Float(string='Cena jednostkowa', required=True,
         digits= dp.get_precision('Product Price'),
         default=_default_price_unit)
-    price_subtotal = fields.Float(string='Amount', digits= dp.get_precision('Account'),
+    price_subtotal = fields.Float(string='Kwota', digits= dp.get_precision('Account'),
         store=True, readonly=True, compute='_compute_price')
-    quantity = fields.Float(string='Quantity', digits= dp.get_precision('Product Unit of Measure'),
+    quantity = fields.Float(string='Ilość', digits= dp.get_precision('Product Unit of Measure'),
         required=True, default=1)
-    discount = fields.Float(string='Discount (%)', digits= dp.get_precision('Discount'),
+    discount = fields.Float(string='Rabat (%)', digits= dp.get_precision('Discount'),
         default=0.0)
     invoice_line_tax_id = fields.Many2many('account.tax',
         'account_invoice_line_tax', 'invoice_line_id', 'tax_id',
-        string='Taxes', domain=[('parent_id', '=', False)])
+        string='Podatki', domain=[('parent_id', '=', False)])
     account_analytic_id = fields.Many2one('account.analytic.account',
         string='Analytic Account')
-    company_id = fields.Many2one('res.company', string='Company',
+    company_id = fields.Many2one('res.company', string='Firma',
         related='invoice_id.company_id', store=True, readonly=True)
     partner_id = fields.Many2one('res.partner', string='Partner',
         related='invoice_id.partner_id', store=True, readonly=True)
@@ -1474,13 +1475,13 @@ class account_invoice_tax(models.Model):
 
     invoice_id = fields.Many2one('account.invoice', string='Invoice Line',
         ondelete='cascade', index=True)
-    name = fields.Char(string='Tax Description',
+    name = fields.Char(string='Opis podaktu',
         required=True)
     account_id = fields.Many2one('account.account', string='Tax Account',
         required=True, domain=[('type', 'not in', ['view', 'income', 'closed'])])
     account_analytic_id = fields.Many2one('account.analytic.account', string='Analytic account')
-    base = fields.Float(string='Base', digits=dp.get_precision('Account'))
-    amount = fields.Float(string='Amount', digits=dp.get_precision('Account'))
+    base = fields.Float(string='Podstawa', digits=dp.get_precision('Account'))
+    amount = fields.Float(string='Konto', digits=dp.get_precision('Account'))
     manual = fields.Boolean(string='Manual', default=True)
     sequence = fields.Integer(string='Sequence',
         help="Gives the sequence order when displaying a list of invoice tax.")

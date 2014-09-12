@@ -439,16 +439,16 @@ class account_move_line(osv.osv):
 
 
     _columns = {
-        'name': fields.char('Name', required=True),
+        'name': fields.char('Nazwa', required=True),
         'quantity': fields.float('Quantity', digits=(16,2), help="The optional quantity expressed by this line, eg: number of product sold. The quantity is not a legal requirement but is very useful for some reports."),
         'product_uom_id': fields.many2one('product.uom', 'Unit of Measure'),
         'product_id': fields.many2one('product.product', 'Product'),
-        'debit': fields.float('Debit', digits_compute=dp.get_precision('Account')),
-        'credit': fields.float('Credit', digits_compute=dp.get_precision('Account')),
+        'debit': fields.float('Debet', digits_compute=dp.get_precision('Account')),
+        'credit': fields.float('Kredyt', digits_compute=dp.get_precision('Account')),
         'account_id': fields.many2one('account.account', 'Account', required=True, ondelete="cascade", domain=[('type','<>','view'), ('type', '<>', 'closed')], select=2),
-        'move_id': fields.many2one('account.move', 'Journal Entry', ondelete="cascade", help="The move of this entry line.", select=2, required=True),
+        'move_id': fields.many2one('account.move', 'Wpis', ondelete="cascade", help="The move of this entry line.", select=2, required=True),
         'narration': fields.related('move_id','narration', type='text', relation='account.move', string='Internal Note'),
-        'ref': fields.related('move_id', 'ref', string='Reference', type='char', store=True),
+        'ref': fields.related('move_id', 'ref', string='Odniesienie', type='char', store=True),
         'statement_id': fields.many2one('account.bank.statement', 'Statement', help="The bank statement used for bank reconciliation", select=1, copy=False),
         'reconcile_id': fields.many2one('account.move.reconcile', 'Reconcile', readonly=True, ondelete='set null', select=2, copy=False),
         'reconcile_partial_id': fields.many2one('account.move.reconcile', 'Partial Reconcile', readonly=True, ondelete='set null', select=2, copy=False),
@@ -458,7 +458,7 @@ class account_move_line(osv.osv):
         'amount_residual_currency': fields.function(_amount_residual, string='Residual Amount in Currency', multi="residual", help="The residual amount on a receivable or payable of a journal entry expressed in its currency (maybe different of the company currency)."),
         'amount_residual': fields.function(_amount_residual, string='Residual Amount', multi="residual", help="The residual amount on a receivable or payable of a journal entry expressed in the company currency."),
         'currency_id': fields.many2one('res.currency', 'Currency', help="The optional other currency if it is a multi-currency entry."),
-        'journal_id': fields.related('move_id', 'journal_id', string='Journal', type='many2one', relation='account.journal', required=True, select=True,
+        'journal_id': fields.related('move_id', 'journal_id', string='Dziennik', type='many2one', relation='account.journal', required=True, select=True,
                                 store = {
                                     'account.move': (_get_move_lines, ['journal_id'], 20)
                                 }),
@@ -469,7 +469,7 @@ class account_move_line(osv.osv):
         'blocked': fields.boolean('No Follow-up', help="You can check this box to mark this journal item as a litigation with the associated partner"),
         'partner_id': fields.many2one('res.partner', 'Partner', select=1, ondelete='restrict'),
         'date_maturity': fields.date('Due date', select=True ,help="This field is used for payable and receivable journal entries. You can put the limit date for the payment of this line."),
-        'date': fields.related('move_id','date', string='Effective date', type='date', required=True, select=True,
+        'date': fields.related('move_id','date', string='Data rozpoczęcia', type='date', required=True, select=True,
                                 store = {
                                     'account.move': (_get_move_lines, ['date'], 20)
                                 }),
