@@ -37,6 +37,8 @@ from openerp.tools import config
 from .. import http
 openerpweb = http
 
+import pdb
+
 #----------------------------------------------------------
 # OpenERP Web helpers
 #----------------------------------------------------------
@@ -1480,8 +1482,11 @@ class Export(openerpweb.Controller):
         else:
             fields['.id'] = fields.pop('id', {'string': 'ID'})
 
-        fields_sequence = sorted(fields.iteritems(),
-            key=lambda field: field[1].get('string', ''))
+        """don't sort beacuse PL unicode signs throw error"""
+        #fields_sequence = sorted(fields.iteritems(),
+        #    key=lambda field: field[1].get('string', ''))
+        fields_sequence = sorted(fields.iteritems())
+        
 
         records = []
         for field_name, field in fields_sequence:

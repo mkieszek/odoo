@@ -22,6 +22,7 @@
 import math
 import re
 
+import math
 from _common import ceiling
 
 from openerp import tools, SUPERUSER_ID
@@ -53,6 +54,7 @@ def ean_checksum(eancode):
 
 def check_ean(eancode):
     """returns True if eancode is a valid ean13 string, or null"""
+    return True
     if not eancode:
         return True
     if len(eancode) <> 13:
@@ -178,7 +180,7 @@ class product_uom(osv.osv):
                 return qty
         amount = qty / from_unit.factor
         if to_unit:
-            amount = ceiling(amount * to_unit.factor, to_unit.rounding)
+            amount = math.ceil(amount * to_unit.factor, to_unit.rounding)
         return amount
 
     def _compute_price(self, cr, uid, from_uom_id, price, to_uom_id=False):
@@ -305,7 +307,7 @@ class product_template(osv.osv):
         'categ_id': fields.many2one('product.category','Category', required=True, change_default=True, domain="[('type','=','normal')]" ,help="Select category for the current product"),
         'list_price': fields.float('Sale Price', digits_compute=dp.get_precision('Product Price'), help="Base price to compute the customer price. Sometimes called the catalog price."),
         'standard_price': fields.float('Cost', digits_compute=dp.get_precision('Product Price'), help="Cost price of the product used for standard stock valuation in accounting and used as a base price on purchase orders.", groups="base.group_user"),
-        'volume': fields.float('Volume', help="The volume in m3."),
+        'volume': fields.float('Volume', help="The volume in m3.", digits=(0,10)),
         'weight': fields.float('Gross Weight', digits_compute=dp.get_precision('Stock Weight'), help="The gross weight in Kg."),
         'weight_net': fields.float('Net Weight', digits_compute=dp.get_precision('Stock Weight'), help="The net weight in Kg."),
         'cost_method': fields.selection([('standard','Standard Price'), ('average','Average Price')], 'Costing Method', required=True,
@@ -635,7 +637,7 @@ class product_product(osv.osv):
             name = d.get('name','')
             code = d.get('default_code',False)
             if code:
-                name = '[%s] %s' % (code,name)
+                name = '%s' % (name)
             if d.get('variants'):
                 name = name + ' - %s' % (d['variants'],)
             return (d['id'], name)
