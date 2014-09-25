@@ -314,16 +314,16 @@
 }
 .openerp .oe_highlight {
   color: white;
-  background: #dc5f59;
+  background: #77bc1f;
 }
 .openerp button.oe_highlight {
-  background-color: #c02c2c;
+  background-color: #77bc1f;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#df3f3f), to(#a21a1a));
-  background-image: -webkit-linear-gradient(top, #df3f3f, #a21a1a);
-  background-image: -moz-linear-gradient(top, #df3f3f, #a21a1a);
-  background-image: -ms-linear-gradient(top, #df3f3f, #a21a1a);
-  background-image: -o-linear-gradient(top, #df3f3f, #a21a1a);
-  background-image: linear-gradient(to bottom, #df3f3f, #a21a1a);
+  background-image: -webkit-linear-gradient(top, #77bc1f, #77bc1f);
+  background-image: -moz-linear-gradient(top, #77bc1f, #77bc1f);
+  background-image: -ms-linear-gradient(top, #77bc1f, #77bc1f);
+  background-image: -o-linear-gradient(top, #77bc1f, #77bc1f);
+  background-image: linear-gradient(to bottom, #77bc1f, #77bc1f);
   -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(155, 155, 155, 0.4) inset;
@@ -351,17 +351,17 @@
 }
 .openerp .oe_form_dirty .oe_highlight_on_dirty {
   color: white;
-  background: #dc5f59;
+  background: #77bc1f;
   font-weight: bold;
 }
 .openerp .oe_form_dirty button.oe_highlight_on_dirty {
   background-color: #c74a44;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#dc5f59), to(#b33630));
-  background-image: -webkit-linear-gradient(top, #dc5f59, #b33630);
-  background-image: -moz-linear-gradient(top, #dc5f59, #b33630);
-  background-image: -ms-linear-gradient(top, #dc5f59, #b33630);
-  background-image: -o-linear-gradient(top, #dc5f59, #b33630);
-  background-image: linear-gradient(to bottom, #dc5f59, #b33630);
+  background-image: -webkit-linear-gradient(top, #77bc1f, #b33630);
+  background-image: -moz-linear-gradient(top, #77bc1f, #b33630);
+  background-image: -ms-linear-gradient(top, #77bc1f, #b33630);
+  background-image: -o-linear-gradient(top, #77bc1f, #b33630);
+  background-image: linear-gradient(to bottom, #77bc1f, #b33630);
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -813,10 +813,10 @@
   top: 0;
   right: 50%;
   padding: 4px 12px;
-  background: #a61300;
+  background: #77bc1f;
   color: white;
   text-align: center;
-  border: 1px solid #990000;
+  border: 1px solid #77bc1f;
   border-top: none;
   -moz-border-radius-bottomright: 8px;
   -moz-border-radius-bottomleft: 8px;
@@ -1961,7 +1961,7 @@
 }
 .openerp .oe_form .oe_form_box_warning {
   background: #bd362f;
-  border-bottom: 1px solid #990000;
+  border-bottom: 1px solid #77bc1f;
   padding: 4px;
 }
 .openerp .oe_form .oe_form_box_warning * {
