@@ -1480,8 +1480,11 @@ class Export(openerpweb.Controller):
         else:
             fields['.id'] = fields.pop('id', {'string': 'ID'})
 
-        fields_sequence = sorted(fields.iteritems(),
-            key=lambda field: field[1].get('string', ''))
+        """don't sort beacuse PL unicode signs throw error"""
+        #fields_sequence = sorted(fields.iteritems(),
+        #    key=lambda field: field[1].get('string', ''))
+        fields_sequence = sorted(fields.iteritems())
+        
 
         records = []
         for field_name, field in fields_sequence:
@@ -1583,7 +1586,7 @@ class Export(openerpweb.Controller):
     def graft_subfields(self, req, model, prefix, prefix_string, fields):
         export_fields = [field.split('/', 1)[1] for field in fields]
         return (
-            (prefix + '/' + k, prefix_string + '/' + v)
+            (prefix + '/' + k, prefix_string.decode('utf-8') + '/' + v)
             for k, v in self.fields_info(req, model, export_fields).iteritems())
 
 class ExportFormat(object):

@@ -22,9 +22,9 @@
 import math
 import re
 
-from _common import ceiling
+import math
 
-from openerp import tools, SUPERUSER_ID
+from openerp import tools
 from openerp.osv import osv, fields
 from openerp.tools.translate import _
 
@@ -53,6 +53,7 @@ def ean_checksum(eancode):
 
 def check_ean(eancode):
     """returns True if eancode is a valid ean13 string, or null"""
+    return True
     if not eancode:
         return True
     if len(eancode) <> 13:
@@ -178,7 +179,7 @@ class product_uom(osv.osv):
                 return qty
         amount = qty / from_unit.factor
         if to_unit:
-            amount = ceiling(amount * to_unit.factor, to_unit.rounding)
+            amount = math.ceil(amount * to_unit.factor, to_unit.rounding)
         return amount
 
     def _compute_price(self, cr, uid, from_uom_id, price, to_uom_id=False):
@@ -305,7 +306,7 @@ class product_template(osv.osv):
         'categ_id': fields.many2one('product.category','Category', required=True, change_default=True, domain="[('type','=','normal')]" ,help="Select category for the current product"),
         'list_price': fields.float('Sale Price', digits_compute=dp.get_precision('Product Price'), help="Base price to compute the customer price. Sometimes called the catalog price."),
         'standard_price': fields.float('Cost', digits_compute=dp.get_precision('Product Price'), help="Cost price of the product used for standard stock valuation in accounting and used as a base price on purchase orders.", groups="base.group_user"),
-        'volume': fields.float('Volume', help="The volume in m3."),
+        'volume': fields.float('Volume', help="The volume in m3.", digits=(0,10)),
         'weight': fields.float('Gross Weight', digits_compute=dp.get_precision('Stock Weight'), help="The gross weight in Kg."),
         'weight_net': fields.float('Net Weight', digits_compute=dp.get_precision('Stock Weight'), help="The net weight in Kg."),
         'cost_method': fields.selection([('standard','Standard Price'), ('average','Average Price')], 'Costing Method', required=True,
@@ -589,9 +590,6 @@ class product_product(osv.osv):
         unlink_ids = []
         unlink_product_tmpl_ids = []
         for product in self.browse(cr, uid, ids, context=context):
-            # Check if product still exists, in case it has been unlinked by unlinking its template
-            if not product.exists():
-                continue
             tmpl_id = product.product_tmpl_id.id
             # Check if the product is last product of this template
             other_product_ids = self.search(cr, uid, [('product_tmpl_id', '=', tmpl_id), ('id', '!=', product.id)], context=context)
@@ -635,7 +633,7 @@ class product_product(osv.osv):
             name = d.get('name','')
             code = d.get('default_code',False)
             if code:
-                name = '[%s] %s' % (code,name)
+                name = '%s' % (name)
             if d.get('variants'):
                 name = name + ' - %s' % (d['variants'],)
             return (d['id'], name)
@@ -706,7 +704,7 @@ class product_product(osv.osv):
 
         res = {}
         product_uom_obj = self.pool.get('product.uom')
-        for product in self.browse(cr, SUPERUSER_ID, ids, context=context):
+        for product in self.browse(cr, uid, ids, context=context):
             res[product.id] = product[ptype] or 0.0
             if ptype == 'list_price':
                 res[product.id] = (res[product.id] * (product.price_margin or 1.0)) + \
@@ -731,7 +729,11 @@ class product_product(osv.osv):
         if not default:
             default = {}
 
-        product = self.read(cr, uid, id, ['name'], context=context)
+        # Craft our own `<name> (copy)` in en_US (self.copy_translation()
+        # will do the other languages).
+        context_wo_lang = context.copy()
+        context_wo_lang.pop('lang', None)
+        product = self.read(cr, uid, id, ['name'], context=context_wo_lang)
         default = default.copy()
         default.update(name=_("%s (copy)") % (product['name']))
 
