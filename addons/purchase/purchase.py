@@ -32,6 +32,7 @@ from openerp.tools.translate import _
 import openerp.addons.decimal_precision as dp
 from openerp.osv.orm import browse_record, browse_null
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT, DATETIME_FORMATS_MAP
+from openerp.tools.float_utils import float_compare
 
 class purchase_order(osv.osv):
 
@@ -470,7 +471,7 @@ class purchase_order(osv.osv):
             if not acc_id:
                 acc_id = po_line.product_id.categ_id.property_account_expense_categ.id
             if not acc_id:
-                raise osv.except_osv(_('Error!'), _('Define expense account for this company: "%s" (id:%d).') % (po_line.product_id.name, po_line.product_id.id,))
+                raise osv.except_osv(_('Error!'), _('Define expense account for this product: "%s" (id:%d).') % (po_line.product_id.name, po_line.product_id.id,))
         else:
             acc_id = property_obj.get(cr, uid, 'property_account_expense_categ', 'product.category', context=context).id
         fpos = po_line.order_id.fiscal_position or False
@@ -1013,13 +1014,14 @@ class purchase_order_line(osv.osv):
 
 
         supplierinfo = False
+        precision = self.pool.get('decimal.precision').precision_get(cr, uid, 'Product Unit of Measure')
         for supplier in product.seller_ids:
             if partner_id and (supplier.name.id == partner_id):
                 supplierinfo = supplier
                 if supplierinfo.product_uom.id != uom_id:
                     res['warning'] = {'title': _('Warning!'), 'message': _('The selected supplier only sells this product by %s') % supplierinfo.product_uom.name }
                 min_qty = product_uom._compute_qty(cr, uid, supplierinfo.product_uom.id, supplierinfo.min_qty, to_uom_id=uom_id)
-                if (qty or 0.0) < min_qty: # If the supplier quantity is greater than entered from user, set minimal.
+                if float_compare(min_qty , qty, precision_digits=precision) == 1: # If the supplier quantity is greater than entered from user, set minimal.
                     if qty:
                         res['warning'] = {'title': _('Warning!'), 'message': _('The selected supplier has a minimal quantity set to %s %s, you should not purchase less.') % (supplierinfo.min_qty, supplierinfo.product_uom.name)}
                     qty = min_qty
