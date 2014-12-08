@@ -189,10 +189,11 @@ class project_issue(osv.Model):
             res[issue.id] = {'progress' : progress}
         return res
 
-    def on_change_project(self, cr, uid, ids, project_id, context=None):
+    def on_change_project(self, cr, uid, ids, project_id, partner_id, context=None):
         if project_id:
             project = self.pool.get('project.project').browse(cr, uid, project_id, context=context)
-            if project and project.partner_id:
+            '''why change partner if partner is already set'''
+            if project and project.partner_id and not partner_id:
                 return {'value': {'partner_id': project.partner_id.id}}
         return {}
 
