@@ -1588,7 +1588,7 @@ class Export(openerpweb.Controller):
     def graft_subfields(self, req, model, prefix, prefix_string, fields):
         export_fields = [field.split('/', 1)[1] for field in fields]
         return (
-            (prefix + '/' + k, prefix_string + '/' + v)
+            (prefix + '/' + k, prefix_string.decode('utf-8') + '/' + v)
             for k, v in self.fields_info(req, model, export_fields).iteritems())
 
 class ExportFormat(object):

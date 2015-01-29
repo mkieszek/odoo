@@ -1021,12 +1021,21 @@
   background-color: #dc5f59;
   color: #eeeeee;
   background-color: #be4343;
+<<<<<<< HEAD
   background-image: -webkit-gradient(linear, left top, left bottom, from(#FC8787), to(#800000));
   background-image: -webkit-linear-gradient(top, #FC8787, #800000);
   background-image: -moz-linear-gradient(top, #FC8787, #800000);
   background-image: -ms-linear-gradient(top, #FC8787, #800000);
   background-image: -o-linear-gradient(top, #FC8787, #800000);
   background-image: linear-gradient(to bottom, #FC8787, #800000);
+=======
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#fc8787), to(maroon));
+  background-image: -webkit-linear-gradient(top, #fc8787, maroon);
+  background-image: -moz-linear-gradient(top, #fc8787, maroon);
+  background-image: -ms-linear-gradient(top, #fc8787, maroon);
+  background-image: -o-linear-gradient(top, #fc8787, maroon);
+  background-image: linear-gradient(to bottom, #fc8787, #800000);
+>>>>>>> cederroth_7.0
 }
 .openerp .oe_topbar .oe_topbar_anonymous_login a {
   display: block;

@@ -27,9 +27,13 @@ from _common import ceiling
 
 from openerp import tools, SUPERUSER_ID
 from openerp.osv import osv, fields, expression
-from openerp.tools.translate import _
 
+from openerp import tools
+from openerp.osv import osv, fields
+from openerp.tools.translate import _
 import openerp.addons.decimal_precision as dp
+
+
 from openerp.tools.float_utils import float_round
 
 def ean_checksum(eancode):
@@ -601,9 +605,6 @@ class product_product(osv.osv):
         unlink_ids = []
         unlink_product_tmpl_ids = []
         for product in self.browse(cr, uid, ids, context=context):
-            # Check if product still exists, in case it has been unlinked by unlinking its template
-            if not product.exists():
-                continue
             tmpl_id = product.product_tmpl_id.id
             # Check if the product is last product of this template
             other_product_ids = self.search(cr, uid, [('product_tmpl_id', '=', tmpl_id), ('id', '!=', product.id)], context=context)
@@ -727,8 +728,12 @@ class product_product(osv.osv):
 
         res = {}
         product_uom_obj = self.pool.get('product.uom')
+<<<<<<< HEAD
         company_id = self.pool['res.users'].read(cr, uid, uid, ['company_id'], context=context)['company_id'][0]
         for product in self.browse(cr, SUPERUSER_ID, ids, context=dict(context, force_company=company_id)):
+=======
+        for product in self.browse(cr, uid, ids, context=context):
+>>>>>>> cederroth_7.0
             res[product.id] = product[ptype] or 0.0
             if ptype == 'list_price':
                 res[product.id] = (res[product.id] * (product.price_margin or 1.0)) + \
@@ -753,7 +758,11 @@ class product_product(osv.osv):
         if not default:
             default = {}
 
-        product = self.read(cr, uid, id, ['name'], context=context)
+        # Craft our own `<name> (copy)` in en_US (self.copy_translation()
+        # will do the other languages).
+        context_wo_lang = context.copy()
+        context_wo_lang.pop('lang', None)
+        product = self.read(cr, uid, id, ['name'], context=context_wo_lang)
         default = default.copy()
         default.update(name=_("%s (copy)") % (product['name']))
 
