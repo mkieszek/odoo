@@ -8,7 +8,7 @@ var instance = openerp;
 openerp.web.view_tree = {};
 var QWeb = instance.web.qweb,
       _lt = instance.web._lt;
-
+	
 instance.web.views.add('tree', 'instance.web.TreeView');
 instance.web.TreeView = instance.web.View.extend(/** @lends instance.web.TreeView# */{
     display_name: _lt('Tree'),
