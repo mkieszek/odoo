@@ -979,6 +979,7 @@ class pos_order(osv.osv):
                     'invoice_id': inv_id,
                     'product_id': line.product_id.id,
                     'quantity': line.qty,
+                    'account_analytic_id': self._prepare_analytic_account(cr, uid, line, context=context),
                 }
                 inv_name = product_obj.name_get(cr, uid, [line.product_id.id], context=context)[0][1]
                 inv_line.update(inv_line_ref.product_id_change(cr, uid, [],
@@ -989,7 +990,7 @@ class pos_order(osv.osv):
                 inv_line['price_unit'] = line.price_unit
                 inv_line['discount'] = line.discount
                 inv_line['name'] = inv_name
-                inv_line['invoice_line_tax_id'] = [(6, 0, [x.id for x in line.product_id.taxes_id] )]
+                inv_line['invoice_line_tax_id'] = [(6, 0, inv_line['invoice_line_tax_id'])]
                 inv_line_ref.create(cr, uid, inv_line, context=context)
             inv_ref.button_reset_taxes(cr, uid, [inv_id], context=context)
             self.signal_workflow(cr, uid, [order.id], 'invoice')
