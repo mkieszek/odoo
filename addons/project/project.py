@@ -775,6 +775,9 @@ class task(osv.osv):
         'id': fields.integer('ID', readonly=True),
         'color': fields.integer('Color Index'),
         'user_email': fields.related('user_id', 'email', type='char', string='User Email', readonly=True),
+        'estimation_value': fields.float('Wycena'),
+        'invoice_number': fields.text('Nr Faktury'),
+        'invoice_value': fields.float('Wartość faktury'),
     }
     _defaults = {
         'stage_id': _get_default_stage_id,
