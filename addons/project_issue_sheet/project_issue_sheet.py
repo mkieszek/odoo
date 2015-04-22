@@ -30,11 +30,11 @@ class project_issue(osv.osv):
         'analytic_account_id': fields.many2one('account.analytic.account', 'Analytic Account'), 
     }
     
-    def on_change_project(self, cr, uid, ids, project_id, context=None):
+    def on_change_project(self, cr, uid, ids, project_id, partner_id, context=None):
         if not project_id:
             return {}
 
-        result = super(project_issue, self).on_change_project(cr, uid, ids, project_id, context=context)
+        result = super(project_issue, self).on_change_project(cr, uid, ids, project_id, partner_id, context=context)
         
         project = self.pool.get('project.project').browse(cr, uid, project_id, context=context)
         if 'value' not in result:

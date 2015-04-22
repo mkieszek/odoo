@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="project_issue.project_issue_form_view" />
             <field name="arch" type="xml">
                 <field name="project_id" position="attributes">
-                    <attribute name="on_change">on_change_project(project_id)</attribute>
+                    <attribute name="on_change">on_change_project(project_id, partner_id)</attribute>
                 </field>
                 <field name="active" position="after">
                     <newline/>
