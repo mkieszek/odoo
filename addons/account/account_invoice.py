@@ -131,7 +131,7 @@ class account_invoice(models.Model):
                 continue
             # Get the correct line residual amount
             if line.currency_id == self.currency_id:
-                line_amount = line.currency_id and line.amount_residual_currency or line.amount_residual
+                line_amount = line.amount_residual_currency if line.currency_id else line.amount_residual
             else:
                 from_currency = line.company_id.currency_id.with_context(date=line.date)
                 line_amount = from_currency.compute(line.amount_residual, self.currency_id)
@@ -810,7 +810,7 @@ class account_invoice(models.Model):
             # create the analytical lines, one move line per invoice line
             iml = inv._get_analytic_lines()
             # check if taxes are all computed
-            compute_taxes = account_invoice_tax.compute(inv)
+            compute_taxes = account_invoice_tax.compute(inv.with_context(lang=inv.partner_id.lang))
             inv.check_tax_lines(compute_taxes)
 
             # I disabled the check_total feature
