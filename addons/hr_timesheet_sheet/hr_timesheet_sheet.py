@@ -181,6 +181,15 @@ class hr_timesheet_sheet(osv.osv):
         'department_id':fields.many2one('hr.department','Department'),
         'timesheet_activity_count': fields.function(_count_all, type='integer', string='Timesheet Activities', multi=True),
         'attendance_count': fields.function(_count_all, type='integer', string="Attendances", multi=True),
+        'godz_normalne': fields.float('Normalne'),
+        'godz_nieefektywne': fields.float('Nieefektywne'),
+        'godz_nadliczbowe': fields.float('Nadliczbowe'),
+        'godz_nocne': fields.float('Noce'),
+        'nieobecnosc': fields.selection([('C', 'C'), ('W', 'W')], "Nieobecność"),
+        'uciazliwe': fields.float("Uciążliwe"),
+        'kierowca': fields.float('Czynny kierowca'),
+        'niebezpieczne': fields.float('Niebezpieczne'),
+        'nadplacone': fields.float('Nadpłacone'),
     }
 
     def _default_date_from(self, cr, uid, context=None):
