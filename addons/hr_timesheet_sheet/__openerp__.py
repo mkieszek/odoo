@@ -48,7 +48,9 @@ The validation can be configured in the company:
     'depends': ['hr_timesheet', 'hr_timesheet_invoice'],
     'data': [
         'security/ir.model.access.csv',
+        #'security/ir.model.access.pkp.csv',
         'security/hr_timesheet_sheet_security.xml',
+        'security/hr_timesheet_pkp_security.xml',
         'hr_timesheet_sheet_view.xml',
         'hr_timesheet_workflow.xml',
         'report/hr_timesheet_report_view.xml',
@@ -56,6 +58,7 @@ The validation can be configured in the company:
         'hr_timesheet_sheet_data.xml',
         'res_config_view.xml',
         'views/hr_timesheet_sheet.xml',
+        'views/hr_timesheet_pkp.xml',
     ],
     'demo': ['hr_timesheet_sheet_demo.xml'],
     'test':['test/test_hr_timesheet_sheet.yml'],

@@ -181,15 +181,15 @@ class hr_timesheet_sheet(osv.osv):
         'department_id':fields.many2one('hr.department','Department'),
         'timesheet_activity_count': fields.function(_count_all, type='integer', string='Timesheet Activities', multi=True),
         'attendance_count': fields.function(_count_all, type='integer', string="Attendances", multi=True),
-        'godz_normalne': fields.float('Normalne'),
-        'godz_nieefektywne': fields.float('Nieefektywne'),
-        'godz_nadliczbowe': fields.float('Nadliczbowe'),
-        'godz_nocne': fields.float('Noce'),
+        'godz_normalne': fields.function(_total, method=True, string='Suma Normalne', multi="_total"),
+        'godz_nieefektywne': fields.function(_total, method=True, string='Suma Nieefektywne', multi="_total"),
+        'godz_nadliczbowe': fields.function(_total, method=True, string='Suma Nadliczbowe', multi="_total"),
+        'godz_nocne': fields.function(_total, method=True, string='Suma Nocne', multi="_total"),
         'nieobecnosc': fields.selection([('C', 'C'), ('W', 'W')], "Nieobecność"),
-        'uciazliwe': fields.float("Uciążliwe"),
-        'kierowca': fields.float('Czynny kierowca'),
-        'niebezpieczne': fields.float('Niebezpieczne'),
-        'nadplacone': fields.float('Nadpłacone'),
+        'uciazliwe': fields.function(_total, method=True, string='Suma Uciążliwe', multi="_total"),
+        'kierowca': fields.function(_total, method=True, string='Suma Kierowca', multi="_total"),
+        'niebezpieczne': fields.function(_total, method=True, string='Suma Niebezpieczne', multi="_total"),
+        'nadplacone': fields.function(_total, method=True, string='Suma Nadpłacone', multi="_total"),
     }
 
     def _default_date_from(self, cr, uid, context=None):
@@ -373,6 +373,18 @@ class hr_timesheet_line(osv.osv):
                     'hr.analytic.timesheet': (lambda self,cr,uid,ids,context=None: ids, None, 10),
                   },
             ),
+        'cpk_id': fields.many2one('hr.timesheet.pkp.cpk', 'CPK'),
+        'proces_id': fields.many2one('hr.timesheet.pkp.proces', 'Proces'),
+        'obiekt_id': fields.many2one('hr.timesheet.pkp.obiekt', 'Obiekt'),
+        'godz_normalne': fields.float('Normalne'),
+        'godz_nieefektywne': fields.float('Nieefektywne'),
+        'godz_nadliczbowe': fields.float('Nadliczbowe'),
+        'godz_nocne': fields.float('Noce'),
+        'nieobecnosc': fields.selection([('C', 'C'), ('W', 'W')], "Nieobecność"),
+        'uciazliwe': fields.float("Uciążliwe"),
+        'kierowca': fields.float('Czynny kierowca'),
+        'niebezpieczne': fields.float('Niebezpieczne'),
+        'nadplacone': fields.datetime('Nadpłacone'),
     }
 
     def write(self, cr, uid, ids, values, context=None):

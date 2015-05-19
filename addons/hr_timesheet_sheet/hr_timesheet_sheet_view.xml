@@ -105,16 +105,16 @@
                     <group col="2">
                     	<group>
                         	<field name="nieobecnosc"/>
-                        	<field name="godz_normalne" attrs="{'invisible': [('nieobecnosc', '!=', '')]}"/>
-                        	<field name="godz_nieefektywne"/>
-                        	<field name="godz_nadliczbowe"/>
-                        	<field name="godz_nocne"/>
+                        	<field name="godz_normalne" widget="float_time"/>
+                        	<field name="godz_nieefektywne" widget="float_time"/>
+                        	<field name="godz_nadliczbowe" widget="float_time"/>
+                        	<field name="godz_nocne" widget="float_time"/>
                         </group>
                         <group>
-                        	<field name="uciazliwe"/>
-                        	<field name="kierowca"/>
-                        	<field name="niebezpieczne"/>
-                        	<field name="nadplacone"/>
+                        	<field name="uciazliwe" widget="float_time"/>
+                        	<field name="kierowca" widget="float_time"/>
+                        	<field name="niebezpieczne" widget="float_time"/>
+                        	<field name="nadplacone" widget="float_time"/>
                         </group>
                     </group>
                     <notebook>
@@ -126,14 +126,25 @@
                             <field context="{'employee_id': employee_id, 'user_id':user_id, 'timesheet_date_from': date_from, 'timesheet_date_to': date_to}" name="timesheet_ids" nolabel="1">
                                 <tree editable="top" string="Timesheet Activities">
                                     <field name="date" invisible="1"/>
-                                    <field domain="[('type','in',['normal', 'contract']), ('state', '&lt;&gt;', 'close'),('use_timesheets','=',1)]" name="account_id" on_change="on_change_account_id(account_id, user_id)" context="{'default_use_timesheets': 1}"/>
+                                    <field name="cpk_id" />
+                                    <field name="proces_id" />
+                                    <field name="obiekt_id" />
+                                    <field domain="[('type','in',['normal', 'contract']), ('state', '&lt;&gt;', 'close'),('use_timesheets','=',1)]" name="account_id" on_change="on_change_account_id(account_id, user_id)" context="{'default_use_timesheets': 1}" string="Projekt"/>
                                     <field name="name"/>
-                                    <field name="unit_amount" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)" widget="float_time" string="Hours" sum="Hours"/>
+                                    <field name="unit_amount" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)" widget="float_time" string="Hours" sum="Hours" invisible="1"/>
                                     <field name="to_invoice" widget="selection" invisible="1"/>
                                     <field invisible="1" name="journal_id"/>
                                     <field invisible="1" name="product_id" domain="[('type','=','service')]" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)"/>
                                     <field invisible="1" name="product_uom_id" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)"/>
                                     <field invisible="1" name="amount"/>
+                                    <field name="godz_normalne" widget="float_time"/>
+                                    <field name="godz_nieefektywne" widget="float_time"/>
+                                    <field name="godz_nadliczbowe" widget="float_time"/>
+                                    <field name="godz_nocne" widget="float_time"/>
+                                    <field name="uciazliwe" widget="float_time"/>
+                                    <field name="kierowca" widget="float_time"/>
+                                    <field name="niebezpieczne" widget="float_time"/>
+                                    <field name="nadplacone" widget="float_time"/>
                                     <field invisible="1" name="general_account_id"/>
                                     <field invisible="1" name="user_id" required="1"/>
                                 </tree>
