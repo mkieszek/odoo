@@ -444,6 +444,8 @@
                             <field name="manager_id"/>
                             <field name="parent_id"/>
                             <field name="company_id" widget="selection" groups="base.group_multi_company"/>
+                            <field name="cpk" />
+                            <field name="rpk" />
                         </group>
                     </sheet>
                 </form>
@@ -458,6 +460,8 @@
                     <field name="complete_name"/>
                     <field name="company_id" groups="base.group_multi_company"/>
                     <field name="manager_id"/>
+                    <field name="cpk" />
+                    <field name="rpk" />
                 </tree>
             </field>
         </record>

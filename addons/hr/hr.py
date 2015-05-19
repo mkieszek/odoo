@@ -384,6 +384,8 @@ class hr_department(osv.osv):
         'member_ids': fields.one2many('hr.employee', 'department_id', 'Members', readonly=True),
         'jobs_ids': fields.one2many('hr.job', 'department_id', 'Jobs'),
         'note': fields.text('Note'),
+        'cpk': fields.text('CPK'),
+        'rpk': fields.text('RPK'),
     }
 
     _defaults = {
