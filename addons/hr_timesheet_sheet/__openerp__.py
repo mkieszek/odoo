@@ -45,7 +45,7 @@ The validation can be configured in the company:
     """,
     'author': 'OpenERP SA',
     'website': 'https://www.odoo.com/page/employees',
-    'depends': ['hr_timesheet', 'hr_timesheet_invoice'],
+    'depends': ['hr', 'hr_timesheet', 'hr_timesheet_invoice'],
     'data': [
         'security/ir.model.access.csv',
         #'security/ir.model.access.pkp.csv',

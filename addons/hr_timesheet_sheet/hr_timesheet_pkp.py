@@ -35,14 +35,72 @@ STATUSY_OKRESU = [('o', 'Otwarty'), ('z', 'Zamknięty')]
 class hr_timesheet_pkp_proces(osv.Model):
     _name = 'hr.timesheet.pkp.proces'
     _description = 'Proces'
-    _columns = {'name': fields.char('Nazwa')
+    _columns = {'name': fields.char('Nazwa'),
+                'kod': fields.char('Kod')
                 }
+    
+    def name_get(self, cr, uid, ids, context=None):
+        """Overrides orm name_get method"""
+        if not isinstance(ids, list) :
+            ids = [ids]
+        res = []
+        if not ids:
+            return res
+        #reads = self.read(cr, uid, ids, ['client_id', 'month', 'year'], context)
+        for record in self.browse(cr, uid, ids):
+            res.append((record.id, record.kod + ' - ' + record.name or ''))
+        return res
+    
+    def name_search(self, cr, uid, name='', args=None, operator='ilike', context=None, limit=0):
+        args = []
+        if not context:
+            context = {}
+        
+        if name:
+            # Be sure name_search is symetric to name_get
+            #name = name.split(' / ')[-1]
+            name_ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
+            kod_ids = self.search(cr, uid, [('kod', operator, name)] + args, limit=limit, context=context)
+            ids = name_ids + kod_ids
+        else:
+            ids = self.search(cr, uid, args, limit=limit, context=context)
+       
+        return self.name_get(cr, uid, ids, context)
     
 class hr_timesheet_pkp_obiekt(osv.Model):
     _name = 'hr.timesheet.pkp.obiekt'
     _description = 'Obiekt'
-    _columns = {'name': fields.char('Nazwa')
+    _columns = {'name': fields.char('Nazwa'),
+                'kod': fields.char('Kod')
                 }
+    
+    def name_get(self, cr, uid, ids, context=None):
+        """Overrides orm name_get method"""
+        if not isinstance(ids, list) :
+            ids = [ids]
+        res = []
+        if not ids:
+            return res
+        #reads = self.read(cr, uid, ids, ['client_id', 'month', 'year'], context)
+        for record in self.browse(cr, uid, ids):
+            res.append((record.id, record.kod + ' - ' + record.name or ''))
+        return res
+    
+    def name_search(self, cr, uid, name='', args=None, operator='ilike', context=None, limit=0):
+        args = []
+        if not context:
+            context = {}
+        
+        if name:
+            # Be sure name_search is symetric to name_get
+            #name = name.split(' / ')[-1]
+            name_ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
+            kod_ids = self.search(cr, uid, [('kod', operator, name)] + args, limit=limit, context=context)
+            ids = name_ids + kod_ids
+        else:
+            ids = self.search(cr, uid, args, limit=limit, context=context)
+       
+        return self.name_get(cr, uid, ids, context)
 
 class hr_timesheet_pkp_okres(osv.Model):
     _name = 'hr.timesheet.pkp.okres'
@@ -54,26 +112,98 @@ class hr_timesheet_pkp_okres(osv.Model):
                 }
     
     def name_get(self, cr, uid, ids, context=None):
+        """Overrides orm name_get method"""
+        if not isinstance(ids, list) :
+            ids = [ids]
         res = []
-        for record in self.browse(cr, uid, ids, context=context):
-            #name = record.name
-            #if not record.limit:
-            #    name = name + ('  (%g/%g)' % (record.leaves_taken or 0.0, record.max_leaves or 0.0))
-            res.append((record.id, 'dupa'))
+        if not ids:
+            return res
+        #reads = self.read(cr, uid, ids, ['client_id', 'month', 'year'], context)
+        for record in self.browse(cr, uid, ids):
+            res.append((record.id, record.kod + ' - ' + record.name or ''))
         return res
-
-    @api.model
-    def name_search(self, name, args=None, operator='ilike', limit=100):
-        args = args or []
-        recs = self.browse()
+    
+    def name_search(self, cr, uid, name='', args=None, operator='ilike', context=None, limit=0):
+        args = []
+        if not context:
+            context = {}
+        
         if name:
-            recs = self.search([('number', '=', name)] + args, limit=limit)
-        if not recs:
-            recs = self.search([('name', operator, name)] + args, limit=limit)
-        return recs.name_get()
+            # Be sure name_search is symetric to name_get
+            #name = name.split(' / ')[-1]
+            name_ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
+            kod_ids = self.search(cr, uid, [('kod', operator, name)] + args, limit=limit, context=context)
+            ids = name_ids + kod_ids
+        else:
+            ids = self.search(cr, uid, args, limit=limit, context=context)
+       
+        return self.name_get(cr, uid, ids, context)
     
 class hr_timesheet_pkp_cpk(osv.Model):
     _name = 'hr.timesheet.pkp.cpk'
     _description = 'CPK'
-    _columns = {'name': fields.char('Nazwa')
+    _columns = {'name': fields.char('Nazwa'),
+                'kod': fields.char('Kod')
                 }
+    
+    def name_get(self, cr, uid, ids, context=None):
+        """Overrides orm name_get method"""
+        if not isinstance(ids, list) :
+            ids = [ids]
+        res = []
+        if not ids:
+            return res
+        #reads = self.read(cr, uid, ids, ['client_id', 'month', 'year'], context)
+        for record in self.browse(cr, uid, ids):
+            name = record.name or ''
+            res.append((record.id, record.kod + ' - ' + name))
+        return res
+    
+    def name_search(self, cr, uid, name='', args=None, operator='ilike', context=None, limit=0):
+        args = []
+        if not context:
+            context = {}
+        
+        if name:
+            # Be sure name_search is symetric to name_get
+            #name = name.split(' / ')[-1]
+            name_ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
+            kod_ids = self.search(cr, uid, [('kod', operator, name)] + args, limit=limit, context=context)
+            ids = name_ids + kod_ids
+        else:
+            ids = self.search(cr, uid, args, limit=limit, context=context)
+       
+        return self.name_get(cr, uid, ids, context)
+    
+class account_analytic_account(osv.osv):
+    _name = "account.analytic.account"
+    _inherit = "account.analytic.account"
+    
+    def name_get(self, cr, uid, ids, context=None):
+        """Overrides orm name_get method"""
+        if not isinstance(ids, list) :
+            ids = [ids]
+        res = []
+        if not ids:
+            return res
+        #reads = self.read(cr, uid, ids, ['client_id', 'month', 'year'], context)
+        for record in self.browse(cr, uid, ids):
+            name = record.name or ''
+            res.append((record.id, record.code + ' - ' + name))
+        return res
+    
+    def name_search(self, cr, uid, name='', args=None, operator='ilike', context=None, limit=0):
+        args = []
+        if not context:
+            context = {}
+        
+        if name:
+            # Be sure name_search is symetric to name_get
+            #name = name.split(' / ')[-1]
+            name_ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
+            kod_ids = self.search(cr, uid, [('code', operator, name)] + args, limit=limit, context=context)
+            ids = name_ids + kod_ids
+        else:
+            ids = self.search(cr, uid, args, limit=limit, context=context)
+       
+        return self.name_get(cr, uid, ids, context)

@@ -234,6 +234,7 @@ class hr_employee(osv.osv):
         'city': fields.related('address_id', 'city', type='char', string='City'),
         'login': fields.related('user_id', 'login', type='char', string='Login', readonly=1),
         'last_login': fields.related('user_id', 'date', type='datetime', string='Latest Connection', readonly=1),
+        'person_id': fields.char('Person ID'),
     }
 
     def _get_default_image(self, cr, uid, context=None):
@@ -384,8 +385,8 @@ class hr_department(osv.osv):
         'member_ids': fields.one2many('hr.employee', 'department_id', 'Members', readonly=True),
         'jobs_ids': fields.one2many('hr.job', 'department_id', 'Jobs'),
         'note': fields.text('Note'),
-        'cpk': fields.text('CPK'),
-        'rpk': fields.text('RPK'),
+        'cpk': fields.many2one('hr.timesheet.pkp.cpk', 'CPK'),
+        'kod': fields.text('Kod'),
     }
 
     _defaults = {

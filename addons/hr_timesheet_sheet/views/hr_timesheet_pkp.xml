@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
     <data>
+    	<record id="hr_timesheet_pkp_proces_tree" model="ir.ui.view">
+            <field name="name">hr.timesheet.pkp.proces.tree</field>
+            <field name="model">hr.timesheet.pkp.proces</field>
+            <field name="arch" type="xml">
+                <tree editable="top">  
+                	<field name="kod" />
+                	<field name="name" />                
+                </tree>
+            </field>
+        </record>
         <record id="act_hr_timesheet_pkp_proces" model="ir.actions.act_window">
             <field name="name">Procesy</field>
             <field name="type">ir.actions.act_window</field>
@@ -13,6 +23,16 @@
 
         <menuitem parent="hr.menu_hr_configuration" id="menu_timesheet_pkp_proces" action="act_hr_timesheet_pkp_proces" sequence="50" groups="base.group_hr_manager"/>
         
+        <record id="hr_timesheet_pkp_obiekt_tree" model="ir.ui.view">
+            <field name="name">hr.timesheet.pkp.obiekt.tree</field>
+            <field name="model">hr.timesheet.pkp.obiekt</field>
+            <field name="arch" type="xml">
+                <tree editable="top">  
+                	<field name="kod" />
+                	<field name="name" />                
+                </tree>
+            </field>
+        </record>
         <record id="act_hr_timesheet_pkp_obiekt" model="ir.actions.act_window">
             <field name="name">Obiekty</field>
             <field name="type">ir.actions.act_window</field>
@@ -25,6 +45,16 @@
 
         <menuitem parent="hr.menu_hr_configuration" id="menu_timesheet_pkp_obiekt" action="act_hr_timesheet_pkp_obiekt" sequence="50" groups="base.group_hr_manager"/>
         
+        <record id="hr_timesheet_pkp_cpk_tree" model="ir.ui.view">
+            <field name="name">hr.timesheet.pkp.cpk.tree</field>
+            <field name="model">hr.timesheet.pkp.cpk</field>
+            <field name="arch" type="xml">
+                <tree editable="top">  
+                	<field name="kod" />
+                	<field name="name" />                
+                </tree>
+            </field>
+        </record>
         <record id="act_hr_timesheet_pkp_cpk" model="ir.actions.act_window">
             <field name="name">CPK</field>
             <field name="type">ir.actions.act_window</field>
@@ -51,7 +81,7 @@
         </record>
         
         <record id="act_hr_timesheet_pkp_okres" model="ir.actions.act_window">
-            <field name="name">CPK</field>
+            <field name="name">Okres</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">hr.timesheet.pkp.okres</field>
             <field name="view_type">form</field>
