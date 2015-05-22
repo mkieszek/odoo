@@ -92,7 +92,8 @@
                             <label for="date_from" string="Timesheet Period"/>
                             <div><field name="date_from" class="oe_inline" string="Data" /><field name="date_to" class="oe_inline" invisible="1"/></div>
                             <field name="name" invisible="1"/>
-                            <field name="department_id" invisible="1"/>
+                            <field name="department_id" invisible="0"/>
+                            <field name="cpk_id" />
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                         
@@ -126,7 +127,6 @@
                             <field context="{'employee_id': employee_id, 'user_id':user_id, 'timesheet_date_from': date_from, 'timesheet_date_to': date_to}" name="timesheet_ids" nolabel="1">
                                 <tree editable="top" string="Timesheet Activities">
                                     <field name="date" invisible="1"/>
-                                    <field name="cpk_id" />
                                     <field name="proces_id" />
                                     <field name="obiekt_id" />
                                     <field domain="[('type','in',['normal', 'contract']), ('state', '&lt;&gt;', 'close'),('use_timesheets','=',1)]" name="account_id" on_change="on_change_account_id(account_id, user_id)" context="{'default_use_timesheets': 1}" string="Projekt"/>
@@ -358,7 +358,16 @@
                     <field name="employee_id"/>
                     <field name="date_from"/>
                     <field name="date_to"/>
-                    <field name="department_id" invisible="1"/>
+                    <field name="department_id" invisible="0"/>
+                    <field name="godz_normalne" widget="float_time" sum="Suma normalnych"/>
+                    <field name="godz_nieefektywne" widget="float_time" sum="Suma normalnych"/>
+                    <field name="godz_nadliczbowe" widget="float_time" sum="Suma normalnych"/>
+                    <field name="godz_nocne" widget="float_time" sum="Suma normalnych"/>
+                    <field name="nieobecnosc" widget="float_time" sum="Suma normalnych"/>
+                    <field name="uciazliwe" widget="float_time" sum="Suma normalnych"/>
+                    <field name="kierowca" widget="float_time" sum="Suma normalnych"/>
+                    <field name="niebezpieczne" widget="float_time" sum="Suma normalnych"/>
+                    <field name="nadplacone" widget="float_time" sum="Suma normalnych"/>
                     <field name="total_attendance" widget="float_time" groups="base.group_hr_attendance"/>
                     <field name="total_timesheet" widget="float_time"/>
                     <field name="total_difference" widget="float_time" groups="base.group_hr_attendance"/>

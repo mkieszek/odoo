@@ -35,8 +35,8 @@ STATUSY_OKRESU = [('o', 'Otwarty'), ('z', 'Zamknięty')]
 class hr_timesheet_pkp_proces(osv.Model):
     _name = 'hr.timesheet.pkp.proces'
     _description = 'Proces'
-    _columns = {'name': fields.char('Nazwa'),
-                'kod': fields.char('Kod')
+    _columns = {'name': fields.char('Nazwa', required=True),
+                'kod': fields.char('Kod', required=True)
                 }
     
     def name_get(self, cr, uid, ids, context=None):
@@ -70,8 +70,8 @@ class hr_timesheet_pkp_proces(osv.Model):
 class hr_timesheet_pkp_obiekt(osv.Model):
     _name = 'hr.timesheet.pkp.obiekt'
     _description = 'Obiekt'
-    _columns = {'name': fields.char('Nazwa'),
-                'kod': fields.char('Kod')
+    _columns = {'name': fields.char('Nazwa', required=True),
+                'kod': fields.char('Kod', required=True)
                 }
     
     def name_get(self, cr, uid, ids, context=None):
@@ -142,8 +142,8 @@ class hr_timesheet_pkp_okres(osv.Model):
 class hr_timesheet_pkp_cpk(osv.Model):
     _name = 'hr.timesheet.pkp.cpk'
     _description = 'CPK'
-    _columns = {'name': fields.char('Nazwa'),
-                'kod': fields.char('Kod')
+    _columns = {'name': fields.char('Nazwa', required=True),
+                'kod': fields.char('Kod', required=True)
                 }
     
     def name_get(self, cr, uid, ids, context=None):
@@ -157,6 +157,43 @@ class hr_timesheet_pkp_cpk(osv.Model):
         for record in self.browse(cr, uid, ids):
             name = record.name or ''
             res.append((record.id, record.kod + ' - ' + name))
+        return res
+    
+    def name_search(self, cr, uid, name='', args=None, operator='ilike', context=None, limit=0):
+        args = []
+        if not context:
+            context = {}
+        
+        if name:
+            # Be sure name_search is symetric to name_get
+            #name = name.split(' / ')[-1]
+            name_ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
+            kod_ids = self.search(cr, uid, [('kod', operator, name)] + args, limit=limit, context=context)
+            ids = name_ids + kod_ids
+        else:
+            ids = self.search(cr, uid, args, limit=limit, context=context)
+       
+        return self.name_get(cr, uid, ids, context)
+class hr_timesheet_pkp_nieobecnosc(osv.Model):
+    _name = 'hr.timesheet.pkp.nieobecnosc'
+    _description = 'Nieobecnosc'
+    _columns = {'name': fields.char('Nazwa', required=True),
+                'kod': fields.char('Kod', required=True),
+                'enova_kod': fields.char('Kod Enova', required=True),
+                }
+    
+    def name_get(self, cr, uid, ids, context=None):
+        """Overrides orm name_get method"""
+        if not isinstance(ids, list) :
+            ids = [ids]
+        res = []
+        if not ids:
+            return res
+        #reads = self.read(cr, uid, ids, ['client_id', 'month', 'year'], context)
+        for record in self.browse(cr, uid, ids):
+            name = record.name or ''
+            kod = record.kod or ''
+            res.append((record.id, kod + ' - ' + name))
         return res
     
     def name_search(self, cr, uid, name='', args=None, operator='ilike', context=None, limit=0):
@@ -207,3 +244,30 @@ class account_analytic_account(osv.osv):
             ids = self.search(cr, uid, args, limit=limit, context=context)
        
         return self.name_get(cr, uid, ids, context)
+class account_analytic_line(osv.Model):
+    _inherit = "account.analytic.line"
+    
+    def _sheet(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        sheet_obj = self.pool.get('hr.analytic.timesheet')
+        timesheet_ids = sheet_obj.search(cr, uid, ['line_id', 'in', ids])
+        
+        for timesheet in sheet_obj.browse(cr, uid, timesheet_ids):
+            departament_id = timesheet.sheet_id.department_id.id
+            res[timesheet.line_id.id] = departament_id
+        return res
+    def _department_search(self, cr, uid, obj, name, args, context=None):
+        
+        res = []
+        """sheet_obj = self.pool.get('hr.analytic.timesheet')
+        timesheet_ids = sheet_obj.search(cr, uid, args)
+        for timesheet in sheet_obj.browse(cr, uid, timesheet_ids):
+            res.append(timesheet.line_id.id)
+        """
+        if not res:
+            return [('id', '=', 0)]
+        return [('id', 'in', res)]
+    
+    _columns = {
+                'department_id': fields.function(_sheet, string='Departament', type='many2one', relation='hr.department', fnct_search=_department_search),
+                }
