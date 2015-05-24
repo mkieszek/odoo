@@ -92,8 +92,8 @@
                             <label for="date_from" string="Timesheet Period"/>
                             <div><field name="date_from" class="oe_inline" string="Data" /><field name="date_to" class="oe_inline" invisible="1"/></div>
                             <field name="name" invisible="1"/>
-                            <field name="department_id" invisible="0"/>
-                            <field name="cpk_id" />
+                            <field name="department_id" invisible="0" readonly="True"/>
+                            <field name="cpk_id" readonly="True" />
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                         
