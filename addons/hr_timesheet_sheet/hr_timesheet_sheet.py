@@ -47,11 +47,32 @@ class hr_timesheet_sheet(osv.osv):
                 'total_attendance': 0.0,
                 'total_timesheet': 0.0,
                 'total_difference': 0.0,
+                'godz_normalne': 0.0,
+                'godz_nieefektywne': 0.0,
+                'godz_nadliczbowe': 0.0,
+                'godz_nocne': 0.0,
+                'nieobecnosc': 0.0,
+                'uciazliwe': 0.0,
+                'kierowca': 0.0,
+                'niebezpieczne': 0.0,
+                'nadplacone': 0.0,
+                
             })
             for period in sheet.period_ids:
                 res[sheet.id]['total_attendance'] += period.total_attendance
                 res[sheet.id]['total_timesheet'] += period.total_timesheet
                 res[sheet.id]['total_difference'] += period.total_attendance - period.total_timesheet
+            
+            for line in sheet.timesheet_ids:
+                res[sheet.id]['godz_normalne'] += line.godz_normalne
+                res[sheet.id]['godz_nieefektywne'] += line.godz_nieefektywne
+                res[sheet.id]['godz_nadliczbowe'] += line.godz_nadliczbowe
+                res[sheet.id]['godz_nocne'] += line.godz_nocne
+                res[sheet.id]['nieobecnosc'] += line.nieobecnosc
+                res[sheet.id]['uciazliwe'] += line.uciazliwe
+                res[sheet.id]['kierowca'] += line.kierowca
+                res[sheet.id]['niebezpieczne'] += line.niebezpieczne
+                res[sheet.id]['nadplacone'] += line.nadplacone
         return res
 
     def check_employee_attendance_state(self, cr, uid, sheet_id, context=None):
@@ -76,6 +97,8 @@ class hr_timesheet_sheet(osv.osv):
         if vals.get('attendances_ids'):
             # If attendances, we sort them by date asc before writing them, to satisfy the alternance constraint
             vals['attendances_ids'] = self.sort_attendances(cr, uid, vals['attendances_ids'], context=context)
+            
+        vals['date_to'] = vals['date_from']
         return super(hr_timesheet_sheet, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
@@ -285,6 +308,7 @@ class hr_timesheet_sheet(osv.osv):
             user_id = empl_id.user_id.id
         return {'value': {'department_id': department_id, 'user_id': user_id,}}
 
+        
     # ------------------------------------------------
     # OpenChatter methods and notifications
     # ------------------------------------------------
