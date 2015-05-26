@@ -409,7 +409,7 @@ class hr_timesheet_line(osv.osv):
         'uciazliwe': fields.float("Uciążliwe"),
         'kierowca': fields.float('Czynny kierowca'),
         'niebezpieczne': fields.float('Niebezpieczne'),
-        'nadplacone': fields.datetime('Nadpłacone'),
+        'nadplacone': fields.float('Nadpłacone'),
     }
 
     def write(self, cr, uid, ids, values, context=None):
