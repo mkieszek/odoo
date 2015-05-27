@@ -97,8 +97,9 @@ class hr_timesheet_sheet(osv.osv):
         if vals.get('attendances_ids'):
             # If attendances, we sort them by date asc before writing them, to satisfy the alternance constraint
             vals['attendances_ids'] = self.sort_attendances(cr, uid, vals['attendances_ids'], context=context)
-            
-        vals['date_to'] = vals['date_from']
+        
+        if 'date_from' in vals:
+            vals['date_to'] = vals['date_from']
         if 'timesheet_ids' in vals:
             for timesheet in vals['timesheet_ids']:
                 timesheet[2]['date'] = vals['date_from']
@@ -123,7 +124,7 @@ class hr_timesheet_sheet(osv.osv):
             
         if 'timesheet_ids' in vals:
             for timesheet in vals['timesheet_ids']:
-                timesheet[2]['date'] = vals['date_from'] = self.browse(cr, uid, ids)[0].date_from
+                timesheet[2]['date'] = self.browse(cr, uid, ids)[0].date_from
             
         res = super(hr_timesheet_sheet, self).write(cr, uid, ids, vals, context=context)
         if vals.get('attendances_ids'):
