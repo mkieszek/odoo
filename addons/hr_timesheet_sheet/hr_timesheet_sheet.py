@@ -99,6 +99,9 @@ class hr_timesheet_sheet(osv.osv):
             vals['attendances_ids'] = self.sort_attendances(cr, uid, vals['attendances_ids'], context=context)
             
         vals['date_to'] = vals['date_from']
+        for timesheet in vals['timesheet_ids']:
+            timesheet[2]['date'] = vals['date_from']
+            
         return super(hr_timesheet_sheet, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
