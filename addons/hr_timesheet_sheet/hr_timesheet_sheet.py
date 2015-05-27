@@ -102,7 +102,8 @@ class hr_timesheet_sheet(osv.osv):
             vals['date_to'] = vals['date_from']
         if 'timesheet_ids' in vals:
             for timesheet in vals['timesheet_ids']:
-                timesheet[2]['date'] = vals['date_from']
+                if len(timesheet) >= 3 and isinstance(timesheet[2], dict) and 'date' in timesheet[2]:
+                    timesheet[2]['date'] = vals['date_from']
                 
         return super(hr_timesheet_sheet, self).create(cr, uid, vals, context=context)
 
@@ -124,7 +125,9 @@ class hr_timesheet_sheet(osv.osv):
             
         if 'timesheet_ids' in vals:
             for timesheet in vals['timesheet_ids']:
-                timesheet[2]['date'] = self.browse(cr, uid, ids)[0].date_from
+                
+                if len(timesheet) >= 3 and isinstance(timesheet[2], dict) and 'date' in timesheet[2]:
+                    timesheet[2]['date'] = self.browse(cr, uid, ids)[0].date_from
             
         res = super(hr_timesheet_sheet, self).write(cr, uid, ids, vals, context=context)
         if vals.get('attendances_ids'):
@@ -429,7 +432,7 @@ class hr_timesheet_line(osv.osv):
         'niebezpieczne': fields.float('Niebezpieczne'),
         'nadplacone': fields.float('Nadpłacone'),
     }
-
+    
     def write(self, cr, uid, ids, values, context=None):
         if isinstance(ids, (int, long)):
             ids = [ids]

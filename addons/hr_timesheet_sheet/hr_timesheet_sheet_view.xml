@@ -125,7 +125,7 @@
                         </page> -->
                         <page string="Details">
                             <field context="{'employee_id': employee_id, 'user_id':user_id, 'timesheet_date_from': date_from, 'timesheet_date_to': date_to}" name="timesheet_ids" nolabel="1">
-                                <tree editable="top" string="Timesheet Activities">
+                                <tree editable="bottom" string="Timesheet Activities">
                                     <field name="date" invisible="1"/>
                                     <field name="proces_id" />
                                     <field name="obiekt_id" />
