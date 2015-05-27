@@ -121,6 +121,10 @@
             <field name="model">hr.analytic.timesheet</field>
             <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
             <field name="arch" type="xml">
+            	<field name="account_id" position="before">
+            		<field name="proces_id" />
+            		<field name="obiekt_id" />
+            	</field>
                 <field name="unit_amount" position="after">
                     <field name="godz_normalne" widget="float_time" sum="Suma normalnych"/>
                     <field name="godz_nieefektywne" widget="float_time" sum="Suma normalnych"/>
