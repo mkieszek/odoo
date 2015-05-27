@@ -119,6 +119,8 @@ class hr_timesheet_sheet(osv.osv):
             # If attendances, we sort them by date asc before writing them, to satisfy the alternance constraint
             # In addition to the date order, deleting attendances are done before inserting attendances
             vals['attendances_ids'] = self.sort_attendances(cr, uid, vals['attendances_ids'], context=context)
+            
+        vals['timesheet_ids'][0][2]['date'] = self.browse(cr, uid, ids)[0].date_from
         res = super(hr_timesheet_sheet, self).write(cr, uid, ids, vals, context=context)
         if vals.get('attendances_ids'):
             for timesheet in self.browse(cr, uid, ids):
@@ -244,12 +246,20 @@ class hr_timesheet_sheet(osv.osv):
     def _default_employee(self, cr, uid, context=None):
         emp_ids = self.pool.get('hr.employee').search(cr, uid, [('user_id','=',uid)], context=context)
         return emp_ids and emp_ids[0] or False
+    
+    def _default_department(self, cr, uid, context=None):
+        ids = self.pool.get('hr.employee').search(cr, uid, [('user_id','=',uid)], context=context)
+        dep_id = 0
+        for emp in self.pool.get('hr.employee').browse(cr, uid, ids):
+            dep_id = emp.department_id and emp.department_id.id or False
+        return dep_id
 
     _defaults = {
         'date_from' : _default_date_from,
         'date_to' : _default_date_to,
         'state': 'new',
         'employee_id': _default_employee,
+        'department_id': _default_department,
         'company_id': lambda self, cr, uid, c: self.pool.get('res.company')._company_default_get(cr, uid, 'hr_timesheet_sheet.sheet', context=c)
     }
 
