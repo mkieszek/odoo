@@ -99,9 +99,10 @@ class hr_timesheet_sheet(osv.osv):
             vals['attendances_ids'] = self.sort_attendances(cr, uid, vals['attendances_ids'], context=context)
             
         vals['date_to'] = vals['date_from']
-        for timesheet in vals['timesheet_ids']:
-            timesheet[2]['date'] = vals['date_from']
-            
+        if 'timesheet_ids' in vals:
+            for timesheet in vals['timesheet_ids']:
+                timesheet[2]['date'] = vals['date_from']
+                
         return super(hr_timesheet_sheet, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
@@ -120,7 +121,10 @@ class hr_timesheet_sheet(osv.osv):
             # In addition to the date order, deleting attendances are done before inserting attendances
             vals['attendances_ids'] = self.sort_attendances(cr, uid, vals['attendances_ids'], context=context)
             
-        vals['timesheet_ids'][0][2]['date'] = self.browse(cr, uid, ids)[0].date_from
+        if 'timesheet_ids' in vals:
+            for timesheet in vals['timesheet_ids']:
+                timesheet[2]['date'] = vals['date_from'] = self.browse(cr, uid, ids)[0].date_from
+            
         res = super(hr_timesheet_sheet, self).write(cr, uid, ids, vals, context=context)
         if vals.get('attendances_ids'):
             for timesheet in self.browse(cr, uid, ids):
