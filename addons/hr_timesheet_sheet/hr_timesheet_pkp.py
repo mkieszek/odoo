@@ -244,30 +244,3 @@ class account_analytic_account(osv.osv):
             ids = self.search(cr, uid, args, limit=limit, context=context)
        
         return self.name_get(cr, uid, ids, context)
-class account_analytic_line(osv.Model):
-    _inherit = "account.analytic.line"
-    
-    def _sheet(self, cr, uid, ids, name, args, context=None):
-        res = {}
-        sheet_obj = self.pool.get('hr.analytic.timesheet')
-        timesheet_ids = sheet_obj.search(cr, uid, ['line_id', 'in', ids])
-        
-        for timesheet in sheet_obj.browse(cr, uid, timesheet_ids):
-            departament_id = timesheet.sheet_id.department_id.id
-            res[timesheet.line_id.id] = departament_id
-        return res
-    def _department_search(self, cr, uid, obj, name, args, context=None):
-        
-        res = []
-        """sheet_obj = self.pool.get('hr.analytic.timesheet')
-        timesheet_ids = sheet_obj.search(cr, uid, args)
-        for timesheet in sheet_obj.browse(cr, uid, timesheet_ids):
-            res.append(timesheet.line_id.id)
-        """
-        if not res:
-            return [('id', '=', 0)]
-        return [('id', 'in', res)]
-    
-    _columns = {
-                'department_id': fields.function(_sheet, string='Departament', type='many2one', relation='hr.department', fnct_search=_department_search),
-                }

@@ -391,6 +391,28 @@ class hr_timesheet_line(osv.osv):
                 res[ts_line.id] = sheet_obj.name_get(cursor, user, sheet_ids, context=context)[0]
         return res
 
+    def _department_get(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        sheet_obj = self.pool.get('hr.analytic.timesheet')
+        timesheet_ids = sheet_obj.search(cr, uid, [('line_id', 'in', ids)])
+        
+        for timesheet in sheet_obj.browse(cr, uid, timesheet_ids):
+            departament_id = timesheet.sheet_id.department_id.id
+            res[timesheet.line_id.id] = departament_id
+        return res
+    
+    def _department_search(self, cr, uid, obj, name, args, context=None):
+        
+        res = []
+        """sheet_obj = self.pool.get('hr.analytic.timesheet')
+        timesheet_ids = sheet_obj.search(cr, uid, args)
+        for timesheet in sheet_obj.browse(cr, uid, timesheet_ids):
+            res.append(timesheet.line_id.id)
+        """
+        if not res:
+            return [('id', '=', 0)]
+        return [('id', 'in', res)]
+    
     def _get_hr_timesheet_sheet(self, cr, uid, ids, context=None):
         ts_line_ids = []
         for ts in self.browse(cr, uid, ids, context=context):
@@ -412,6 +434,7 @@ class hr_timesheet_line(osv.osv):
         ts_line_ids = self.pool.get('hr.analytic.timesheet').search(cr, uid, [('line_id', 'in', ids)])
         return ts_line_ids
 
+                
     _columns = {
         'sheet_id': fields.function(_sheet, string='Sheet', select="1",
             type='many2one', relation='hr_timesheet_sheet.sheet', ondelete="cascade",
@@ -421,7 +444,7 @@ class hr_timesheet_line(osv.osv):
                     'hr.analytic.timesheet': (lambda self,cr,uid,ids,context=None: ids, None, 10),
                   },
             ),
-        #'department_id': fields.related('sheet_id','department_id', type='hr.department',string="Department", readonly=True, store=False),
+        'department_id': fields.function(_department_get, string='Departament', type='many2one', relation='hr.department', fnct_search=_department_search),
         'proces_id': fields.many2one('hr.timesheet.pkp.proces', 'Proces', required=True),
         'obiekt_id': fields.many2one('hr.timesheet.pkp.obiekt', 'Obiekt', required=True),
         'godz_normalne': fields.float('Normalne'),
