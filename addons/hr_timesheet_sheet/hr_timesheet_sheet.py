@@ -227,6 +227,7 @@ class hr_timesheet_sheet(osv.osv):
         'kierowca': fields.function(_total, method=True, string='Kierowca', multi="_total"),
         'niebezpieczne': fields.function(_total, method=True, string='Niebezpieczne', multi="_total"),
         'nadplacone': fields.function(_total, method=True, string='Nadpłacone', multi="_total"),
+        'import': fields.boolean('Import'),
     }
 
     def _default_date_from(self, cr, uid, context=None):
@@ -268,7 +269,8 @@ class hr_timesheet_sheet(osv.osv):
         'state': 'new',
         'employee_id': _default_employee,
         'department_id': _default_department,
-        'company_id': lambda self, cr, uid, c: self.pool.get('res.company')._company_default_get(cr, uid, 'hr_timesheet_sheet.sheet', context=c)
+        'company_id': lambda self, cr, uid, c: self.pool.get('res.company')._company_default_get(cr, uid, 'hr_timesheet_sheet.sheet', context=c),
+        'import': False
     }
 
     def _sheet_date(self, cr, uid, ids, forced_user_id=False, context=None):
@@ -431,6 +433,8 @@ class hr_timesheet_line(osv.osv):
         'kierowca': fields.float('Czynny kierowca'),
         'niebezpieczne': fields.float('Niebezpieczne'),
         'nadplacone': fields.float('Nadpłacone'),
+        'nadpracowane': fields.float('Nadpracowane'),
+        'import': fields.boolean('Import'),
     }
     
     def write(self, cr, uid, ids, values, context=None):

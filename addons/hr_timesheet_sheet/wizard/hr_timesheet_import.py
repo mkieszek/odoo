@@ -39,7 +39,14 @@ class hr_timesheet_import(osv.osv_memory):
         record = self.browse(cr, uid, ids, context=context)[0]
         
         csvfile = StringIO(base64.b64decode(record.file_import))
-        partner_obj = self.pool.get('res.partner')
+        emp_obj = self.pool.get('hr.employee')
+        cpk_obj = self.pool.get('hr.timesheet.pkp.cpk')
+        obiekt_obj = self.pool.get('hr.timesheet.pkp.obiekt')
+        proces_obj = self.pool.get('hr.timesheet.pkp.proces')
+        nieobecnosc_obj = self.pool.get('hr.timesheet.pkp.nieobecnosc')
+        line_obj = self.pool.get('hr.analytic.timesheet')
+        sheet_obj = self.pool.get('hr_timesheet_sheet.sheet')
+        account_obj = self.pool.get('account.analytic.account')
         
         dict = {'message_follower_ids': False, 'timesheet_ids': [[0, False, {'general_account_id': 23, 
  'godz_nadliczbowe': 1, 'godz_nocne': 1, 'name': '123', 'godz_nieefektywne': 1, 'user_id': 6, 
@@ -50,38 +57,114 @@ class hr_timesheet_import(osv.osv_memory):
  False, 'date_to': '2015-05-27', 'message_ids': False}
 
         bgt_values = {}
-        
+        kz_dict = {}
+                
         for row in csvfile:
-            client_num = None
-            brand_name = None
-            
-            client_id = 0
-            month = 0
-            year = 0
-            category_id = 0
-            plan_client_id = 0
-            plan_client_brand_id = 0
-            product_category_id = 0
+            emp_name = None
+            emp_id = None
+            cpk_id = None
+            proces_id = None
+            obiekt_id = None
+            projekt_id = None
+            nieobecnosc_id = None
+            sheet_id = None
             
             row = row.replace('\r\n', '')
-            row_tab = row.split(",") 
+            row_tab = row.split(";") 
             
-            client_num = row_tab[0]
-            brand_name = row_tab[1]
             
-            year = 0
-            month = 0
-            nsh = 0.0
-            gp = 0.0
-            try:
-                year = int(row_tab[2])
-                month = row_tab[3].zfill(2)
-                nsh = float(row_tab[4])
-                gp = float(row_tab[5])
-            except:
+            emp_name = row_tab[22]
+            data = row_tab[1]
+            cpk = row_tab[2]
+            proces = row_tab[3]
+            obiekt = row_tab[4]
+            projekt = row_tab[6]
+            nieobecnosc = row_tab[8]
+            nieefektywne = row_tab[9]
+            normalne = row_tab[10]
+            nadliczbowe = row_tab[11]
+            nadliczbowe_sw = row_tab[12]
+            noc = row_tab[13]
+            uciazliwe = row_tab[14]
+            kierowcy = row_tab[15]
+            niebezpieczne = row_tab[16]
+            swieta = row_tab[17]
+            nadpracowane = row_tab[18]
+            
+            emp_id = emp_obj.search(cr, uid, [('name', '=', emp_name.rstrip('\n'))])
+            cpk_id = cpk_obj.search(cr, uid, [('kod', '=', cpk)])
+            proces_id = proces_obj.search(cr, uid, [('kod', '=', proces)])
+            nieobecnosc_id = nieobecnosc_obj.search(cr, uid, [('kod', '=', nieobecnosc)])
+            
+            obiekt_id = obiekt_obj.search(cr, uid, [('kod', '=', obiekt)])
+            if not obiekt_id:
+                obiekt_id = obiekt_obj.search(cr, uid, [('kod', '=', '000')])
+            
+            projekt_id = account_obj.search(cr, uid, [('code', '=', projekt)])
+            if not projekt_id:
+                projekt_id = account_obj.search(cr, uid, [('code', '=', '0000')])
+                
+            if emp_id:
+                emp_id = emp_id[0]
+                sheet_id = sheet_obj.search(cr, uid, [('date_from', '=', data),('employee_id','=', emp_id),('import','=', False)])
+            else:
                 continue
             
-            client_id = partner_obj.search(cr, uid, [('ref','ilike', client_num)])
+            if sheet_id:
+                continue
+            
+            emp = emp_obj.browse(cr, uid, emp_id)
+            
+            sheet_id = sheet_obj.search(cr, uid, [('date_from', '=', data),('employee_id','=', emp_id),('import','=', True)])
+            
+            if sheet_id:
+                sheet_id = sheet_id[0]
+            else:
+                sheet_dict = {'employee_id': emp_id,
+                              'name': False,
+                              'date_from': data, 
+                              'company_id': 1, 
+                              'nieobecnosc': nieobecnosc_id and nieobecnosc_id[0] or False, 
+                              'date_to': data,
+                              'import': True,
+                              'state': 'draft',
+                              'department_id': emp.department_id.id}
+                sheet_id = sheet_obj.create(cr, uid, sheet_dict)
+                
+            sheet = sheet_obj.browse(cr, uid, sheet_id)
+            
+            line_dict = {'general_account_id': 23, 
+                         'godz_nadliczbowe': float(nadliczbowe) + float(nadliczbowe_sw), 
+                         'godz_nocne': float(noc), 
+                         'name': 'brak', 
+                         'godz_nieefektywne': float(nieefektywne),
+                         'user_id': sheet[0].user_id.id,
+                         'product_uom_id': 5,
+                         'proces_id': proces_id[0],
+                         'journal_id': 3,
+                         'godz_normalne': float(normalne) + float(swieta),
+                         'to_invoice': False,
+                         'amount': 0,
+                         'product_id': 1,
+                         'nadplacone': float(nadpracowane),
+                         'unit_amount': 0,
+                         'date': data,
+                         'uciazliwe': float(uciazliwe),
+                         'niebezpieczne': float(niebezpieczne),
+                         'kierowca': float(kierowcy),
+                         'obiekt_id': obiekt_id[0],
+                         'account_id': projekt_id[0],
+                         'sheet_id': sheet_id,
+                         'import': True}
+            
+            #pdb.set_trace()
+            line_obj.create(cr, uid, line_dict)
+            #dodac wiersz do karty 
+                
+                
+        
+            
+            #client_id = partner_obj.search(cr, uid, [('ref','ilike', client_num)])
         
         for row in bgt_values:
             print row
