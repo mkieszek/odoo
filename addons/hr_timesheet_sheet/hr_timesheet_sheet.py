@@ -401,7 +401,7 @@ class hr_timesheet_line(osv.osv):
         sheet_obj = self.pool.get('hr.analytic.timesheet')
         
         for timesheet in sheet_obj.browse(cr, 1, ids):
-            departament_id = timesheet.sheet_id.department_id.id
+            departament_id = timesheet and timesheet.sheet_id and timesheet.sheet_id.department_id and timesheet.sheet_id.department_id.id or False
             res[timesheet.id] = departament_id
         return res
     
