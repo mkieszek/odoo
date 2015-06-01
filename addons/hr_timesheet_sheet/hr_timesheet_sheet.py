@@ -227,7 +227,7 @@ class hr_timesheet_sheet(osv.osv):
         'godz_nieefektywne': fields.function(_total, method=True, string='Nieefektywne', multi="_total"),
         'godz_nadliczbowe': fields.function(_total, method=True, string='Nadliczbowe', multi="_total"),
         'godz_nocne': fields.function(_total, method=True, string='Nocne', multi="_total"),
-        'nieobecnosc': fields.many2one('hr.timesheet.pkp.nieobecnosc', 'Nieobecność'),
+        'nieobecnosc': fields.many2one('hr.timesheet.pkp.nieobecnosc', 'Nieobecnosc'),
         'uciazliwe': fields.function(_total, method=True, string='Uciążliwe', multi="_total"),
         'kierowca': fields.function(_total, method=True, string='Kierowca', multi="_total"),
         'niebezpieczne': fields.function(_total, method=True, string='Niebezpieczne', multi="_total"),
