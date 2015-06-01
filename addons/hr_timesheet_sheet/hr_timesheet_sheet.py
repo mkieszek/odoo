@@ -88,6 +88,9 @@ class hr_timesheet_sheet(osv.osv):
 
     def create(self, cr, uid, vals, context=None):
         if 'employee_id' in vals:
+            empl = self.pool.get('hr.employee').browse(cr, uid, vals['employee_id'], context=context)
+            vals['department_id'] = empl and empl.department_id and empl.department_id.id or False
+            
             if not self.pool.get('hr.employee').browse(cr, uid, vals['employee_id'], context=context).user_id:
                 raise osv.except_osv(_('Error!'), _('In order to create a timesheet for this employee, you must link him/her to a user.'))
             if not self.pool.get('hr.employee').browse(cr, uid, vals['employee_id'], context=context).product_id:
@@ -110,6 +113,8 @@ class hr_timesheet_sheet(osv.osv):
     def write(self, cr, uid, ids, vals, context=None):
         if 'employee_id' in vals:
             new_user_id = self.pool.get('hr.employee').browse(cr, uid, vals['employee_id'], context=context).user_id.id or False
+            empl = self.pool.get('hr.employee').browse(cr, uid, vals['employee_id'], context=context)
+            vals['department_id'] = empl and empl.department_id and empl.department_id.id or False
             if not new_user_id:
                 raise osv.except_osv(_('Error!'), _('In order to create a timesheet for this employee, you must link him/her to a user.'))
             if not self._sheet_date(cr, uid, ids, forced_user_id=new_user_id, context=context):
@@ -394,11 +399,10 @@ class hr_timesheet_line(osv.osv):
     def _department_get(self, cr, uid, ids, name, args, context=None):
         res = {}
         sheet_obj = self.pool.get('hr.analytic.timesheet')
-        timesheet_ids = sheet_obj.search(cr, uid, [('line_id', 'in', ids)])
         
-        for timesheet in sheet_obj.browse(cr, uid, timesheet_ids):
+        for timesheet in sheet_obj.browse(cr, 1, ids):
             departament_id = timesheet.sheet_id.department_id.id
-            res[timesheet.line_id.id] = departament_id
+            res[timesheet.id] = departament_id
         return res
     
     def _department_search(self, cr, uid, obj, name, args, context=None):
