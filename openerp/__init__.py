@@ -26,8 +26,8 @@
 #----------------------------------------------------------
 # Is the server running with gevent.
 import sys
-evented = False
-if sys.modules.get("gevent") is not None:
+evented = True
+if sys.modules.get("gevent") is None:
     evented = False
 
 # Is the server running in pefork mode (e.g. behind Gunicorn).
