@@ -21,5 +21,6 @@
 
 import hr_timesheet_current
 import hr_timesheet_import
+import hr_timesheet_copy
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 

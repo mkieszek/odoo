@@ -83,8 +83,20 @@ class hr_timesheet_sheet(osv.osv):
             raise osv.except_osv(('Warning!'),_('The timesheet cannot be validated as it does not contain an equal number of sign ins and sign outs.'))
         return True
 
-    def copy(self, cr, uid, ids, *args, **argv):
-        raise osv.except_osv(_('Error!'), _('You cannot duplicate a timesheet.'))
+    def copy(self, cr, uid, id, default=None, context=None):
+        timesheet_id =  super(hr_timesheet_sheet, self).copy(cr, uid, id, default, context)
+        
+        employee = self.pool.get('hr.employee').browse(cr, uid, default['employee_id'])
+        
+        timesheet_line_obj = self.pool.get('hr.analytic.timesheet')
+        
+        default_line = {'user_id': employee.user_id.id, 'sheet_id': timesheet_id}
+        
+        timesheet = self.browse(cr, uid, id)
+        
+        for timesheet_line in timesheet.timesheet_ids:
+            timesheet_line_obj.copy(cr, uid, timesheet_line.id, default_line)
+        #raise osv.except_osv(_('Error!'), _('You cannot duplicate a timesheet.'))
 
     def create(self, cr, uid, vals, context=None):
         if 'employee_id' in vals:
@@ -348,7 +360,22 @@ class hr_timesheet_sheet(osv.osv):
             return False
         dom = ['&', ('state', '=', 'confirm'), ('employee_id', 'in', empids)]
         return dom
-
+    
+    def open_copy_timesheet(self, cr, uid, ids, context=None):
+        if context:
+            context['sheet_id'] = ids[0]
+        else:
+            context = {'sheet_id' : ids[0]}
+            
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Dodaj wiele produktów', 
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'hr.timesheet.copy.wizard',
+            'target': 'new',
+            'context': context,
+        }
 
 class account_analytic_line(osv.osv):
     _inherit = "account.analytic.line"

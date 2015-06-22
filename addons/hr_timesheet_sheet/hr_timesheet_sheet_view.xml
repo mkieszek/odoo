@@ -62,6 +62,7 @@
             <field name="arch" type="xml">
                 <form string="Timesheet">
                 <header>
+                	<button name="open_copy_timesheet" type="object" string="Kopiuj kartę pracy" />
                     <button name="button_confirm" states="draft" string="Submit to Manager" type="object" class="oe_highlight"/>
                     <button name="done" states="confirm" string="Approve" type="workflow" groups="base.group_hr_user" class="oe_highlight"/>
                     <button name="action_set_to_draft" states="done" string="Set to Draft" type="object" />

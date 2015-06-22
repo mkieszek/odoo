@@ -26,7 +26,7 @@
 #----------------------------------------------------------
 # Is the server running with gevent.
 import sys
-evented = True
+evented = False
 if sys.modules.get("gevent") is None:
     evented = False
 
