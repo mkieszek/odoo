@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+      <record id="hr_timesheet_copy_wizard_view" model="ir.ui.view">
+        <field name="name">hr_timesheet_copy_wizard_view</field>
+        <field name="model">hr.timesheet.copy.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Kopiowanie karty pracy">
+               <group>
+                    <separator string="Wybierz pracownika"/>
+                    <field name="employee_id" />
+               </group>
+               <footer>
+                    <button name="copy_timesheet" string="Kopiuj" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Anuluj" class="oe_link" special="cancel" />
+               </footer>
+           </form>
+        </field>
+    </record>
+
+    <record id="action_hr_timesheet_copy_wizard" model="ir.actions.act_window">
+        <field name="name">Kopiuj kartę pracy</field>
+        <field name="res_model">hr.timesheet.copy.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="hr_timesheet_copy_wizard_view"/>
+        <field name="target">new</field>
+        <field name="help">Kopiowanie karty pracy.</field>
+    </record>
+
+    </data>
+</openerp>
