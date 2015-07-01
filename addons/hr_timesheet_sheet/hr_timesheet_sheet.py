@@ -489,6 +489,7 @@ class hr_timesheet_line(osv.osv):
         'nadplacone': fields.float('Nadpłacone'),
         'nadpracowane': fields.float('Nadpracowane'),
         'import': fields.boolean('Import'),
+        'nieobecnosc_id': fields.related('sheet_id', 'nieobecnosc', relation='hr.timesheet.pkp.nieobecnosc', type='many2one', string='Nieobecność', readonly=True),
     }
     
     def write(self, cr, uid, ids, values, context=None):

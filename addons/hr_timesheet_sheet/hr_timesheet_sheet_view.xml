@@ -364,7 +364,7 @@
                     <field name="godz_nieefektywne" widget="float_time" sum="Suma normalnych"/>
                     <field name="godz_nadliczbowe" widget="float_time" sum="Suma normalnych"/>
                     <field name="godz_nocne" widget="float_time" sum="Suma normalnych"/>
-                    <field name="nieobecnosc" widget="float_time" sum="Suma normalnych"/>
+                    <field name="nieobecnosc" />
                     <field name="uciazliwe" widget="float_time" sum="Suma normalnych"/>
                     <field name="kierowca" widget="float_time" sum="Suma normalnych"/>
                     <field name="niebezpieczne" widget="float_time" sum="Suma normalnych"/>
