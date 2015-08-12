@@ -56,7 +56,7 @@
             </field>
         </record>
         <record id="act_hr_timesheet_pkp_cpk" model="ir.actions.act_window">
-            <field name="name">CPK</field>
+            <field name="name">MPK</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">hr.timesheet.pkp.cpk</field>
             <field name="view_type">form</field>
@@ -90,7 +90,7 @@
 
         <menuitem parent="hr.menu_hr_configuration" id="menu_timesheet_pkp_nieobecnosc" action="act_hr_timesheet_pkp_nieobecnosc" sequence="50" groups="base.group_hr_manager"/>
         
-        <record id="hr_timesheet_pkp_okres_tree" model="ir.ui.view">
+        <!-- <record id="hr_timesheet_pkp_okres_tree" model="ir.ui.view">
             <field name="name">hr.timesheet.pkp.okres.tree</field>
             <field name="model">hr.timesheet.pkp.okres</field>
             <field name="arch" type="xml">
@@ -115,7 +115,7 @@
         </record>
 
         <menuitem parent="hr.menu_hr_configuration" id="menu_timesheet_pkp_okres" action="act_hr_timesheet_pkp_okres" sequence="50" groups="base.group_hr_manager"/>
-       
+        -->
        	<record id="hr_timesheet_line_pkp_tree" model="ir.ui.view">
             <field name="name">hr.analytic.timesheet.tree</field>
             <field name="model">hr.analytic.timesheet</field>
@@ -133,6 +133,7 @@
                     <field name="nieobecnosc_id" />
                     <field name="uciazliwe" widget="float_time" sum="Suma normalnych"/>
                     <field name="kierowca" widget="float_time" sum="Suma normalnych"/>
+                    <field name="budowa" widget="float_time" sum="Suma budowa" />
                     <field name="niebezpieczne" widget="float_time" sum="Suma normalnych"/>
                     <field name="nadplacone" widget="float_time" sum="Suma normalnych"/>
                 </field>

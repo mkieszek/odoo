@@ -385,7 +385,7 @@ class hr_department(osv.osv):
         'member_ids': fields.one2many('hr.employee', 'department_id', 'Members', readonly=True),
         'jobs_ids': fields.one2many('hr.job', 'department_id', 'Jobs'),
         'note': fields.text('Note'),
-        'cpk': fields.many2one('hr.timesheet.pkp.cpk', 'CPK'),
+        'cpk': fields.many2one('hr.timesheet.pkp.cpk', 'MPK'),
         'kod': fields.text('Kod'),
         'manager_user_id': fields.related('manager_id', 'user_id', type="many2one", relation="res.users"),
     }

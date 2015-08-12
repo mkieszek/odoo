@@ -141,7 +141,7 @@ class hr_timesheet_pkp_okres(osv.Model):
     
 class hr_timesheet_pkp_cpk(osv.Model):
     _name = 'hr.timesheet.pkp.cpk'
-    _description = 'CPK'
+    _description = 'MPK'
     _columns = {'name': fields.char('Nazwa', required=True),
                 'kod': fields.char('Kod', required=True)
                 }

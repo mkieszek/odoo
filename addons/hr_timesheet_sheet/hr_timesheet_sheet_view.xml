@@ -115,6 +115,7 @@
                         <group>
                         	<field name="uciazliwe" widget="float_time"/>
                         	<field name="kierowca" widget="float_time"/>
+                        	<field name="budowa" widget="float_time" />
                         	<field name="niebezpieczne" widget="float_time"/>
                         	<field name="nadplacone" widget="float_time"/>
                         </group>
@@ -144,6 +145,7 @@
                                     <field name="godz_nocne" widget="float_time"/>
                                     <field name="uciazliwe" widget="float_time"/>
                                     <field name="kierowca" widget="float_time"/>
+                                    <field name="budowa" widget="float_time" />
                                     <field name="niebezpieczne" widget="float_time"/>
                                     <field name="nadplacone" widget="float_time"/>
                                     <field invisible="1" name="general_account_id"/>
@@ -367,6 +369,7 @@
                     <field name="nieobecnosc" />
                     <field name="uciazliwe" widget="float_time" sum="Suma normalnych"/>
                     <field name="kierowca" widget="float_time" sum="Suma normalnych"/>
+                    <field name="budowa" widget="float_time" sum="Suma" />
                     <field name="niebezpieczne" widget="float_time" sum="Suma normalnych"/>
                     <field name="nadplacone" widget="float_time" sum="Suma normalnych"/>
                     <field name="total_attendance" widget="float_time" groups="base.group_hr_attendance"/>

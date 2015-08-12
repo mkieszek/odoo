@@ -56,6 +56,7 @@ class hr_timesheet_sheet(osv.osv):
                 'kierowca': 0.0,
                 'niebezpieczne': 0.0,
                 'nadplacone': 0.0,
+                'budowa': 0.0,
                 
             })
             for period in sheet.period_ids:
@@ -71,6 +72,8 @@ class hr_timesheet_sheet(osv.osv):
                 res[sheet.id]['nieobecnosc'] += line.nieobecnosc
                 res[sheet.id]['uciazliwe'] += line.uciazliwe
                 res[sheet.id]['kierowca'] += line.kierowca
+                res[sheet.id]['budowa'] += line.budowa
+                
                 res[sheet.id]['niebezpieczne'] += line.niebezpieczne
                 res[sheet.id]['nadplacone'] += line.nadplacone
         return res
@@ -232,7 +235,7 @@ class hr_timesheet_sheet(osv.osv):
         'account_ids': fields.one2many('hr_timesheet_sheet.sheet.account', 'sheet_id', 'Analytic accounts', readonly=True),
         'company_id': fields.many2one('res.company', 'Company'),
         'department_id':fields.many2one('hr.department','Department'),
-        'cpk_id': fields.related('department_id','cpk', type="many2one", relation='hr.timesheet.pkp.cpk',string="CPK", readonly=True, store=False),
+        'cpk_id': fields.related('department_id','cpk', type="many2one", relation='hr.timesheet.pkp.cpk',string="MPK", readonly=True, store=False),
         'timesheet_activity_count': fields.function(_count_all, type='integer', string='Timesheet Activities', multi=True),
         'attendance_count': fields.function(_count_all, type='integer', string="Attendances", multi=True),
         'godz_normalne': fields.function(_total, method=True, string='Normalne', multi="_total"),
@@ -241,7 +244,8 @@ class hr_timesheet_sheet(osv.osv):
         'godz_nocne': fields.function(_total, method=True, string='Nocne', multi="_total"),
         'nieobecnosc': fields.many2one('hr.timesheet.pkp.nieobecnosc', 'Nieobecnosc'),
         'uciazliwe': fields.function(_total, method=True, string='Uciążliwe', multi="_total"),
-        'kierowca': fields.function(_total, method=True, string='Kierowca', multi="_total"),
+        'kierowca': fields.function(_total, method=True, string='Dod. pojazd.', multi="_total"),
+        'budowa': fields.function(_total, method=True, string='Budowa', multi="_total"),
         'niebezpieczne': fields.function(_total, method=True, string='Niebezpieczne', multi="_total"),
         'nadplacone': fields.function(_total, method=True, string='Nadpłacone', multi="_total"),
         'import': fields.boolean('Import'),
@@ -484,12 +488,13 @@ class hr_timesheet_line(osv.osv):
         'godz_nocne': fields.float('Noce'),
         'nieobecnosc': fields.selection([('C', 'C'), ('W', 'W')], "Nieobecność"),
         'uciazliwe': fields.float("Uciążliwe"),
-        'kierowca': fields.float('Czynny kierowca'),
+        'kierowca': fields.float('Dod. pojazd.'),
         'niebezpieczne': fields.float('Niebezpieczne'),
         'nadplacone': fields.float('Nadpłacone'),
         'nadpracowane': fields.float('Nadpracowane'),
         'import': fields.boolean('Import'),
         'nieobecnosc_id': fields.related('sheet_id', 'nieobecnosc', relation='hr.timesheet.pkp.nieobecnosc', type='many2one', string='Nieobecność', readonly=True),
+        'budowa': fields.float('Budowa'),
     }
     
     def write(self, cr, uid, ids, values, context=None):
