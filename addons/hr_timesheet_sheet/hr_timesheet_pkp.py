@@ -230,9 +230,8 @@ class account_analytic_account(osv.osv):
         return res
     
     def name_search(self, cr, uid, name='', args=None, operator='ilike', context=None, limit=0):
-        args = []
-        if not context:
-            context = {}
+        if not args:
+            args = []
         
         if name:
             # Be sure name_search is symetric to name_get
