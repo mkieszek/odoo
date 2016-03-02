@@ -294,21 +294,24 @@ instance.web.ListView = instance.web.View.extend( /** @lends instance.web.ListVi
             this.$pager
                 .on('click', 'a[data-pager-action]', function () {
                     var $this = $(this);
-                    var max_page = Math.floor(self.dataset.size() / self.limit());
+                    var max_page_index = Math.ceil(self.dataset.size() / self.limit()) - 1;
                     switch ($this.data('pager-action')) {
                         case 'first':
-                            self.page = 0; break;
+                            self.page = 0;
+                            break;
                         case 'last':
-                            self.page = max_page - 1;
+                            self.page = max_page_index;
                             break;
                         case 'next':
-                            self.page += 1; break;
+                            self.page += 1;
+                            break;
                         case 'previous':
-                            self.page -= 1; break;
+                            self.page -= 1;
+                            break;
                     }
                     if (self.page < 0) {
-                        self.page = max_page;
-                    } else if (self.page > max_page) {
+                        self.page = max_page_index;
+                    } else if (self.page > max_page_index) {
                         self.page = 0;
                     }
                     self.reload_content();
@@ -1078,7 +1081,7 @@ instance.web.ListView.List = instance.web.Class.extend( /** @lends instance.web.
                     ids = value;
                 }
                 new instance.web.Model(column.relation)
-                    .call('name_get', [ids, this.dataset.context]).done(function (names) {
+                    .call('name_get', [ids, this.dataset.get_context()]).done(function (names) {
                         // FIXME: nth horrible hack in this poor listview
                         record.set(column.id + '__display',
                                    _(names).pluck(1).join(', '));

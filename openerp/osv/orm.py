@@ -49,7 +49,6 @@ import datetime
 import itertools
 import logging
 import operator
-import pickle
 import re
 import simplejson
 import time
@@ -65,7 +64,7 @@ import openerp
 import openerp.netsvc as netsvc
 import openerp.tools as tools
 from openerp.tools.config import config
-from openerp.tools.misc import CountingStream
+from openerp.tools.misc import CountingStream, pickle
 from openerp.tools.safe_eval import safe_eval as eval
 from openerp.tools.translate import _
 from openerp import SUPERUSER_ID
@@ -77,7 +76,7 @@ _schema = logging.getLogger(__name__ + '.schema')
 # List of etree._Element subclasses that we choose to ignore when parsing XML.
 from openerp.tools import SKIPPED_ELEMENT_TYPES
 
-regex_order = re.compile('^( *([a-z0-9_]+|"[a-z0-9_]+")( *desc| *asc)?( *, *|))+$', re.I)
+regex_order = re.compile('^(\s*([a-z0-9:_]+|"[a-z0-9:_]+")(\s+(desc|asc))?\s*(,|$))+(?<!,)$', re.I)
 regex_object_name = re.compile(r'^[a-z0-9_.]+$')
 
 # TODO for trunk, raise the value to 1000
@@ -288,6 +287,9 @@ class browse_null(object):
 
     def __unicode__(self):
         return u''
+
+    def __iter__(self):
+        raise NotImplementedError("Iteration is not allowed on browse_null")
 
 
 #
@@ -1215,17 +1217,6 @@ class BaseModel(object):
                                 for fpos2 in range(len(fields)):
                                     if lines2 and lines2[0][fpos2]:
                                         data[fpos2] = lines2[0][fpos2]
-                                if not data[fpos]:
-                                    dt = ''
-                                    for rr in r:
-                                        name_relation = self.pool.get(rr._table_name)._rec_name
-                                        if isinstance(rr[name_relation], browse_record):
-                                            rr = rr[name_relation]
-                                        rr_name = self.pool.get(rr._table_name).name_get(cr, uid, [rr.id], context=context)
-                                        rr_name = rr_name and rr_name[0] and rr_name[0][1] or ''
-                                        dt += tools.ustr(rr_name or '') + ','
-                                    data[fpos] = dt[:-1]
-                                    break
                                 lines += lines2[1:]
                                 first = False
                             else:
@@ -1739,6 +1730,9 @@ class BaseModel(object):
         result = False
         fields = {}
         children = True
+
+        if isinstance(node, SKIPPED_ELEMENT_TYPES):
+            return fields
 
         modifiers = {}
 
@@ -2894,7 +2888,7 @@ class BaseModel(object):
                 # if val is a many2one, just write the ID
                 if type(val) == tuple:
                     val = val[0]
-                if val is not False:
+                if f._type == 'boolean' or val is not False:
                     cr.execute(update_query, (ss[1](val), key))
 
     def _check_selection_field_value(self, cr, uid, field, value, context=None):

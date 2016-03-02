@@ -73,6 +73,16 @@ class mrp_workcenter(osv.osv):
             value = {'costs_hour': cost.standard_price}
         return {'value': value}
 
+    def _check_capacity_per_cycle(self, cr, uid, ids, context=None):
+        for obj in self.browse(cr, uid, ids, context=context):
+            if obj.capacity_per_cycle <= 0.0:
+                return False
+        return True
+
+    _constraints = [
+        (_check_capacity_per_cycle, 'The capacity per cycle must be strictly positive.', ['capacity_per_cycle']),
+    ]
+
 mrp_workcenter()
 
 
@@ -247,19 +257,17 @@ class mrp_bom(osv.osv):
         return True
 
     def _check_product(self, cr, uid, ids, context=None):
-        all_prod = []
         boms = self.browse(cr, uid, ids, context=context)
-        def check_bom(boms):
+        def check_bom(boms, all_prod):
             res = True
             for bom in boms:
                 if bom.product_id.id in all_prod:
-                    res = res and False
-                all_prod.append(bom.product_id.id)
-                lines = bom.bom_lines
-                if lines:
-                    res = res and check_bom([bom_id for bom_id in lines if bom_id not in boms])
+                    return False
+                if bom.bom_lines:
+                    res = res and check_bom([b for b in bom.bom_lines if b not in boms], all_prod + [bom.product_id.id])
             return res
-        return check_bom(boms)
+        return check_bom(boms, [])
+
 
     _constraints = [
         (_check_recursion, 'Error ! You cannot create recursive BoM.', ['parent_id']),
@@ -373,6 +381,40 @@ class mrp_bom(osv.osv):
                 res = self._bom_explode(cr, uid, bom2, factor, properties, addthis=True, level=level+10)
                 result = result + res[0]
                 result2 = result2 + res[1]
+
+        # We merge the results for the same product. The reason is that action_produce does not
+        # support the case where the same product appears on multiple lines. To avoid major changes
+        # in a stable version, we do this simple hack at this point.
+        # Only for v7.0, do not use in v8.0
+        result_dict = {}
+        result_dup = False
+        for product_detail in result:
+            key = (
+                product_detail['name'],
+                product_detail['product_id'],
+                product_detail['product_uom'],
+                product_detail['product_uos_qty'],
+                product_detail['product_uos']
+            )
+            if key in result_dict:
+                result_dict[key] += product_detail['product_qty']
+                result_dup = True
+            else:
+                result_dict[key] = product_detail['product_qty']
+
+        if result_dup:
+            result = []
+            for key in result_dict.keys():
+                result.append(
+                {
+                    'name': key[0],
+                    'product_id': key[1],
+                    'product_qty': result_dict[key],
+                    'product_uom': key[2],
+                    'product_uos_qty': key[3],
+                    'product_uos': key[4],
+                })
+
         return result, result2
 
     def copy_data(self, cr, uid, id, default=None, context=None):
