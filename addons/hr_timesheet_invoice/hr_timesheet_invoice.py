@@ -32,6 +32,7 @@ class hr_timesheet_invoice_factor(osv.osv):
         'name': fields.char('Internal Name', required=True, translate=True),
         'customer_name': fields.char('Name', help="Label for the customer"),
         'factor': fields.float('Discount (%)', required=True, help="Discount in percentage"),
+        'active': fields.boolean('Active'),
     }
     _defaults = {
         'factor': lambda *a: 0.0,
