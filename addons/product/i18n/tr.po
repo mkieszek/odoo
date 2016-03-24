@@ -4,14 +4,16 @@
 # 
 # Translators:
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
+# gezgin biri <gezginbiri@hotmail.com>, 2015
+# Murat Kaplan <muratk@projetgrup.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo 8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-21 14:08+0000\n"
-"PO-Revision-Date: 2015-05-29 12:58+0000\n"
-"Last-Translator: Martin Trigaux\n"
-"Language-Team: Turkish (http://www.transifex.com/projects/p/odoo-8/language/tr/)\n"
+"PO-Revision-Date: 2015-12-30 21:45+0000\n"
+"Last-Translator: Murat Kaplan <muratk@projetgrup.com>\n"
+"Language-Team: Turkish (http://www.transifex.com/odoo/odoo-8/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -21,7 +23,7 @@ msgstr ""
 #. module: product
 #: field:product.template,product_variant_count:0
 msgid "# of Product Variants"
-msgstr "Ürün Çeşiti sayısı"
+msgstr "Ürün Varyant Sayısı"
 
 #. module: product
 #: code:addons/product/product.py:757 code:addons/product/product.py:1111
@@ -99,7 +101,7 @@ msgid ""
 ": adding or deleting attributes\n"
 "                            will delete and recreate existing variants and lead\n"
 "                            to the loss of their possible customizations."
-msgstr ""
+msgstr ": Nitelik ekleme ve silme varyantları silip yeniden oluşturabilir. Varyantlar üzerinde yaptığınız özelleştirmeleri (ek özellik fiyatı girme vb.) kaybetmemek için dikkatli olun."
 
 #. module: product
 #: model:product.template,website_description:product.product_product_9_product_template
@@ -828,7 +830,7 @@ msgstr "Enaz bir fiyat listesinin etkin sürümü yok!\nLüten bir tane oluştur
 #: field:product.attribute.line,attribute_id:0
 #: field:product.attribute.value,attribute_id:0
 msgid "Attribute"
-msgstr "Öznitelik"
+msgstr "Nitelik"
 
 #. module: product
 #: field:product.attribute.value,price_extra:0
@@ -844,14 +846,14 @@ msgstr "Özellik fiyatları"
 #: model:ir.actions.act_window,name:product.variants_action
 #: model:ir.ui.menu,name:product.menu_variants_action
 msgid "Attribute Values"
-msgstr "Öznitelik Değerleri"
+msgstr "Nitelik Değerleri"
 
 #. module: product
 #: model:ir.actions.act_window,name:product.attribute_action
 #: model:ir.ui.menu,name:product.menu_attribute_action
 #: field:product.product,attribute_value_ids:0
 msgid "Attributes"
-msgstr "Öznitelikler"
+msgstr "Nitelikler"
 
 #. module: product
 #: view:product.pricelist.item:product.product_pricelist_item_form_view
@@ -967,7 +969,7 @@ msgstr "Mevcut Ölçü Birimi kategorisi değiştirilemiyor '%s'."
 #. module: product
 #: model:product.public.category,name:product.case
 msgid "Case"
-msgstr "Servis Talebi"
+msgstr "Kutu"
 
 #. module: product
 #: view:product.template:product.product_template_search_view
@@ -1059,7 +1061,7 @@ msgstr "Yapılandırmalar"
 #: view:product.template:product.product_template_search_view
 #: selection:product.template,type:0
 msgid "Consumable"
-msgstr "Hammadde"
+msgstr "Sarf"
 
 #. module: product
 #: view:product.template:product.product_template_search_view
@@ -1100,7 +1102,7 @@ msgid ""
 "Cost price of the product template used for standard stock valuation in "
 "accounting and used as a base price on purchase orders. Expressed in the "
 "default unit of measure of the product."
-msgstr ""
+msgstr "Muhasebede standart stok değerlemesi için kullanılan ürünün maliyet fiyatıdır ve satınalma siparişlerinde temel fiyat olarak kullanılır.  Ürünün vasayılan ölçü biriminde tanımlanır."
 
 #. module: product
 #: field:pricelist.partnerinfo,create_uid:0
@@ -1184,7 +1186,7 @@ msgstr "Gün"
 #. module: product
 #: model:product.pricelist.version,name:product.ver0
 msgid "Default Public Pricelist Version"
-msgstr "Varsayılan Genel Fiyat Listesi"
+msgstr "Genel Satış Fiyat Listesi"
 
 #. module: product
 #: view:product.template:product.product_template_search_view
@@ -1278,7 +1280,7 @@ msgstr "Hata!"
 #. module: product
 #: constraint:product.pricelist.item:0
 msgid "Error! The minimum margin should be lower than the maximum margin."
-msgstr "Hata!Enaz oran ençok orandan daha düşük olmalıdır."
+msgstr "Hata! Min. oran Max. oran'dan daha düşük olmalıdır."
 
 #. module: product
 #: constraint:product.pricelist.item:0
@@ -1347,7 +1349,7 @@ msgstr "Sabit"
 #: field:product.product,message_follower_ids:0
 #: field:product.template,message_follower_ids:0
 msgid "Followers"
-msgstr "İzleyiciler"
+msgstr "Takipçiler"
 
 #. module: product
 #: help:product.pricelist.item,min_quantity:0
@@ -1647,13 +1649,13 @@ msgstr "Ipod"
 #: field:product.product,message_is_follower:0
 #: field:product.template,message_is_follower:0
 msgid "Is a Follower"
-msgstr "Bir İzleyicidir"
+msgstr "Bir Takipçidir"
 
 #. module: product
 #: field:product.product,is_product_variant:0
 #: field:product.template,is_product_variant:0
 msgid "Is product variant"
-msgstr ""
+msgstr "ürün varyantıdır"
 
 #. module: product
 #: view:product.pricelist.version:product.product_pricelist_version_form_view
@@ -1764,7 +1766,7 @@ msgstr "Uzunluk / Mesafe"
 #. module: product
 #: view:product.template:product.product_template_only_form_view
 msgid "List of Variants"
-msgstr "Çeşit Listesi"
+msgstr "Varyant Listesi"
 
 #. module: product
 #: model:product.uom,name:product.product_uom_litre
@@ -1822,12 +1824,12 @@ msgstr "İkinci Ölçü Birimini Yönetme"
 #. module: product
 #: view:product.pricelist.item:product.product_pricelist_item_form_view
 msgid "Max. Margin"
-msgstr "Ençok Oran"
+msgstr "Max. Marj (%)"
 
 #. module: product
 #: field:product.pricelist.item,price_max_margin:0
 msgid "Max. Price Margin"
-msgstr "En fazla fiyat marjı"
+msgstr "Max. Br.Fiyat Marjı"
 
 #. module: product
 #: field:product.template,mes_type:0
@@ -1866,7 +1868,7 @@ msgstr "Mesajlar ve iletişim geçmişi"
 #. module: product
 #: view:product.pricelist.item:product.product_pricelist_item_form_view
 msgid "Min. Margin"
-msgstr "Min. Marj"
+msgstr "Min. Marj (%)"
 
 #. module: product
 #: field:product.pricelist.item,price_min_margin:0
@@ -1876,7 +1878,7 @@ msgstr "Min. Fiyat Marjı"
 #. module: product
 #: field:product.pricelist.item,min_quantity:0
 msgid "Min. Quantity"
-msgstr "Enaz Miktar"
+msgstr "Min. Miktar"
 
 #. module: product
 #: field:product.supplierinfo,min_qty:0
@@ -2009,7 +2011,7 @@ msgstr "Diğer Bilgiler"
 #: field:product.pricelist.item,base_pricelist_id:0
 #, python-format
 msgid "Other Pricelist"
-msgstr "Diğer FiyatListesi"
+msgstr "Diğer Fiyat Listesi"
 
 #. module: product
 #: model:product.category,name:product.product_category_3
@@ -2217,12 +2219,12 @@ msgstr "Fiyat Listesi Sürümü"
 #: model:ir.ui.menu,name:product.menu_product_pricelist_action
 #: field:product.pricelist,version_id:0
 msgid "Pricelist Versions"
-msgstr "FiyatListesi Versiyonları"
+msgstr "Fiyat Listesi Sürümleri"
 
 #. module: product
 #: model:ir.model,name:product.model_product_pricelist_item
 msgid "Pricelist item"
-msgstr "FiyatListesi öğesi"
+msgstr "Fiyat Listesi Öğesi"
 
 #. module: product
 #: model:ir.actions.act_window,name:product.product_pricelist_action2
@@ -2298,12 +2300,12 @@ msgstr "Ürün Özniteliği"
 #: field:product.attribute.line,value_ids:0
 #: field:product.attribute.price,value_id:0
 msgid "Product Attribute Value"
-msgstr "Ürün Öznitelik Değeri"
+msgstr "Ürün Nitelik Değeri"
 
 #. module: product
 #: field:product.template,attribute_line_ids:0
 msgid "Product Attributes"
-msgstr "Ürün Öznitelikleri"
+msgstr "Ürün Nitelikleri"
 
 #. module: product
 #: model:ir.actions.act_window,name:product.product_category_action_form
@@ -2318,7 +2320,7 @@ msgstr "Ürün Kategorleri"
 #. module: product
 #: model:ir.ui.menu,name:product.prod_config_main
 msgid "Product Categories & Attributes"
-msgstr "Ürün Kategorileri & Öznitelikleri"
+msgstr "Ürün Kategorileri & Nitelikleri"
 
 #. module: product
 #: model:ir.model,name:product.model_product_category
@@ -2334,7 +2336,7 @@ msgstr "Ürün Alanı"
 #. module: product
 #: field:product.template,product_manager:0
 msgid "Product Manager"
-msgstr "Ürün Müdürü"
+msgstr "Ürün Yöneticisi"
 
 #. module: product
 #: view:product.template:product.product_template_form_view
@@ -2368,7 +2370,7 @@ msgstr "Ürün Ölçü Birimi"
 #: view:product.product:product.product_normal_form_view
 #: view:product.template:product.product_template_search_view
 msgid "Product Variant"
-msgstr "Ürün Değişkeni"
+msgstr "Ürün Varyantı"
 
 #. module: product
 #: model:ir.actions.act_window,name:product.product_normal_action
@@ -2378,7 +2380,7 @@ msgstr "Ürün Değişkeni"
 #: model:ir.ui.menu,name:product.menu_products
 #: view:product.product:product.product_product_tree_view
 msgid "Product Variants"
-msgstr "Ürün Çeşitleri"
+msgstr "Ürün Varyantları"
 
 #. module: product
 #: model:ir.model,name:product.model_product_uom_categ
@@ -2440,7 +2442,7 @@ msgstr "Ürünler: "
 #: model:product.price.type,name:product.list_price
 #: field:product.product,lst_price:0 field:product.template,lst_price:0
 msgid "Public Price"
-msgstr "Genel Fiyat"
+msgstr "Satış Fiyatı"
 
 #. module: product
 #: model:product.pricelist,name:product.list0
@@ -2591,12 +2593,12 @@ msgstr "Satışlar"
 #. module: product
 #: view:res.partner:product.view_partner_property_form
 msgid "Sales & Purchases"
-msgstr "Satışlar & Satınalmalar"
+msgstr "Satış & Satınalma"
 
 #. module: product
 #: model:res.groups,name:product.group_sale_pricelist
 msgid "Sales Pricelists"
-msgstr "Satış Fiyat Listesi"
+msgstr "Satış Fiyat Listeleri"
 
 #. module: product
 #: model:product.public.category,name:product.Screen
@@ -2713,12 +2715,12 @@ msgstr "İndirimle hesaplanan tutara eklenecek ya da çıkartılacak (eksi değe
 #. module: product
 #: help:product.pricelist.item,price_max_margin:0
 msgid "Specify the maximum amount of margin over the base price."
-msgstr "Taban fiyat üzerinden ençok oran miktarını belirtin."
+msgstr "Taban fiyat üzerinden max. marj oranını belirtin."
 
 #. module: product
 #: help:product.pricelist.item,price_min_margin:0
 msgid "Specify the minimum amount of margin over the base price."
-msgstr "Taban fiyat üzerinden enaz oran miktarını belirtin."
+msgstr "Taban fiyat üzerinden min. oran miktarını belirtin."
 
 #. module: product
 #: field:product.pricelist.version,date_start:0
@@ -2767,7 +2769,7 @@ msgstr "Tedarikçi Fiyat Listesi"
 #: code:addons/product/pricelist.py:433
 #, python-format
 msgid "Supplier Prices on the product form"
-msgstr "Ürün kartındaki Tedarikçi Fiyatları"
+msgstr "Ürün Kartındaki İş Ortağı Bazında Net Fiyat"
 
 #. module: product
 #: field:product.supplierinfo,product_code:0
@@ -2829,7 +2831,7 @@ msgstr "Nakliye birim kodu."
 msgid ""
 "The computed price is expressed in the default Unit of Measure of the "
 "product."
-msgstr ""
+msgstr "Bu hesaplanan fiyat, ürünün Varsayılan Ölçü Biriminde tanımlanır."
 
 #. module: product
 #: help:product.uom,rounding:0
@@ -2869,14 +2871,14 @@ msgid ""
 "The minimal quantity to purchase to this supplier, expressed in the supplier"
 " Product Unit of Measure if not empty, in the default unit of measure of the"
 " product otherwise."
-msgstr "Bu tedarikçiden satınalınacak enaz miktar, eğer varsayılan ürün ölçü birimi boş değilse tedarikçi ürün Ölçü Biriminde belirtilir"
+msgstr "Bu tedarikçiden satın alınacak min. miktar, eğer varsayılan ürün ölçü birimi boş değilse tedarikçi ürün Ölçü Biriminde belirtilir"
 
 #. module: product
 #: help:pricelist.partnerinfo,min_quantity:0
 msgid ""
 "The minimal quantity to trigger this rule, expressed in the supplier Unit of"
 " Measure if any or in the default Unit of Measure of the product otherrwise."
-msgstr "Bu kuralı tetikleyecek enaz miktar, eğer varsa tedarikçi ölçü biriminde belirtilir ya da aksi durumda varsayıla Ölçü Biriminde."
+msgstr "Bu kuralı tetikleyecek min. miktar, eğer varsa tedarikçi ölçü biriminde belirtilir ya da aksi durumda varsayılan Ölçü Biriminde."
 
 #. module: product
 #: help:product.template,weight_net:0
@@ -2899,14 +2901,14 @@ msgstr "Kata göre paket sayısı"
 msgid ""
 "The operation cannot be completed:\n"
 "You trying to delete an attribute value with a reference on a product variant."
-msgstr "İşlem tamamlanamıyor:\nBir ürün çeşitiyle ilgili olan bir öznitelik değerini silmeye çalışıyorsunuz."
+msgstr "İşlem tamamlanamıyor:\nBir ürün varyantı ile ilgili olan bir nitelik değerini silmeye çalışıyorsunuz."
 
 #. module: product
 #: view:product.supplierinfo:product.product_supplierinfo_form_view
 msgid ""
 "The prices below will only be taken into account when your pricelist is set "
 "as based on supplier prices."
-msgstr "Fiyatlar yalnızca fiyat listeniz tedarikçi fiyatları temelli olduğunda dikkate alınacaktır."
+msgstr "Bu alanda tanımladığınız fiyatlar yalnızca fiyat listeniz \"ürün kartındaki net fiyat\" temelli olduğunda dikkate alınacaktır. Fiyat Listesi kurallarınızı kontrol ediniz."
 
 #. module: product
 #: model:product.template,description_sale:product.product_product_9_product_template
@@ -2938,7 +2940,7 @@ msgstr "Paket genişliği"
 #. module: product
 #: sql_constraint:product.attribute.value:0
 msgid "This attribute value already exists !"
-msgstr "Öznitelik zaten var!"
+msgstr "Nitelik değeri zaten mevcut !"
 
 #. module: product
 #: help:product.supplierinfo,product_uom:0
@@ -2967,7 +2969,7 @@ msgstr "Bu, Varsayılan Ölçü Birimine dönüştürülmüş bir miktardır."
 #. module: product
 #: help:product.template,seller_qty:0
 msgid "This is minimum quantity to purchase from Main Supplier."
-msgstr "Ana Tedarikçiden satınalma yapılacak enaz miktarı belirtir."
+msgstr "Ana Tedarikçiden satın alma yapılacak min. miktarı belirtir."
 
 #. module: product
 #: help:product.template,seller_delay:0
@@ -2975,7 +2977,7 @@ msgid ""
 "This is the average delay in days between the purchase order confirmation "
 "and the receipts for this product and for the default supplier. It is used "
 "by the scheduler to order requests based on reordering delays."
-msgstr "Satınalma siparişi onaylanması ve bu ürünün varsayılan tedarikçiden teslim alınması arasında geçen süredir. Bu programcı tarafından sipariş yinelemeye dayalı olarak istekleri yerine getirmek için kullanılır."
+msgstr "Satınalma siparişi onaylanması ve bu ürünün varsayılan tedarikçiden teslim alınması arasında geçen süredir. Bu planlayıcı tarafından sipariş yinelemeye dayalı olarak istekleri yerine getirmek için kullanılır."
 
 #. module: product
 #: help:product.product,price_extra:0
@@ -3143,17 +3145,17 @@ msgstr "Değişken"
 #. module: product
 #: field:product.product,price_extra:0
 msgid "Variant Extra Price"
-msgstr "Ekstra Fiyat Çeşiti"
+msgstr "Varyant Ekstra Fiyatı"
 
 #. module: product
 #: field:product.product,image_variant:0
 msgid "Variant Image"
-msgstr "Değişken Resim"
+msgstr "Varyant Resmi"
 
 #. module: product
 #: view:product.template:product.product_template_only_form_view
 msgid "Variant Prices"
-msgstr "Değişken Fiyatlar"
+msgstr "Varyant Fiyatları"
 
 #. module: product
 #: model:ir.actions.act_window,name:product.variants_template_action
@@ -3161,14 +3163,14 @@ msgstr "Değişken Fiyatlar"
 #: view:product.attribute.value:product.variants_template_tree_view
 #: view:product.attribute.value:product.variants_tree_view
 msgid "Variant Values"
-msgstr "Değişken Değerler"
+msgstr "Varyant Değerleri"
 
 #. module: product
 #: field:product.attribute.value,product_ids:0
 #: view:product.template:product.product_template_kanban_view
 #: view:product.template:product.product_template_only_form_view
 msgid "Variants"
-msgstr "Değişkeler"
+msgstr "Varyantlar"
 
 #. module: product
 #: model:product.public.category,name:product.video_acquisition
@@ -3215,7 +3217,7 @@ msgstr "Ağırlık"
 #. module: product
 #: view:product.template:product.product_template_form_view
 msgid "Weights"
-msgstr "Ağırlıklar"
+msgstr "Hacim ve Ağırlık Bilgileri"
 
 #. module: product
 #: help:product.pricelist.version,active:0
@@ -3258,7 +3260,7 @@ msgstr "Çalışma Süresi"
 #. module: product
 #: constraint:product.pricelist.version:0
 msgid "You cannot have 2 pricelist versions that overlap!"
-msgstr "Aynı anda çakışan 2 fiyat listesi kullanamazsınız"
+msgstr "Aynı anda çakışan 2 fiyat listesi sürümü kullanamazsınız"
 
 #. module: product
 #: constraint:product.product:0
@@ -3350,11 +3352,6 @@ msgstr "km"
 #: model:product.uom,name:product.product_uom_lb
 msgid "lb(s)"
 msgstr "lb"
-
-#. module: product
-#: view:product.product:product.product_normal_form_view
-msgid "lst_price"
-msgstr "lst_fiyat"
 
 #. module: product
 #: model:product.uom,name:product.product_uom_mile

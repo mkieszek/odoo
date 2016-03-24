@@ -4,14 +4,15 @@
 # 
 # Translators:
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
+# Murat Kaplan <muratk@projetgrup.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo 8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-21 14:07+0000\n"
-"PO-Revision-Date: 2015-05-29 12:57+0000\n"
-"Last-Translator: Martin Trigaux\n"
-"Language-Team: Turkish (http://www.transifex.com/projects/p/odoo-8/language/tr/)\n"
+"PO-Revision-Date: 2015-12-11 13:24+0000\n"
+"Last-Translator: Murat Kaplan <muratk@projetgrup.com>\n"
+"Language-Team: Turkish (http://www.transifex.com/odoo/odoo-8/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -30,7 +31,7 @@ msgstr " * Bir kullanıcı yeni bir ve uzlaşılmamış bir Fiş kodlarken 'Tasl
 #. module: account_voucher
 #: field:sale.receipt.report,nbr:0
 msgid "# of Voucher Lines"
-msgstr "Çek Satırı Sayısı"
+msgstr "Çek Satır Sayısı"
 
 #. module: account_voucher
 #: view:account.voucher:account_voucher.view_voucher_form
@@ -135,7 +136,7 @@ msgstr "Tutar"
 #. module: account_voucher
 #: field:account.voucher.line,account_analytic_id:0
 msgid "Analytic Account"
-msgstr "Analiz Hesabı"
+msgstr "Analitik Hesap"
 
 #. module: account_voucher
 #: view:account.voucher:account_voucher.view_vendor_payment_form
@@ -222,7 +223,7 @@ msgstr "Hali hazırda açık ya da ödenmiş olan fiş(ler) silinemiyor."
 msgid ""
 "Check this box if you are unsure of that journal entry and if you want to "
 "note it as 'to be reviewed' by an accounting expert."
-msgstr "Günlük girişi konusunda karasızsanız ve bir muhasebe uzmanı tarafından 'incelenmeli'  notunu düşmek istiyorsanız bu kutuyu işaretleyin."
+msgstr "Yevmiye girişi konusunda karasızsanız ve bir muhasebe uzmanı tarafından 'incelenmeli'  notunu düşmek istiyorsanız bu kutuyu işaretleyin."
 
 #. module: account_voucher
 #: field:account.voucher,company_id:0 field:account.voucher.line,company_id:0
@@ -401,12 +402,12 @@ msgstr "Döviz Kuru Oranı"
 #. module: account_voucher
 #: view:account.voucher:account_voucher.view_purchase_receipt_form
 msgid "Expense Lines"
-msgstr "Gider Kalemleri"
+msgstr "Gider Satırları"
 
 #. module: account_voucher
 #: view:sale.receipt.report:account_voucher.view_sale_receipt_report_search
 msgid "Extended Filters..."
-msgstr "Genişletilmiş Süzgeçler..."
+msgstr "Genişletilmiş Filtreler..."
 
 #. module: account_voucher
 #: help:account.voucher,is_multi_currency:0
@@ -418,7 +419,7 @@ msgstr "Fişin çoklu para birimli olup olmadığını belirten yalnızca iç am
 #. module: account_voucher
 #: field:account.voucher,message_follower_ids:0
 msgid "Followers"
-msgstr "İzleyiciler"
+msgstr "Takipçiler"
 
 #. module: account_voucher
 #: field:account.voucher.line,reconcile:0
@@ -494,7 +495,7 @@ msgstr "Faturalar ve Kapatılmamış İşlemler"
 #. module: account_voucher
 #: field:account.voucher,message_is_follower:0
 msgid "Is a Follower"
-msgstr "Bir İzleyicidir"
+msgstr "Bir Takipçidir"
 
 #. module: account_voucher
 #: view:account.voucher:account_voucher.view_voucher_filter
@@ -730,13 +731,13 @@ msgstr "Dönem"
 #: code:addons/account_voucher/account_voucher.py:1058
 #, python-format
 msgid "Please activate the sequence of selected journal !"
-msgstr "Lütfen seçilen günlüğün seri numarasını etkinleştirin !"
+msgstr "Lütfen seçilen yevmiyenin seri numarasını etkinleştirin !"
 
 #. module: account_voucher
 #: code:addons/account_voucher/account_voucher.py:1064
 #, python-format
 msgid "Please define a sequence on the journal."
-msgstr "Günlük için lütfen bir seri no tanımlayın."
+msgstr "Yevmiye için lütfen bir seri no tanımlayın."
 
 #. module: account_voucher
 #: code:addons/account_voucher/account_voucher.py:518
@@ -843,7 +844,7 @@ msgstr "Satış Bilgisi"
 #. module: account_voucher
 #: view:account.voucher:account_voucher.view_sale_receipt_form
 msgid "Sales Lines"
-msgstr "Satış Kalemleri"
+msgstr "Satış Satırları"
 
 #. module: account_voucher
 #: view:account.voucher:account_voucher.view_sale_receipt_form
@@ -1101,14 +1102,14 @@ msgstr "Fiş Girişi"
 #. module: account_voucher
 #: view:account.voucher:account_voucher.view_voucher_form
 msgid "Voucher Items"
-msgstr "Fiş Kalemleri"
+msgstr "Fiş Öğeleri"
 
 #. module: account_voucher
 #: field:account.voucher,line_ids:0
 #: view:account.voucher.line:account_voucher.view_voucher_line_form
 #: model:ir.model,name:account_voucher.model_account_voucher_line
 msgid "Voucher Lines"
-msgstr "Fiş Kalemleri"
+msgstr "Fiş Satırları"
 
 #. module: account_voucher
 #: view:account.voucher:account_voucher.view_vendor_payment_form
@@ -1149,13 +1150,13 @@ msgstr "Borç Silme"
 #. module: account_voucher
 #: field:account.voucher,analytic_id:0
 msgid "Write-Off Analytic Account"
-msgstr "Borç Silme Analiz Hesabı"
+msgstr "Borç Silme Analitik Hesap"
 
 #. module: account_voucher
 #: code:addons/account_voucher/account_voucher.py:1202
 #, python-format
 msgid "Wrong voucher line"
-msgstr "Yanlış fiş kalemi"
+msgstr "Yanlış fiş satırı"
 
 #. module: account_voucher
 #: code:addons/account_voucher/account_voucher.py:1243

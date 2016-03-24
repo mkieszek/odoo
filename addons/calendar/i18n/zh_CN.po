@@ -3,17 +3,24 @@
 # * calendar
 # 
 # Translators:
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014
-# maie <m@maie.name>, 2015
-# maie <m@maie.name>, 2015
+# eden.chen <ccskysea@gmail.com>, 2015
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012,2014
+# jeffery chen fan <jeffery9@gmail.com>, 2015-2016
+# 珠海-老天 <liangjia@qq.com>, 2015
+# Maie <m@maie.name>, 2015
+# Maie <m@maie.name>, 2015
+# Maie <m@maie.name>, 2015
+# mrshelly <mrshelly@hotmail.com>, 2015
+# SHOM <shanmuxin@yeah.net>, 2015
+# 珠海-老天 <liangjia@qq.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 14:07+0000\n"
-"PO-Revision-Date: 2015-06-04 04:51+0000\n"
-"Last-Translator: maie <m@maie.name>\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/projects/p/odoo-8/language/zh_CN/)\n"
+"POT-Creation-Date: 2015-11-25 13:28+0000\n"
+"PO-Revision-Date: 2016-03-12 02:06+0000\n"
+"Last-Translator: jeffery chen fan <jeffery9@gmail.com>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/odoo/odoo-8/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -49,11 +56,11 @@ msgid ""
 "                                <table>\n"
 "                                    <tr>\n"
 "                                        <td>\n"
-"                                            <div style=\"border-top-left-radius:3px;border-top-right-radius:3px;font-size:12px;border-collapse:separate;text-align:center;font-weight:bold;color:#ffffff;width:130px;min-height: 18px;border-color:#ffffff;background:#8a89ba;padding-top: 4px;\">${object.event_id.get_interval(object.event_id.start, 'dayname')}</div>\n"
+"                                            <div style=\"border-top-left-radius:3px;border-top-right-radius:3px;font-size:12px;border-collapse:separate;text-align:center;font-weight:bold;color:#ffffff;width:130px;min-height: 18px;border-color:#ffffff;background:#8a89ba;padding-top: 4px;\">${object.event_id.get_interval(object.event_id.start, 'dayname', tz=object.partner_id.tz)}</div>\n"
 "                                            <div style=\"font-size:48px;min-height:auto;font-weight:bold;text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 130px;\">\n"
-"                                                ${object.event_id.get_interval(object.event_id.start,'day')}\n"
+"                                                ${object.event_id.get_interval(object.event_id.start,'day', tz=object.partner_id.tz)}\n"
 "                                            </div>\n"
-"                                            <div style='font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#8a89ba'>${object.event_id.get_interval(object.event_id.start, 'month')}</div>\n"
+"                                            <div style='font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#8a89ba'>${object.event_id.get_interval(object.event_id.start, 'month', tz=object.partner_id.tz)}</div>\n"
 "                                            <div style=\"border-collapse:separate;color:#8a89ba;text-align:center;width: 128px;font-size:12px;border-bottom-right-radius:3px;font-weight:bold;border:1px solid;border-bottom-left-radius:3px;\">${not object.event_id.allday and object.event_id.get_interval(object.event_id.start, 'time', tz=object.partner_id.tz) or ''}</div>\n"
 "                                        </td>\n"
 "                                        <td>\n"
@@ -138,7 +145,7 @@ msgid ""
 "                </html>\n"
 "                \n"
 "                "
-msgstr ""
+msgstr "\n                <html>\n                    <head>\n                        <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />\n                        <title>${object.event_id.name}</title>\n                        <style>\n                            span.oe_mail_footer_access {\n                                display:block;    \n                                text-align:center;\n                                color:grey;                                \n                            }\n                        </style>\n                    </head>\n                    <body>\n                        <div style=\"border-radius: 2px; max-width: 1200px; height: auto;margin-left: auto;margin-right: auto;background-color:#f9f9f9;\">\n                            <div style=\"height:auto;text-align: center;font-size : 30px;color: #8A89BA;\">\n                                <strong>${object.event_id.name}</strong>                                \n                            </div>\n                            <div style=\"height: 50px;text-align: left;font-size : 14px;border-collapse: separate;margin-top:10px\">\n                                <strong style=\"margin-left:12px\">亲爱的 ${object.cn}</strong> ,<br/>\n                                <p style=\"margin-left:12px\">温馨提醒您：: </p>\n                            </div>\n                            <div style=\"height: auto;margin-left:12px;margin-top:30px;\">\n                                <table>\n                                    <tr>\n                                        <td>\n                                            <div style=\"border-top-left-radius:3px;border-top-right-radius:3px;font-size:12px;border-collapse:separate;text-align:center;font-weight:bold;color:#ffffff;width:130px;min-height: 18px;border-color:#ffffff;background:#8a89ba;padding-top: 4px;\">${object.event_id.get_interval(object.event_id.start, 'dayname', tz=object.partner_id.tz)}</div>\n                                            <div style=\"font-size:48px;min-height:auto;font-weight:bold;text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 130px;\">\n                                                ${object.event_id.get_interval(object.event_id.start,'day', tz=object.partner_id.tz)}\n                                            </div>\n                                            <div style='font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#8a89ba'>${object.event_id.get_interval(object.event_id.start, 'month', tz=object.partner_id.tz)}</div>\n                                            <div style=\"border-collapse:separate;color:#8a89ba;text-align:center;width: 128px;font-size:12px;border-bottom-right-radius:3px;font-weight:bold;border:1px solid;border-bottom-left-radius:3px;\">${not object.event_id.allday and object.event_id.get_interval(object.event_id.start, 'time', tz=object.partner_id.tz) or ''}</div>\n                                        </td>\n                                        <td>\n                                            <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" style=\"margin-top: 15px; margin-left: 10px;font-size: 16px;\">\n                                                    <tr>\n                                                        <td style=\"vertical-align:top;\">\n                                                            % if object.event_id.location:\n                                                                <div style=\"width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    地点\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                        <td  style=\"vertical-align:top;\">\n                                                            % if object.event_id.location:\n                                                                <div style = \"font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;   font-size: 14px\" >\n                                                                    : ${object.event_id.location}\n                                                                    <span style= \"color:#A9A9A9; \">(<a href=\"http://maps.google.com/maps?oi=map&q=${object.event_id.location}\">View Map</a>)\n                                                                        </span>\n                                                                </div>\n                                                            % endif\n                                                        </td>                                                        \n                                                    </tr> \n                                                                                                \n                                                    <tr>\n                                                        <td style=\"vertical-align:top;\">\n                                                            % if object.event_id.description :\n                                                                <div style=\"width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    主题\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                        <td style=\"vertical-align:text-top;\">\n                                                            % if object.event_id.description :\n                                                                <div style=\"font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    : ${object.event_id.description}\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                    </tr>\n                                                                                                \n                                                    <tr>\n                                                        <td style=\"vertical-align:top;\">\n                                                            % if not object.event_id.allday and object.event_id.duration:\n                                                                <div style=\"height:auto; width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                   时长\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                        <td colspan=\"3\" style=\"vertical-align:text-top;\">\n                                                            % if not object.event_id.allday and object.event_id.duration:\n                                                                <div style=\"font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    : ${('%dH%02d' % (object.event_id.duration,(object.event_id.duration*60)%60))}\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                    </tr>                                                \n                                                <tr style=\" height: 30px;\">\n                                                    <td style=\"height: 25px;width: 120px; background : # CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                        <div>\n                                                            参加者\n                                                        </div>\n                                                    </td>\n                                                    <td colspan=\"3\">\n                                                       : \n                                                        % for attendee in object.event_id.attendee_ids:\n                                                            <div style=\"display:inline-block; border-radius: 50%; width:10px; height:10px;background:${'color' in ctx and ctx['color'][attendee.state] or 'white'};\"></div>\n                                                            % if attendee.cn != object.cn:\n                                                                <span style=\"margin-left:5px\">${attendee.cn}</span>\n                                                            % else:\n                                                                <span style=\"margin-left:5px\">您</span>\n                                                            % endif\n                                                        % endfor\n                                                    </td>\n                                                </tr>\n                                            </table>\n                                        </td>\n                                    </tr>\n                                </table>\n                            </div>            \n                        </div>\n                    </body>\n                </html>\n                \n                "
 
 #. module: calendar
 #: model:email.template,body_html:calendar.calendar_template_meeting_invitation
@@ -168,11 +175,11 @@ msgid ""
 "                                <table>\n"
 "                                    <tr>\n"
 "                                        <td>\n"
-"                                            <div style=\"border-top-left-radius:3px;border-top-right-radius:3px;font-size:12px;border-collapse:separate;text-align:center;font-weight:bold;color:#ffffff;width:130px;min-height: 18px;border-color:#ffffff;background:#8a89ba;padding-top: 4px;\">${object.event_id.get_interval(object.event_id.start, 'dayname')}</div>\n"
+"                                            <div style=\"border-top-left-radius:3px;border-top-right-radius:3px;font-size:12px;border-collapse:separate;text-align:center;font-weight:bold;color:#ffffff;width:130px;min-height: 18px;border-color:#ffffff;background:#8a89ba;padding-top: 4px;\">${object.event_id.get_interval(object.event_id.start, 'dayname', tz=object.partner_id.tz)}</div>\n"
 "                                            <div style=\"font-size:48px;min-height:auto;font-weight:bold;text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 130px;\">\n"
-"                                                ${object.event_id.get_interval(object.event_id.start,'day')}\n"
+"                                                ${object.event_id.get_interval(object.event_id.start,'day', tz=object.partner_id.tz)}\n"
 "                                            </div>\n"
-"                                            <div style='font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#8a89ba'>${object.event_id.get_interval(object.event_id.start, 'month')}</div>\n"
+"                                            <div style='font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#8a89ba'>${object.event_id.get_interval(object.event_id.start, 'month', tz=object.partner_id.tz)}</div>\n"
 "                                            <div style=\"border-collapse:separate;color:#8a89ba;text-align:center;width: 128px;font-size:12px;border-bottom-right-radius:3px;font-weight:bold;border:1px solid;border-bottom-left-radius:3px;\">${not object.event_id.allday and object.event_id.get_interval(object.event_id.start, 'time', tz=object.partner_id.tz) or ''}</div>\n"
 "                                        </td>\n"
 "                                        <td>\n"
@@ -262,7 +269,7 @@ msgid ""
 "                </html>\n"
 "                \n"
 "                "
-msgstr ""
+msgstr "\n                <html>\n                    <head>\n                        <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />\n                        <title>${object.event_id.name}</title>\n                        <style> \n                            span.oe_mail_footer_access {\n                                display:block;    \n                                text-align:center;\n                                color:grey;                                \n                            }\n                        </style>\n                    </head>\n                    <body>\n                        <div style=\"border-radius: 2px; max-width: 1200px; height: auto;margin-left: auto;margin-right: auto;background-color:#f9f9f9;\">\n                            <div style=\"height:auto;text-align: center;font-size : 30px;color: #8A89BA;\">\n                                <strong>${object.event_id.name}</strong>\n                            </div>\n                            <div style=\"height: 50px;text-align: left;font-size : 14px;border-collapse: separate;margin-top:10px\">\n                                <strong style=\"margin-left:12px\">尊敬的 ${object.cn}</strong> ,<br/><p style=\"margin-left:12px\">${object.event_id.user_id.partner_id.name} 您好！我们满心欢喜，诚致邀请 ${object.event_id.name} 来参加 ${object.event_id.user_id.company_id.name}会议.</p> \n                            </div>\n                            <div style=\"height: auto;margin-left:12px;margin-top:30px;\">\n                                <table>\n                                    <tr>\n                                        <td>\n                                            <div style=\"border-top-left-radius:3px;border-top-right-radius:3px;font-size:12px;border-collapse:separate;text-align:center;font-weight:bold;color:#ffffff;width:130px;min-height: 18px;border-color:#ffffff;background:#8a89ba;padding-top: 4px;\">${object.event_id.get_interval(object.event_id.start, 'dayname', tz=object.partner_id.tz)}</div>\n                                            <div style=\"font-size:48px;min-height:auto;font-weight:bold;text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 130px;\">\n                                                ${object.event_id.get_interval(object.event_id.start,'day', tz=object.partner_id.tz)}\n                                            </div>\n                                            <div style='font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#8a89ba'>${object.event_id.get_interval(object.event_id.start, 'month', tz=object.partner_id.tz)}</div>\n                                            <div style=\"border-collapse:separate;color:#8a89ba;text-align:center;width: 128px;font-size:12px;border-bottom-right-radius:3px;font-weight:bold;border:1px solid;border-bottom-left-radius:3px;\">${not object.event_id.allday and object.event_id.get_interval(object.event_id.start, 'time', tz=object.partner_id.tz) or ''}</div>\n                                        </td>\n                                        <td>\n                                            <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" style=\"margin-top: 15px; margin-left: 10px;font-size: 16px;\">\n                                                    <tr>\n                                                        <td style=\"vertical-align:top;\">\n                                                            % if object.event_id.location:\n                                                                <div style=\"width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    会议地点\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                        <td  style=\"vertical-align:top;\">\n                                                            % if object.event_id.location:\n                                                                <div style = \"font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;   font-size: 14px\" >\n                                                                    : ${object.event_id.location}\n                                                                    <span style= \"color:#A9A9A9; \">(<a href=\"http://maps.google.com/maps?oi=map&q=${object.event_id.location}\">查看地图</a>)\n                                                                        </span>\n                                                                </div>\n                                                            % endif\n                                                        </td>                                                        \n                                                    </tr> \n                                                                                                \n                                                    <tr>\n                                                        <td style=\"vertical-align:top;\">\n                                                            % if object.event_id.description :\n                                                                <div style=\"width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    会议主题\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                        <td style=\"vertical-align:text-top;\">\n                                                            % if object.event_id.description :\n                                                                <div style=\"font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    : ${object.event_id.description}\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                    </tr>\n                                                                                                \n                                                    <tr>\n                                                        <td style=\"vertical-align:top;\">\n                                                            % if not object.event_id.allday and object.event_id.duration:\n                                                                <div style=\"height:auto; width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    会议时长\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                        <td colspan=\"3\" style=\"vertical-align:text-top;\">\n                                                            % if not object.event_id.allday and object.event_id.duration:\n                                                                <div style=\"font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    : ${('%dH%02d' % (object.event_id.duration,(object.event_id.duration*60)%60))}\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                    </tr>                                                \n                                                <tr style=\" height: 30px;\">\n                                                    <td style=\"height: 25px;width: 120px; background : # CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                        <div>\n                                                            参会人员\n                                                        </div>\n                                                    </td>\n                                                    <td colspan=\"3\">\n                                                       : \n                                                        % for attendee in object.event_id.attendee_ids:\n                                                            <div style=\"display:inline-block; border-radius: 50%; width:10px; height:10px;background:${'color' in ctx and ctx['color'][attendee.state] or 'white'};\"></div>\n                                                            % if attendee.cn != object.cn:\n                                                                <span style=\"margin-left:5px\">${attendee.cn}</span>\n                                                            % else:\n                                                                <span style=\"margin-left:5px\">You</span>\n                                                            % endif\n                                                        % endfor\n                                                    </td>\n                                                </tr>\n                                            </table>\n                                        </td>\n                                    </tr>\n                                </table>\n                            </div>\n                            <div style=\"height: auto;width:450px; margin:0 auto;padding-top:20px;padding-bottom:40px;\">\n                                    <a style=\"padding: 8px 30px 8px 30px;border-radius: 6px;border: 1px solid #CCCCCC;background:#8A89BA;margin : 0 15px 0 0;text-decoration: none;color:#FFFFFF;\" href=\"/calendar/meeting/accept?db=${'dbname' in ctx and ctx['dbname'] or ''}&token=${object.access_token}&action=${'action_id' in ctx and ctx['action_id'] or ''}&id=${object.event_id.id}\">接受</a>\n                                    <a style=\"padding: 8px 30px 8px 30px;border-radius: 6px;border: 1px solid #CCCCCC;background:#808080;margin : 0 15px 0 0;text-decoration: none;color:#FFFFFF;\" href=\"/calendar/meeting/decline?db=${'dbname' in ctx and ctx['dbname'] or '' }&token=${object.access_token}&action=${'action_id' in ctx and ctx['action_id'] or ''}&id=${object.event_id.id}\">婉拒</a>\n                                    <a style=\"padding: 8px 30px 8px 30px;border-radius: 6px;border: 1px solid #CCCCCC;background:#D8D8D8;text-decoration: none;color:#FFFFFF;\" href=\"/calendar/meeting/view?db=${'dbname' in ctx and ctx['dbname'] or ''}&token=${object.access_token}&action=${'action_id' in ctx and ctx['action_id'] or ''}&id=${object.event_id.id}\">待定</a>\n                            </div> \n                        </div>\n                    </body>\n                </html>\n                \n                "
 
 #. module: calendar
 #: model:email.template,body_html:calendar.calendar_template_meeting_changedate
@@ -294,11 +301,11 @@ msgid ""
 "                                <table>\n"
 "                                    <tr>                                        \n"
 "                                        <td>\n"
-"                                            <div style=\"border-top-left-radius:3px;border-top-right-radius:3px;font-size:12px;border-collapse:separate;text-align:center;font-weight:bold;color:#ffffff;width:130px;min-height: 18px;border-color:#ffffff;background:#8a89ba;padding-top: 4px;\">${object.event_id.get_interval(object.event_id.start, 'dayname')}</div>\n"
+"                                            <div style=\"border-top-left-radius:3px;border-top-right-radius:3px;font-size:12px;border-collapse:separate;text-align:center;font-weight:bold;color:#ffffff;width:130px;min-height: 18px;border-color:#ffffff;background:#8a89ba;padding-top: 4px;\">${object.event_id.get_interval(object.event_id.start, 'dayname', tz=object.partner_id.tz)}</div>\n"
 "                                            <div style=\"font-size:48px;min-height:auto;font-weight:bold;text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 130px;\">\n"
-"                                                ${object.event_id.get_interval(object.event_id.start,'day')}\n"
+"                                                ${object.event_id.get_interval(object.event_id.start,'day', tz=object.partner_id.tz)}\n"
 "                                            </div>\n"
-"                                            <div style='font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#8a89ba'>${object.event_id.get_interval(object.event_id.start, 'month')}</div>\n"
+"                                            <div style='font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#8a89ba'>${object.event_id.get_interval(object.event_id.start, 'month', tz=object.partner_id.tz)}</div>\n"
 "                                            <div style=\"border-collapse:separate;color:#8a89ba;text-align:center;width: 128px;font-size:12px;border-bottom-right-radius:3px;font-weight:bold;border:1px solid;border-bottom-left-radius:3px;\">${not object.event_id.allday and object.event_id.get_interval(object.event_id.start, 'time', tz=object.partner_id.tz) or ''}</div>\n"
 "                                        </td>\n"
 "                                        <td>\n"
@@ -388,29 +395,43 @@ msgid ""
 "                </html>\n"
 "                \n"
 "                "
-msgstr ""
+msgstr " \n                <html>\n                    <head>\n                        <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />\n                        <title>${object.event_id.name}</title>\n                        <style>\n                            span.oe_mail_footer_access {\n                                display:block;    \n                                text-align:center;\n                                color:grey;                                \n                            }\n                        </style>\n                    </head>\n                    <body>\n                        <div style=\"border-radius: 2px; max-width: 1200px; height: auto;margin-left: auto;margin-right: auto;background-color:#f9f9f9;\">\n                            <div style=\"height:auto;text-align: center;font-size : 30px;color: #8A89BA;\">\n                                <strong>${object.event_id.name}</strong>\n                            </div>\n                            <div style=\"height: 50px;text-align: left;font-size : 14px;border-collapse: separate;margin-top:10px\">\n                                <strong style=\"margin-left:12px\">尊敬的 ${object.cn}</strong> ,<br/>\n                                <p style=\"margin-left:12px\">我们很抱歉地通知您，会议改期这件事情...<br/>\n                                原定 ${object.event_id.user_id.partner_id.name} 的会议，现变更为 : ${object.event_id.get_display_time_tz(tz=object.partner_id.tz)}.</p>\n                            </div>\n                            <div style=\"height: auto;margin-left:12px;margin-top:30px;\">\n                                <table>\n                                    <tr>                                        \n                                        <td>\n                                            <div style=\"border-top-left-radius:3px;border-top-right-radius:3px;font-size:12px;border-collapse:separate;text-align:center;font-weight:bold;color:#ffffff;width:130px;min-height: 18px;border-color:#ffffff;background:#8a89ba;padding-top: 4px;\">${object.event_id.get_interval(object.event_id.start, 'dayname', tz=object.partner_id.tz)}</div>\n                                            <div style=\"font-size:48px;min-height:auto;font-weight:bold;text-align:center;color: #5F5F5F;background-color: #E1E2F8;width: 130px;\">\n                                                ${object.event_id.get_interval(object.event_id.start,'day', tz=object.partner_id.tz)}\n                                            </div>\n                                            <div style='font-size:12px;text-align:center;font-weight:bold;color:#ffffff;background-color:#8a89ba'>${object.event_id.get_interval(object.event_id.start, 'month', tz=object.partner_id.tz)}</div>\n                                            <div style=\"border-collapse:separate;color:#8a89ba;text-align:center;width: 128px;font-size:12px;border-bottom-right-radius:3px;font-weight:bold;border:1px solid;border-bottom-left-radius:3px;\">${not object.event_id.allday and object.event_id.get_interval(object.event_id.start, 'time', tz=object.partner_id.tz) or ''}</div>\n                                        </td>\n                                        <td>\n                                            <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" style=\"margin-top: 15px; margin-left: 10px;font-size: 16px;\">\n                                                    <tr>\n                                                        <td style=\"vertical-align:top;\">\n                                                            % if object.event_id.location:\n                                                                <div style=\"width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    会议地点\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                        <td  style=\"vertical-align:top;\">\n                                                            % if object.event_id.location:\n                                                                <div style = \"font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;   font-size: 14px\" >\n                                                                    : ${object.event_id.location}\n                                                                    <span style= \"color:#A9A9A9; \">(<a href=\"http://maps.google.com/maps?oi=map&q=${object.event_id.location}\">View Map</a>)\n                                                                        </span>\n                                                                </div>\n                                                            % endif\n                                                        </td>                                                        \n                                                    </tr> \n                                                                                                \n                                                    <tr>\n                                                        <td style=\"vertical-align:top;\">\n                                                            % if object.event_id.description :\n                                                                <div style=\"width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    会议主题\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                        <td style=\"vertical-align:text-top;\">\n                                                            % if object.event_id.description :\n                                                                <div style=\"font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    : ${object.event_id.description}\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                    </tr>\n                                                                                                \n                                                    <tr>\n                                                        <td style=\"vertical-align:top;\">\n                                                            % if not object.event_id.allday and object.event_id.duration:\n                                                                <div style=\"height:auto; width: 120px; background : #CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    会议时长\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                        <td colspan=\"3\" style=\"vertical-align:text-top;\">\n                                                            % if not object.event_id.allday and object.event_id.duration:\n                                                                <div style=\"font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                                    : ${('%dH%02d' % (object.event_id.duration,(object.event_id.duration*60)%60))}\n                                                                </div>\n                                                            % endif\n                                                        </td>\n                                                    </tr>                                                \n                                                <tr style=\" height: 30px;\">\n                                                    <td style=\"height: 25px;width: 120px; background : # CCCCCC; font-family: Lucica Grande', Ubuntu, Arial, Verdana, sans-serif;\">\n                                                        <div>\n                                                            参会人员\n                                                        </div>\n                                                    </td>\n                                                    <td colspan=\"3\">\n                                                       : \n                                                        % for attendee in object.event_id.attendee_ids:\n                                                            <div style=\"display:inline-block; border-radius: 50%; width:10px; height:10px;background:${'color' in ctx and ctx['color'][attendee.state] or 'white'};\"></div>\n                                                            % if attendee.cn != object.cn:\n                                                                <span style=\"margin-left:5px\">${attendee.cn}</span>\n                                                            % else:\n                                                                <span style=\"margin-left:5px\">You</span>\n                                                            % endif\n                                                        % endfor\n                                                    </td>\n                                                </tr>\n                                            </table>\n                                        </td>\n                                    </tr>\n                                </table>                                      \n                            </div>\n                            <div style=\"height: auto;width:450px; margin:0 auto;padding-top:20px;padding-bottom:40px;\">\n                                    <a style=\"padding: 8px 30px 8px 30px;border-radius: 6px;border: 1px solid #CCCCCC;background:#8A89BA;margin : 0 15px 0 0;text-decoration: none;color:#FFFFFF;\" href=\"/calendar/meeting/accept?db=${'dbname' in ctx and ctx['dbname'] or ''}&token=${object.access_token}&action=${'action_id' in ctx and ctx['action_id'] or ''}&id=${object.event_id.id}\">接受</a>\n                                    <a style=\"padding: 8px 30px 8px 30px;border-radius: 6px;border: 1px solid #CCCCCC;background:#808080;margin : 0 15px 0 0;text-decoration: none;color:#FFFFFF;\" href=\"/calendar/meeting/decline?db=${'dbname' in ctx and ctx['dbname'] or ''}&token=${object.access_token}&action=${'action_id' in ctx and ctx['action_id'] or ''}&id=${object.event_id.id}\">婉拒</a>\n                                    <a style=\"padding: 8px 30px 8px 30px;border-radius: 6px;border: 1px solid #CCCCCC;background:#D8D8D8;text-decoration: none;color:#FFFFFF;\" href=\"/calendar/meeting/view?db=${'dbname' in ctx and ctx['dbname'] or ''}&token=${object.access_token}&action=${'action_id' in ctx and ctx['action_id'] or ''}&id=${object.event_id.id}\">待定</a>\n                            </div>                             \n                        </div>\n                    </body>\n                </html>\n                \n                "
 
 #. module: calendar
 #. openerp-web
 #: code:addons/calendar/static/src/js/base_calendar.js:20
 #, python-format
 msgid " [Me]"
-msgstr ""
+msgstr " [我]"
 
 #. module: calendar
 #: model:email.template,subject:calendar.calendar_template_meeting_invitation
 msgid "${object.event_id.name}"
-msgstr ""
+msgstr "${object.event_id.name}"
 
 #. module: calendar
 #: model:email.template,subject:calendar.calendar_template_meeting_changedate
 msgid "${object.event_id.name} - Date has been updated"
-msgstr ""
+msgstr "${object.event_id.name} - 更新的日期"
 
 #. module: calendar
 #: model:email.template,subject:calendar.calendar_template_meeting_reminder
 msgid "${object.event_id.name} - Reminder"
-msgstr ""
+msgstr "${object.event_id.name} - 提醒"
+
+#. module: calendar
+#: code:addons/calendar/calendar.py:802
+#, python-format
+msgid ""
+"%s at %s To\n"
+" %s at %s (%s)"
+msgstr "%s at %s To\n %s at %s (%s)"
+
+#. module: calendar
+#: code:addons/calendar/calendar.py:800
+#, python-format
+msgid "%s at (%s To %s) (%s)"
+msgstr "%s at (%s To %s) (%s)"
 
 #. module: calendar
 #: model:ir.actions.act_window,help:calendar.action_calendar_event
@@ -429,7 +450,7 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n            单击 安排一个�
 #: code:addons/calendar/calendar.py:1593
 #, python-format
 msgid "A email has been send to specify that the date has been changed !"
-msgstr ""
+msgstr "邮件发送日期已经更改！"
 
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form
@@ -440,7 +461,7 @@ msgstr "同意"
 #: selection:calendar.attendee,state:0
 #: selection:calendar.event,attendee_status:0
 msgid "Accepted"
-msgstr "已接受"
+msgstr "已同意"
 
 #. module: calendar
 #: field:calendar.event,active:0
@@ -452,7 +473,7 @@ msgstr "有效"
 #: code:addons/calendar/static/src/js/base_calendar.js:100
 #, python-format
 msgid "Add Favorite Calendar"
-msgstr ""
+msgstr "加到日历"
 
 #. module: calendar
 #: field:calendar.event,allday:0
@@ -463,51 +484,51 @@ msgstr "全天"
 #: code:addons/calendar/calendar.py:776
 #, python-format
 msgid "AllDay , %s"
-msgstr ""
+msgstr "全天，%s"
 
 #. module: calendar
 #: field:calendar.alarm,duration:0
 msgid "Amount"
-msgstr "本位币金额"
+msgstr "总额"
 
 #. module: calendar
 #: code:addons/calendar/calendar.py:1096
 #, python-format
 msgid "An invitation email has been sent to attendee %s"
-msgstr ""
+msgstr "一封邀请信已经发送给出席人 %s"
 
 #. module: calendar
 #: code:addons/calendar/calendar.py:1407
 #, python-format
 msgid "An invitation email has been sent to attendee(s)"
-msgstr ""
+msgstr "一封邀请信已经发送给出席人"
 
 #. module: calendar
 #: field:calendar.event,is_attendee:0
 msgid "Attendee"
-msgstr ""
+msgstr "出席者"
 
 #. module: calendar
 #: field:calendar.event,attendee_status:0
 msgid "Attendee Status"
-msgstr ""
+msgstr "出席者状态"
 
 #. module: calendar
 #: model:ir.model,name:calendar.model_calendar_attendee
 msgid "Attendee information"
-msgstr "与会人员信息"
+msgstr "出席者信息"
 
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form
 #: view:calendar.event:calendar.view_calendar_event_form_popup
 #: field:calendar.event,attendee_ids:0 field:calendar.event,partner_ids:0
 msgid "Attendees"
-msgstr "与会者"
+msgstr "出席者"
 
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_search
 msgid "Availability"
-msgstr "可用"
+msgstr "可用性"
 
 #. module: calendar
 #: code:addons/calendar/calendar.py:1678
@@ -525,12 +546,12 @@ msgstr "按天"
 #. module: calendar
 #: field:calendar.event,start:0
 msgid "Calculated start"
-msgstr ""
+msgstr "计算的开始"
 
 #. module: calendar
 #: field:calendar.event,stop:0
 msgid "Calculated stop"
-msgstr ""
+msgstr "计算的结束"
 
 #. module: calendar
 #: model:ir.ui.menu,name:calendar.mail_menu_calendar
@@ -539,16 +560,23 @@ msgid "Calendar"
 msgstr "日历"
 
 #. module: calendar
+#: view:calendar.alarm:calendar.view_calendar_alarm_tree
+#: model:ir.actions.act_window,name:calendar.action_calendar_alarm
+#: model:ir.ui.menu,name:calendar.menu_calendar_alarm
+msgid "Calendar Alarm"
+msgstr "日历警报"
+
+#. module: calendar
 #. openerp-web
 #: code:addons/calendar/static/src/xml/base_calendar.xml:42
 #, python-format
 msgid "Calendar Invitation"
-msgstr ""
+msgstr "日历 邀请"
 
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form
 msgid "Click here to update only this instance and not all recurrences."
-msgstr ""
+msgstr "点击这里只更新这个实例，不包含其它循环"
 
 #. module: calendar
 #: field:calendar.attendee,cn:0
@@ -577,7 +605,7 @@ msgstr "创建人"
 #: field:calendar.contacts,create_date:0 field:calendar.event,create_date:0
 #: field:calendar.event.type,create_date:0
 msgid "Created on"
-msgstr "创建"
+msgstr "创建时间"
 
 #. module: calendar
 #: model:calendar.event.type,name:calendar.categ_meet1
@@ -593,7 +621,7 @@ msgstr "日期"
 #. module: calendar
 #: field:calendar.event,day:0 selection:calendar.event,month_by:0
 msgid "Date of month"
-msgstr "每月的指定日期"
+msgstr "日期"
 
 #. module: calendar
 #: help:calendar.event,message_last_post:0
@@ -603,7 +631,7 @@ msgstr "发布到记录上的最后信息的日期"
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form
 msgid "Day of Month"
-msgstr "月内日期"
+msgstr "天"
 
 #. module: calendar
 #: selection:calendar.event,month_by:0
@@ -648,21 +676,26 @@ msgstr "详细信息"
 #: code:addons/calendar/static/src/js/base_calendar.js:124
 #, python-format
 msgid "Do you really want to delete this filter from favorite?"
-msgstr ""
+msgstr "你真的要从你的喜好中删除这个过滤器吗？"
 
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form_popup
 #: field:calendar.event,duration:0
 msgid "Duration"
-msgstr "持续时间"
+msgstr "时长"
+
+#. module: calendar
+#: field:calendar.alarm,duration_minutes:0
+msgid "Duration in minutes"
+msgstr "时长（分钟）"
 
 #. module: calendar
 #: selection:calendar.alarm,type:0 field:calendar.attendee,email:0
 msgid "Email"
-msgstr "电子邮箱"
+msgstr "电子邮件"
 
 #. module: calendar
-#: code:addons/calendar/calendar.py:1381
+#: code:addons/calendar/calendar.py:1402
 #, python-format
 msgid "Email addresses not found"
 msgstr "电子邮件地址未找到"
@@ -675,7 +708,7 @@ msgstr "被邀请者邮件"
 #. module: calendar
 #: field:calendar.contacts,partner_id:0
 msgid "Employee"
-msgstr "雇员"
+msgstr "员工"
 
 #. module: calendar
 #: field:calendar.event,stop_date:0
@@ -685,7 +718,7 @@ msgstr "结束日期"
 #. module: calendar
 #: field:calendar.event,stop_datetime:0
 msgid "End Datetime"
-msgstr ""
+msgstr "结束日期时间"
 
 #. module: calendar
 #: selection:calendar.event,end_type:0
@@ -695,7 +728,7 @@ msgstr "结束日期"
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form
 msgid "Ending at"
-msgstr ""
+msgstr "结束于"
 
 #. module: calendar
 #: constraint:calendar.event:0
@@ -711,24 +744,24 @@ msgstr "错误！"
 #. module: calendar
 #: model:ir.model,name:calendar.model_calendar_event
 msgid "Event"
-msgstr "事件"
+msgstr "活动"
 
 #. module: calendar
 #: field:calendar.event,display_time:0
 msgid "Event Time"
-msgstr ""
+msgstr "活动时间"
 
 #. module: calendar
 #: model:ir.model,name:calendar.model_calendar_alarm
 msgid "Event alarm"
-msgstr ""
+msgstr "活动警报"
 
 #. module: calendar
 #. openerp-web
 #: code:addons/calendar/static/src/js/base_calendar.js:30
 #, python-format
 msgid "Everybody's calendars"
-msgstr ""
+msgstr "所有人的日历"
 
 #. module: calendar
 #: model:calendar.event.type,name:calendar.categ_meet5
@@ -796,7 +829,7 @@ msgstr "目前不支持按日期分组，可以通过日历视图达到此目的
 #. module: calendar
 #: model:ir.model,name:calendar.model_ir_http
 msgid "HTTP routing"
-msgstr ""
+msgstr "HTTP路由"
 
 #. module: calendar
 #: help:calendar.event,message_summary:0
@@ -825,9 +858,9 @@ msgstr "如果勾选此项，需要你关注新消息。"
 #. module: calendar
 #: help:calendar.event,active:0
 msgid ""
-"If the active field is set to true, it will allow you to hide the event "
+"If the active field is set to false, it will allow you to hide the event "
 "alarm information without removing it."
-msgstr "如果有效字段设为True，它将允许你隐藏提醒信息而不需要删除事件"
+msgstr "如果有效字段设为false，它将允许你隐藏提醒信息而不需要删除它。"
 
 #. module: calendar
 #: model:calendar.event.type,name:calendar.categ_meet2
@@ -842,7 +875,7 @@ msgstr "邀请"
 #. module: calendar
 #: field:calendar.attendee,access_token:0
 msgid "Invitation Token"
-msgstr ""
+msgstr "邀请令牌"
 
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form
@@ -867,7 +900,7 @@ msgstr "是一个关注者"
 #. module: calendar
 #: selection:calendar.event,byday:0
 msgid "Last"
-msgstr "持续"
+msgstr "最后"
 
 #. module: calendar
 #: field:calendar.event,message_last_post:0
@@ -879,19 +912,19 @@ msgstr "最后信息日期"
 #: field:calendar.contacts,write_uid:0 field:calendar.event,write_uid:0
 #: field:calendar.event.type,write_uid:0
 msgid "Last Updated by"
-msgstr "最后更新"
+msgstr "最后更新于"
 
 #. module: calendar
 #: field:calendar.alarm,write_date:0 field:calendar.attendee,write_date:0
 #: field:calendar.contacts,write_date:0 field:calendar.event,write_date:0
 #: field:calendar.event.type,write_date:0
 msgid "Last Updated on"
-msgstr "最后一次更新"
+msgstr "最后更新于"
 
 #. module: calendar
 #: field:res.partner,calendar_last_notif_ack:0
 msgid "Last notification marked as read from base Calendar"
-msgstr ""
+msgstr "最后的提醒已经标志为已读"
 
 #. module: calendar
 #: help:calendar.event,rrule_type:0
@@ -906,12 +939,12 @@ msgstr "地点"
 #. module: calendar
 #: help:calendar.event,location:0
 msgid "Location of Event"
-msgstr "地点"
+msgstr "活动的地点"
 
 #. module: calendar
 #: field:calendar.contacts,user_id:0
 msgid "Me"
-msgstr ""
+msgstr "我"
 
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_search
@@ -943,7 +976,7 @@ msgstr "会议类型"
 #. module: calendar
 #: field:calendar.attendee,event_id:0
 msgid "Meeting linked"
-msgstr ""
+msgstr "会议已连接"
 
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_calendar
@@ -959,7 +992,7 @@ msgstr "会议"
 #. module: calendar
 #: model:ir.model,name:calendar.model_mail_message
 msgid "Message"
-msgstr "信息"
+msgstr "消息"
 
 #. module: calendar
 #: field:calendar.event,message_ids:0
@@ -969,12 +1002,12 @@ msgstr "消息"
 #. module: calendar
 #: help:calendar.event,message_ids:0
 msgid "Messages and communication history"
-msgstr "消息和通信历史"
+msgstr "消息和沟通历史"
 
 #. module: calendar
 #: selection:calendar.alarm,interval:0
 msgid "Minutes"
-msgstr "每分钟"
+msgstr "分钟"
 
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form
@@ -1004,7 +1037,7 @@ msgstr "月"
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_search
 msgid "My Events"
-msgstr "我的事件"
+msgstr "我的活动"
 
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_search
@@ -1027,7 +1060,7 @@ msgstr "待处理"
 #: code:addons/calendar/static/src/xml/base_calendar.xml:46
 #, python-format
 msgid "No I'm not going."
-msgstr ""
+msgstr "我不会去。"
 
 #. module: calendar
 #: selection:calendar.alarm,type:0
@@ -1049,7 +1082,7 @@ msgstr "确定"
 #. module: calendar
 #: model:calendar.event.type,name:calendar.categ_meet3
 msgid "Off-site Meeting"
-msgstr "离席会议"
+msgstr "离线会议"
 
 #. module: calendar
 #: model:calendar.event.type,name:calendar.categ_meet4
@@ -1096,7 +1129,7 @@ msgstr "公开"
 #. module: calendar
 #: selection:calendar.event,class:0
 msgid "Public for Employees"
-msgstr "全员可见"
+msgstr "对员工公开"
 
 #. module: calendar
 #: field:calendar.event,end_type:0
@@ -1121,29 +1154,29 @@ msgstr "循环ID"
 #. module: calendar
 #: field:calendar.event,recurrent_id_date:0
 msgid "Recurrent ID date"
-msgstr "循环日期"
+msgstr "循环ID日期"
 
 #. module: calendar
 #: help:calendar.event,recurrency:0
 msgid "Recurrent Meeting"
-msgstr "定期会议"
+msgstr "循环会议"
 
 #. module: calendar
 #: field:calendar.event,rrule:0
 msgid "Recurrent Rule"
-msgstr "重复规则"
+msgstr "循环规则"
 
 #. module: calendar
 #: field:calendar.event,alarm_ids:0
 msgid "Reminders"
-msgstr ""
+msgstr "提醒"
 
 #. module: calendar
 #. openerp-web
 #: code:addons/calendar/static/src/xml/base_calendar.xml:80
 #, python-format
 msgid "Remove this favorite from the list"
-msgstr ""
+msgstr "从清单中移除这个收藏"
 
 #. module: calendar
 #: field:calendar.event,count:0
@@ -1153,7 +1186,7 @@ msgstr "重复"
 #. module: calendar
 #: field:calendar.event,interval:0
 msgid "Repeat Every"
-msgstr "逐个重复"
+msgstr "重复"
 
 #. module: calendar
 #: field:calendar.event,final_date:0
@@ -1204,7 +1237,7 @@ msgstr "选择工作日"
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form
 msgid "Send mail"
-msgstr ""
+msgstr "发送邮件"
 
 #. module: calendar
 #: field:calendar.event,show_as:0
@@ -1216,7 +1249,7 @@ msgstr "显示时间为"
 #: code:addons/calendar/static/src/xml/base_calendar.xml:22
 #, python-format
 msgid "Snooze"
-msgstr ""
+msgstr "延后"
 
 #. module: calendar
 #: field:calendar.event,start_date:0
@@ -1226,7 +1259,7 @@ msgstr "开始日期"
 #. module: calendar
 #: field:calendar.event,start_datetime:0
 msgid "Start DateTime"
-msgstr ""
+msgstr "开始时间"
 
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form
@@ -1252,7 +1285,7 @@ msgstr "主题"
 #. module: calendar
 #: field:calendar.event,message_summary:0
 msgid "Summary"
-msgstr "概要"
+msgstr "摘要"
 
 #. module: calendar
 #: field:calendar.event,su:0
@@ -1288,7 +1321,7 @@ msgstr "第三"
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form
 msgid "This event is linked to a recurrence..."
-msgstr ""
+msgstr "这个事件关联到一个循环..."
 
 #. module: calendar
 #: field:calendar.event,th:0
@@ -1346,7 +1379,7 @@ msgstr "直到"
 #. module: calendar
 #: view:calendar.event:calendar.view_calendar_event_form
 msgid "Update only this instance"
-msgstr ""
+msgstr "仅更新这个实例"
 
 #. module: calendar
 #: code:addons/calendar/calendar.py:104 code:addons/calendar/calendar.py:141
@@ -1360,7 +1393,7 @@ msgstr "警告！"
 msgid ""
 "Warning, a mandatory field has been modified since the creation of this "
 "event"
-msgstr ""
+msgstr "提醒：该事件创建后有一个强制字段被修改"
 
 #. module: calendar
 #: field:calendar.event,we:0
@@ -1387,21 +1420,21 @@ msgstr "工作日"
 #: code:addons/calendar/static/src/xml/base_calendar.xml:54
 #, python-format
 msgid "When"
-msgstr ""
+msgstr "时间"
 
 #. module: calendar
 #. openerp-web
 #: code:addons/calendar/static/src/xml/base_calendar.xml:58
 #, python-format
 msgid "Where"
-msgstr ""
+msgstr "地点"
 
 #. module: calendar
 #. openerp-web
 #: code:addons/calendar/static/src/xml/base_calendar.xml:62
 #, python-format
 msgid "Who"
-msgstr ""
+msgstr "人物"
 
 #. module: calendar
 #: selection:calendar.event,rrule_type:0
@@ -1413,7 +1446,7 @@ msgstr "年"
 #: code:addons/calendar/static/src/xml/base_calendar.xml:45
 #, python-format
 msgid "Yes I'm going."
-msgstr ""
+msgstr "我会去。"
 
 #. module: calendar
 #: code:addons/calendar/calendar.py:104
@@ -1424,32 +1457,27 @@ msgstr "你不能复制日程参与者"
 #. module: calendar
 #: field:calendar.contacts,active:0
 msgid "active"
-msgstr ""
+msgstr "有效"
 
 #. module: calendar
 #: field:calendar.event,color_partner_id:0
 msgid "colorize"
-msgstr ""
+msgstr "上色"
 
 #. module: calendar
 #: code:addons/calendar/calendar.py:1247
 #, python-format
 msgid "count cannot be negative or 0."
-msgstr ""
-
-#. module: calendar
-#: field:calendar.alarm,duration_minutes:0
-msgid "duration_minutes"
-msgstr ""
+msgstr "不能是负数或者0。"
 
 #. module: calendar
 #: code:addons/calendar/calendar.py:1245
 #, python-format
 msgid "interval cannot be negative."
-msgstr ""
+msgstr "间隔不能是负数。"
 
 #. module: calendar
 #: code:addons/calendar/calendar.py:1245 code:addons/calendar/calendar.py:1247
 #, python-format
 msgid "warning!"
-msgstr ""
+msgstr "警告！"

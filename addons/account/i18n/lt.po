@@ -3,15 +3,18 @@
 # * account
 # 
 # Translators:
+# Anatolij, 2015
+# Andrius Preimantas <andrius@versada.lt>, 2015
+# Arminas Grigonis <arminas@versada.lt>, 2015
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 14:07+0000\n"
-"PO-Revision-Date: 2015-06-01 22:41+0000\n"
+"POT-Creation-Date: 2015-10-15 06:40+0000\n"
+"PO-Revision-Date: 2015-11-28 08:22+0000\n"
 "Last-Translator: Martin Trigaux\n"
-"Language-Team: Lithuanian (http://www.transifex.com/projects/p/odoo-8/language/lt/)\n"
+"Language-Team: Lithuanian (http://www.transifex.com/odoo/odoo-8/language/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -45,7 +48,7 @@ msgid ""
 "    <br/>\n"
 "    <p>It is also possible to directly pay with Paypal:</p>\n"
 "        <a style=\"margin-left: 120px;\" href=\"${object.paypal_url}\">\n"
-"            <img class=\"oe_edi_paypal_button\" src=\"https://www.paypal.com/en_US/i/btn/btn_paynowCC_LG.gif\"/>\n"
+"            <img class=\"oe_edi_paypal_button\" src=\"/account/static/src/img/btn_paynowcc_lg.gif\"/>\n"
 "        </a>\n"
 "    % endif\n"
 "    \n"
@@ -100,10 +103,17 @@ msgid ""
 msgstr ""
 
 #. module: account
-#: code:addons/account/account.py:1468
+#: code:addons/account/account.py:1477
 #, python-format
 msgid " Centralisation"
 msgstr " Centralizavimas"
+
+#. module: account
+#. openerp-web
+#: code:addons/account/static/src/js/account_widgets.js:521
+#, python-format
+msgid " seconds"
+msgstr "sekundės"
 
 #. module: account
 #: field:analytic.entries.report,nbr:0
@@ -1599,23 +1609,27 @@ msgstr "Taikyti"
 
 #. module: account
 #: help:account.fiscal.position,auto_apply:0
-msgid "Apply automatically this fiscal position."
-msgstr "Taikyti automatiškai šią fiskalinę poziciją."
-
-#. module: account
-#: help:account.fiscal.position,country_group_id:0
-msgid "Apply only if delivery or invocing country match the group."
-msgstr "Pritaikyti tik tada kai pristatymo ar sąskaitų faktūrų šalis atitinka grupei."
-
-#. module: account
-#: help:account.fiscal.position,country_id:0
-msgid "Apply only if delivery or invoicing country match."
-msgstr "Pritaikyti tik tada kai pristatymo ar sąskaitų faktūrų šalis atitinka."
+msgid "Apply automatically this fiscal position if the conditions match."
+msgstr ""
 
 #. module: account
 #: help:account.fiscal.position,vat_required:0
 msgid "Apply only if partner has a VAT number."
 msgstr "Pritaikyti tik tada kai partneris turi PVM mokėtojo numerį"
+
+#. module: account
+#: help:account.fiscal.position,country_group_id:0
+msgid ""
+"Apply when the shipping or invoicing country is in this country group, and "
+"no position matches the country directly."
+msgstr ""
+
+#. module: account
+#: help:account.fiscal.position,country_id:0
+msgid ""
+"Apply when the shipping or invoicing country matches. Takes precedence over "
+"positions matching on a country group."
+msgstr ""
 
 #. module: account
 #: view:validate.account.move:account.validate_account_move_view
@@ -2115,7 +2129,7 @@ msgstr "Atšaukti sąskaitas"
 #: view:account.invoice.cancel:account.account_invoice_cancel_view
 #: model:ir.actions.act_window,name:account.action_account_invoice_cancel
 msgid "Cancel Selected Invoices"
-msgstr ""
+msgstr "Atšaukti pasirinktas S/F"
 
 #. module: account
 #: view:account.bank.statement:account.view_bank_statement_form
@@ -2155,7 +2169,7 @@ msgstr ""
 msgid ""
 "Cannot %s invoice which is already reconciled, invoice should be "
 "unreconciled first. You can only refund this invoice."
-msgstr ""
+msgstr "Negalima %s sąskaitos, kuri yra jau sugretinta, sąskaitą turėtų būti nesugretinta pirma. Jūs tik galite atlikti sąskaitos grąžinimą."
 
 #. module: account
 #: code:addons/account/account_move_line.py:1299
@@ -2429,7 +2443,7 @@ msgstr "Sąskaitų planas"
 #. module: account
 #: model:ir.ui.menu,name:account.menu_finance_charts
 msgid "Charts"
-msgstr "Diagramos"
+msgstr "Sąskaitų/mokečių planai"
 
 #. module: account
 #: model:account.account.type,name:account.conf_account_type_chk
@@ -2567,6 +2581,13 @@ msgstr "Vaikiniai mokesčiai"
 #: model:ir.model,name:account.model_account_open_closed_fiscalyear
 msgid "Choose Fiscal Year"
 msgstr "Pasirinkite finansinius metus"
+
+#. module: account
+#. openerp-web
+#: code:addons/account/static/src/js/account_widgets.js:1297
+#, python-format
+msgid "Choose counterpart"
+msgstr ""
 
 #. module: account
 #: view:account.automatic.reconcile:account.account_automatic_reconcile_view1
@@ -2920,7 +2941,7 @@ msgstr "Patvirtinta"
 #: code:addons/account/static/src/js/account_widgets.js:534
 #, python-format
 msgid "Congrats, you're all done !"
-msgstr ""
+msgstr "Sveikiname, viskas baigta!"
 
 #. module: account
 #: field:account.account,child_consol_ids:0
@@ -2975,8 +2996,8 @@ msgstr "Koresponduoja"
 
 #. module: account
 #: field:account.fiscal.position,country_id:0
-msgid "Countries"
-msgstr "Valstybės"
+msgid "Country"
+msgstr ""
 
 #. module: account
 #: field:account.fiscal.position,country_group_id:0
@@ -3028,6 +3049,13 @@ msgstr "Sukurti mėnesio periodus"
 #: view:account.invoice.refund:account.view_account_invoice_refund
 msgid "Create Refund"
 msgstr "Kredituoti"
+
+#. module: account
+#. openerp-web
+#: code:addons/account/static/src/js/account_widgets.js:1294
+#, python-format
+msgid "Create Write-off"
+msgstr ""
 
 #. module: account
 #: selection:account.invoice.refund,filter_refund:0
@@ -3881,12 +3909,12 @@ msgstr ""
 #: code:addons/account/account.py:3195
 #, python-format
 msgid "EXJ"
-msgstr ""
+msgstr "IŠL"
 
 #. module: account
 #: field:account.entries.report,date:0
 msgid "Effective Date"
-msgstr ""
+msgstr "Dokumento data"
 
 #. module: account
 #: field:account.move.line,date:0
@@ -5602,7 +5630,7 @@ msgstr "Tai parodo, kad sąskaita-faktūra buvo išsiųsta."
 #: code:addons/account/static/src/xml/account_bank_statement_reconciliation.xml:43
 #, python-format
 msgid "It took you"
-msgstr ""
+msgstr "Tai užtruko Jums"
 
 #. module: account
 #: selection:account.financial.report,style_overwrite:0
@@ -5931,9 +5959,16 @@ msgstr "Palikti tuščią, norint naudoti periodą pagal sąskaitos datą."
 
 #. module: account
 #. openerp-web
+#: code:addons/account/static/src/js/account_widgets.js:1299
+#, python-format
+msgid "Keep open"
+msgstr "Palikti atvirą"
+
+#. module: account
+#. openerp-web
 #: field:account.statement.operation.template,label:0
-#: code:addons/account/static/src/js/account_widgets.js:75
-#: code:addons/account/static/src/js/account_widgets.js:80
+#: code:addons/account/static/src/js/account_widgets.js:74
+#: code:addons/account/static/src/js/account_widgets.js:79
 #: view:website:account.report_journal
 #: view:website:account.report_salepurchasejournal
 #, python-format
@@ -6829,7 +6864,7 @@ msgstr "Atidaryti kasą"
 #: view:account.chart:account.view_account_chart
 #: view:account.tax.chart:account.view_account_tax_chart
 msgid "Open Charts"
-msgstr "Rodyti planą"
+msgstr "Rodyti sąskaitų planus"
 
 #. module: account
 #: view:account.journal.select:account.open_journal_button_view
@@ -7255,24 +7290,24 @@ msgstr "Mokėjimo numeris"
 #: field:account.payment.term.line,payment_id:0
 #: model:ir.model,name:account.model_account_payment_term
 msgid "Payment Term"
-msgstr "Apmokėjimo sąlyga"
+msgstr "Mokėjimo sąlyga"
 
 #. module: account
 #: model:ir.model,name:account.model_account_payment_term_line
 msgid "Payment Term Line"
-msgstr "Apmokėjimo sąlygos eilutė"
+msgstr "Mokėjimo sąlygos eilutė"
 
 #. module: account
 #: view:website:account.report_invoice_document
 msgid "Payment Term:"
-msgstr "Apmokėjimo sąlyga:"
+msgstr "Mokėjimo sąlyga:"
 
 #. module: account
 #: field:account.invoice,payment_term:0
 #: model:ir.actions.act_window,name:account.action_payment_term_form
 #: model:ir.ui.menu,name:account.menu_action_payment_term_form
 msgid "Payment Terms"
-msgstr "Mokėjimo terminas"
+msgstr "Mokėjimo sąlygos"
 
 #. module: account
 #: view:account.payment.term:account.view_payment_term_form
@@ -8102,7 +8137,7 @@ msgstr "Dokumento numeris/aprašymas"
 #. module: account
 #: view:website:account.report_invoice_document
 msgid "Reference:"
-msgstr ""
+msgstr "Nuoroda:"
 
 #. module: account
 #: view:account.invoice:account.invoice_form
@@ -8310,7 +8345,7 @@ msgstr ""
 #. module: account
 #: selection:res.company,tax_calculation_rounding_method:0
 msgid "Round Globally"
-msgstr ""
+msgstr "Apvalinti globaliai"
 
 #. module: account
 #: selection:account.config.settings,tax_calculation_rounding_method:0
@@ -8320,11 +8355,17 @@ msgstr "Globaliai apvalus"
 #. module: account
 #: selection:res.company,tax_calculation_rounding_method:0
 msgid "Round per Line"
-msgstr ""
+msgstr "Apvalinti kiekvienai eilutei"
 
 #. module: account
 #: selection:account.config.settings,tax_calculation_rounding_method:0
 msgid "Round per line"
+msgstr ""
+
+#. module: account
+#: code:addons/account/account_bank_statement.py:899
+#, python-format
+msgid "Rounding error from currency conversion"
 msgstr ""
 
 #. module: account
@@ -8347,7 +8388,7 @@ msgstr "Aktyvios periodinės operacijos"
 #: code:addons/account/account.py:3194
 #, python-format
 msgid "SAJ"
-msgstr ""
+msgstr "PARD"
 
 #. module: account
 #: code:addons/account/account.py:3196
@@ -8475,7 +8516,7 @@ msgstr "Banko sąskaitos išrašų paieška"
 #. module: account
 #: view:account.chart.template:account.view_account_chart_template_seacrh
 msgid "Search Chart of Account Templates"
-msgstr ""
+msgstr "Sąskaitų plano šablonų paieška"
 
 #. module: account
 #: view:account.fiscalyear:account.view_account_fiscalyear_search
@@ -9145,6 +9186,11 @@ msgid "Suppliers"
 msgstr "Tiekėjai"
 
 #. module: account
+#: view:website:account.report_invoice_document
+msgid "TIN:"
+msgstr "TIN:"
+
+#. module: account
 #: view:cash.box.out:account.cash_box_out_form
 #: model:ir.actions.act_window,name:account.action_cash_box_out
 msgid "Take Money Out"
@@ -9456,7 +9502,7 @@ msgstr "Šablonas"
 #. module: account
 #: model:ir.model,name:account.model_account_fiscal_position_account_template
 msgid "Template Account Fiscal Mapping"
-msgstr ""
+msgstr "Sąskaitos fiskalinės pozicijos šablonas"
 
 #. module: account
 #: model:ir.model,name:account.model_account_fiscal_position_tax_template
@@ -9614,6 +9660,20 @@ msgid ""
 msgstr ""
 
 #. module: account
+#: constraint:account.config.settings:0
+msgid ""
+"The company of the gain exchange rate account must be the same than the "
+"company selected."
+msgstr ""
+
+#. module: account
+#: constraint:account.config.settings:0
+msgid ""
+"The company of the loss exchange rate account must be the same than the "
+"company selected."
+msgstr ""
+
+#. module: account
 #: help:account.tax,type:0
 msgid "The computation method for the tax amount."
 msgstr "Mokesčio skaičiavimo metodas"
@@ -9628,7 +9688,7 @@ msgstr "Valiuta naudota įvedant dokumentą"
 msgid ""
 "The date of your Journal Entry is not in the defined period! You should "
 "change the date or remove this constraint from the journal."
-msgstr ""
+msgstr "Šio žurnalo įrašo data nėra apibrėžta jokiam periode. Jūs turite pakeisti datą arba pašalinti įrašą."
 
 #. module: account
 #: code:addons/account/wizard/account_fiscalyear_close.py:62
@@ -9641,6 +9701,11 @@ msgstr "Įrašai sudengimui turi priklausyti tai pačiai kompanijai."
 msgid ""
 "The fiscal position will determine taxes and accounts used for the partner."
 msgstr "Mokestinė aplinka nurodo mokesčių kodus bei sąskaitas, kurios bus naudojamos vykdant komercinę veiklą su šiuo kontaktu."
+
+#. module: account
+#: view:account.config.settings:account.view_account_config_settings
+msgid "The fiscal year is created when installing a Chart of Account."
+msgstr ""
 
 #. module: account
 #: constraint:account.aged.trial.balance:0 constraint:account.balance.report:0
@@ -9954,6 +10019,30 @@ msgid "This Year"
 msgstr "Šie metai"
 
 #. module: account
+#: help:product.template,property_account_expense:0
+msgid ""
+"This account will be used for invoices instead of the default one to value "
+"expenses for the current product."
+msgstr ""
+
+#. module: account
+#: help:product.template,property_account_income:0
+msgid ""
+"This account will be used for invoices instead of the default one to value "
+"sales for the current product."
+msgstr ""
+
+#. module: account
+#: help:product.category,property_account_expense_categ:0
+msgid "This account will be used for invoices to value expenses."
+msgstr ""
+
+#. module: account
+#: help:product.category,property_account_income_categ:0
+msgid "This account will be used for invoices to value sales."
+msgstr ""
+
+#. module: account
 #: help:res.partner,property_account_payable:0
 msgid ""
 "This account will be used instead of the default one as the payable account "
@@ -9966,18 +10055,6 @@ msgid ""
 "This account will be used instead of the default one as the receivable "
 "account for the current partner"
 msgstr "Sąskaita naudojama apskaityti gautinoms sumoms iš šio kontakto."
-
-#. module: account
-#: help:product.category,property_account_expense_categ:0
-#: help:product.template,property_account_expense:0
-msgid "This account will be used to value outgoing stock using cost price."
-msgstr ""
-
-#. module: account
-#: help:product.category,property_account_income_categ:0
-#: help:product.template,property_account_income:0
-msgid "This account will be used to value outgoing stock using sale price."
-msgstr ""
 
 #. module: account
 #: help:account.config.settings,module_account_budget:0
@@ -10293,8 +10370,8 @@ msgstr "Šis vedlys patvirtins vius žurnalo įrašus tam tikruose žurnaluose i
 #. openerp-web
 #: code:addons/account/static/src/xml/account_bank_statement_reconciliation.xml:36
 #, python-format
-msgid "Tip : Hit ctrl-enter to validate the whole sheet."
-msgstr "Patarimas: Paspauskite ctrl+enter kad patvirtumėte visą lapą."
+msgid "Tip : Hit ctrl-enter to reconcile all balanced items."
+msgstr ""
 
 #. module: account
 #: selection:account.financial.report,style_overwrite:0
@@ -11001,7 +11078,7 @@ msgstr "Nurašymo suma"
 #: code:addons/account/wizard/account_reconcile.py:115
 #, python-format
 msgid "Write-off"
-msgstr ""
+msgstr "Nurašymas"
 
 #. module: account
 #: code:addons/account/account.py:2304
@@ -11048,6 +11125,13 @@ msgid ""
 msgstr ""
 
 #. module: account
+#. openerp-web
+#: code:addons/account/static/src/js/account_widgets.js:1050
+#, python-format
+msgid "last"
+msgstr ""
+
+#. module: account
 #: help:account.move.line,blocked:0
 msgid ""
 "You can check this box to mark this journal item as a litigation with the "
@@ -11055,13 +11139,21 @@ msgid ""
 msgstr "Galite pažymėti šį DK įrašą kaip ginčytiną. DK įrašas nebebus įtraukiamas į skolų ataskaitas."
 
 #. module: account
-#: code:addons/account/account_move_line.py:1220
+#: code:addons/account/account_move_line.py:1246
 #, python-format
 msgid "You can not add/modify entries in a closed period %s of journal %s."
 msgstr ""
 
 #. module: account
-#: code:addons/account/account.py:1047
+#: code:addons/account/wizard/account_open_closed_fiscalyear.py:42
+#, python-format
+msgid ""
+"You can not cancel closing entries if the 'End of Year Entries Journal' "
+"period is closed."
+msgstr ""
+
+#. module: account
+#: code:addons/account/account.py:1057
 #, python-format
 msgid "You can not re-open a period which belongs to closed fiscal year"
 msgstr ""
@@ -11107,7 +11199,7 @@ msgid ""
 msgstr "Įveskite koeficientą, kuris bus naudojamas tėviniame mokesčių kode konsoliduojant šio mokesčių kodo sumą. Pavyzdžiui, įvedus 1 suma bus pridedama, įvedus -1 suma bus atimama."
 
 #. module: account
-#: code:addons/account/account.py:2273
+#: code:addons/account/account.py:2293
 #, python-format
 msgid ""
 "You can specify year, month and date in the name of the model using the following labels:\n"
@@ -11272,7 +11364,7 @@ msgstr ""
 #: code:addons/account/account.py:659
 #, python-format
 msgid "You cannot remove an account that contains journal items."
-msgstr ""
+msgstr "Jūs negalite pašalinti sąskaitos, kurioje yra žurnalo įrašų."
 
 #. module: account
 #: code:addons/account/account.py:664
@@ -11388,7 +11480,7 @@ msgstr ""
 #: code:addons/account/static/src/xml/account_bank_statement_reconciliation.xml:68
 #, python-format
 msgid "You must balance the reconciliation"
-msgstr ""
+msgstr "Sudengimas privalo būti subalansuotas"
 
 #. module: account
 #. openerp-web
@@ -11407,7 +11499,7 @@ msgstr ""
 #: code:addons/account/account_invoice.py:1311
 #, python-format
 msgid "You must first select a partner!"
-msgstr ""
+msgstr "Jūs turite pasirinkti partnerį!"
 
 #. module: account
 #: code:addons/account/wizard/account_automatic_reconcile.py:154
@@ -11425,7 +11517,7 @@ msgstr ""
 #: code:addons/account/wizard/account_report_aged_partner_balance.py:59
 #, python-format
 msgid "You must set a start date."
-msgstr ""
+msgstr "Jūs privalote nustatyti pradžios datą"
 
 #. module: account
 #: code:addons/account/account.py:422
@@ -11492,13 +11584,13 @@ msgstr ""
 #. module: account
 #: field:account.move,balance:0
 msgid "balance"
-msgstr ""
+msgstr "balansas"
 
 #. module: account
 #: code:addons/account/account_bank_statement.py:693
 #, python-format
 msgid "change"
-msgstr ""
+msgstr "pakeisti"
 
 #. module: account
 #: selection:account.subscription,period_type:0
@@ -11508,7 +11600,7 @@ msgstr "dienos"
 #. module: account
 #: view:account.config.settings:account.view_account_config_settings
 msgid "e.g. sales@odoo.com"
-msgstr ""
+msgstr "pvz. info@versada.lt"
 
 #. module: account
 #: view:account.config.settings:account.view_account_config_settings
@@ -11614,7 +11706,7 @@ msgstr ""
 #. module: account
 #: view:res.partner:account.view_partner_property_form
 msgid "the parent company"
-msgstr ""
+msgstr "Tėvinė įmonė"
 
 #. module: account
 #: view:account.installer:account.view_account_configuration_installer
@@ -11626,14 +11718,14 @@ msgstr "kreipinys"
 #: code:addons/account/static/src/xml/account_bank_statement_reconciliation.xml:43
 #, python-format
 msgid "to reconcile"
-msgstr ""
+msgstr "sudengti"
 
 #. module: account
 #. openerp-web
 #: code:addons/account/static/src/xml/account_bank_statement_reconciliation.xml:43
 #, python-format
 msgid "transactions."
-msgstr ""
+msgstr "operacijos."
 
 #. module: account
 #: field:account.cashbox.line,bank_statement_id:0
@@ -11653,3 +11745,16 @@ msgstr ""
 #: selection:account.subscription,period_type:0
 msgid "year"
 msgstr "metai"
+
+#. module: account
+#: model:res.company,overdue_msg:stock.res_company_1
+msgid ""
+"Dear Sir/Madam,\n"
+"\n"
+"Our records indicate that some payments on your account are still due. Please find details below.\n"
+"If the amount has already been paid, please disregard this notice. Otherwise, please forward us the total amount stated below.\n"
+"If you have any queries regarding your account, Please contact us.\n"
+"\n"
+"Thank you in advance for your cooperation.\n"
+"Best Regards,"
+msgstr ""

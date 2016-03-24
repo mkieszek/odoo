@@ -4,14 +4,15 @@
 # 
 # Translators:
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
+# Murat Kaplan <muratk@projetgrup.com>, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo 8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-21 14:07+0000\n"
-"PO-Revision-Date: 2015-05-29 12:58+0000\n"
-"Last-Translator: Martin Trigaux\n"
-"Language-Team: Turkish (http://www.transifex.com/projects/p/odoo-8/language/tr/)\n"
+"PO-Revision-Date: 2016-01-02 18:45+0000\n"
+"Last-Translator: Murat Kaplan <muratk@projetgrup.com>\n"
+"Language-Team: Turkish (http://www.transifex.com/odoo/odoo-8/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -146,7 +147,7 @@ msgid ""
 "                the needs.\n"
 "              </p>\n"
 "            "
-msgstr ""
+msgstr "<p class=\"oe_view_nocontent_create\">\n                Yeni bir özellik oluşturmak için tıklayın.\n              </p><p>\n                Odoo' özellikler, aynı ürünü farklı yollardan üretme  \n                yolları varken, üretim için doğru ürün ağacını seçmek için \n                kullanılır.  Her ürün ağacına birçok özellik atayabilirsiniz.\n                Bir satış temsilcisi bir satış siparişi oluşturduğunda, onları \n                birçok özellik ile ilişkilendirebilir ve Odoo gereksinimlere\n                uygun olan Ürün Ağacını seçecektir.\n              </p>\n            "
 
 #. module: mrp
 #: model:ir.actions.act_window,help:mrp.mrp_routing_action
@@ -176,7 +177,7 @@ msgid ""
 "                stock rule.\n"
 "              </p>\n"
 "            "
-msgstr ""
+msgstr "<p class=\"oe_view_nocontent_create\">\n                Yeni bir üretim emri başlatmak için tıklayın. \n              </p><p>\n                Bir ürün ağacına dayalı bir üretim emri, ham malzeme\n                tüketir ve bitmiş ürünü üretir.\n              </p><p>\n                Üretim emirleri genelde müşteri gereksinimlerine \n                göre ya da enaz stok kuralı gibi kurallara göre \n                önerilir.\n              </p>\n            "
 
 #. module: mrp
 #: help:mrp.bom,product_efficiency:0
@@ -269,7 +270,7 @@ msgstr "Bu ürünün üretilmesi için ortalama süre. Çok seviyeli Ürün Ağa
 #. module: mrp
 #: selection:mrp.production,state:0
 msgid "Awaiting Raw Materials"
-msgstr "Hammade Bekliyor"
+msgstr "Hammadde Bekliyor"
 
 #. module: mrp
 #: view:website:mrp.report_mrpbomstructure
@@ -279,7 +280,7 @@ msgstr "BOM Adı"
 #. module: mrp
 #: help:mrp.bom.line,attribute_value_ids:0
 msgid "BOM Product Variants needed form apply this line."
-msgstr ""
+msgstr "Bu satırı"
 
 #. module: mrp
 #: view:website:mrp.report_mrpbomstructure
@@ -295,7 +296,7 @@ msgstr "BOM Yapısı"
 #. module: mrp
 #: field:mrp.bom.line,child_line_ids:0
 msgid "BOM lines of the referred bom"
-msgstr ""
+msgstr "İlgili BOM listesinin satıları"
 
 #. module: mrp
 #: code:addons/mrp/stock.py:44
@@ -366,12 +367,12 @@ msgstr "Ürün Ağacı \"%s\" yinelen ürünlü bir Ürün Ağacı kalemi içeri
 msgid ""
 "BoM \"%s\" contains a phantom BoM line but the product \"%s\" does not have "
 "any BoM defined."
-msgstr ""
+msgstr "Ürün Ağacı \"%s\" fantom olarak seçilmiş ancak alt reçetesi tanımlanmamış bir kalem içeriyor \"%s\"."
 
 #. module: mrp
 #: field:mrp.bom.line,type:0
 msgid "BoM Line Type"
-msgstr "Ürün Ağacı Satır Türü"
+msgstr "BoM Satır Türü"
 
 #. module: mrp
 #: field:mrp.bom,bom_line_ids:0
@@ -448,7 +449,7 @@ msgstr "Çevrim başına Kapasite"
 #: view:change.production.qty:mrp.view_change_production_qty_wizard
 #: model:ir.actions.act_window,name:mrp.action_change_production_qty
 msgid "Change Product Qty"
-msgstr "Ürün Mik Değiştir"
+msgstr "Ürün Miktarını Değiştir"
 
 #. module: mrp
 #: view:change.production.qty:mrp.view_change_production_qty_wizard
@@ -738,7 +739,7 @@ msgstr "Bitmiş Ürün Konumu"
 #: field:mrp.production,message_follower_ids:0
 #: field:mrp.production.workcenter.line,message_follower_ids:0
 msgid "Followers"
-msgstr "İzleyiciler"
+msgstr "Takipçiler"
 
 #. module: mrp
 #: view:mrp.production:mrp.mrp_production_form_view
@@ -834,7 +835,7 @@ msgstr "Kimlik"
 #: help:mrp.bom,product_id:0
 msgid ""
 "If a product variant is defined the BOM is available only for this product."
-msgstr ""
+msgstr "Bir ürün çeşidi tanımlanırsa BOM yalnızca bu ürün için kullanılabilir."
 
 #. module: mrp
 #: help:mrp.bom,message_unread:0 help:mrp.production,message_unread:0
@@ -884,7 +885,7 @@ msgstr "Geçersiz İşlem!"
 #: field:mrp.production,message_is_follower:0
 #: field:mrp.production.workcenter.line,message_is_follower:0
 msgid "Is a Follower"
-msgstr "Bir İzleyicidir"
+msgstr "Bir Takipçidir"
 
 #. module: mrp
 #: help:mrp.routing,location_id:0
@@ -954,7 +955,7 @@ msgstr "Sistemin bitmiş ürünleri stokladığı konum."
 #: field:mrp.product.produce,lot_id:0 field:mrp.product.produce.line,lot_id:0
 #: field:stock.move.consume,restrict_lot_id:0
 msgid "Lot"
-msgstr "Parti"
+msgstr "Lot"
 
 #. module: mrp
 #: model:res.groups,name:mrp.group_mrp_routings
@@ -1240,7 +1241,7 @@ msgstr "Her hafta"
 #. module: mrp
 #: selection:mrp.bom.line,type:0
 msgid "Phantom"
-msgstr "Görüntü"
+msgstr "Fantom"
 
 #. module: mrp
 #: help:mrp.bom.line,type:0
@@ -1248,7 +1249,7 @@ msgid ""
 "Phantom: this product line will not appear in the raw materials of "
 "manufacturing orders,it will be directly replaced by the raw materials of "
 "its own BoM, without triggeringan extra manufacturing order."
-msgstr ""
+msgstr "Fantom : Bu ürün satırı üretim emirlerinde sarf edilecek malzemeler arasında görünmeyecek, onun yerine bu ürünün kendi reçetesinde tanımlanan alt bileşenler tetiklenecektir."
 
 #. module: mrp
 #: model:ir.ui.menu,name:mrp.menu_mrp_planning
@@ -1347,12 +1348,12 @@ msgstr "Ürün Üretme"
 #. module: mrp
 #: model:ir.model,name:mrp.model_mrp_product_produce_line
 msgid "Product Produce Consume lines"
-msgstr ""
+msgstr "Sarf Edilecek Ürün Kalemleri"
 
 #. module: mrp
 #: field:change.production.qty,product_qty:0
 msgid "Product Qty"
-msgstr "Ürün Mik."
+msgstr "Ürün Miktarı"
 
 #. module: mrp
 #: field:mrp.bom,product_qty:0 field:mrp.bom.line,product_qty:0
@@ -1576,7 +1577,7 @@ msgstr "Miktar:"
 #. module: mrp
 #: field:mrp.production,location_src_id:0
 msgid "Raw Materials Location"
-msgstr "Hammade Konumu"
+msgstr "Hammadde Konumu"
 
 #. module: mrp
 #: view:mrp.production:mrp.view_mrp_production_filter
@@ -1769,14 +1770,14 @@ msgstr "Sıra"
 #. module: mrp
 #: selection:mrp.bom,type:0
 msgid "Set"
-msgstr "Ayarla"
+msgstr "Set"
 
 #. module: mrp
 #: help:mrp.bom,type:0
 msgid ""
 "Set: When processing a sales order for this product, the delivery order will"
 " contain the raw materials, instead of the finished product."
-msgstr ""
+msgstr "Set/Kit : Bu ürün için bir satış siparişine işlem yaparken, teslimat emri bitmiş ürün yerine alt bileşenlerini içerecektir."
 
 #. module: mrp
 #: field:mrp.production,origin:0
@@ -1829,7 +1830,7 @@ msgstr "Stok Hareketi"
 #. module: mrp
 #: field:report.mrp.inout,value:0
 msgid "Stock value"
-msgstr "Stok değeri"
+msgstr "Stok envanter değeri"
 
 #. module: mrp
 #: model:ir.model,name:mrp.model_report_mrp_inout
@@ -1970,12 +1971,12 @@ msgstr "Toplam Saat"
 #. module: mrp
 #: view:mrp.production:mrp.mrp_production_tree_view
 msgid "Total Qty"
-msgstr "Toplam Mik."
+msgstr "Toplam Miktar"
 
 #. module: mrp
 #: field:product.template,track_production:0
 msgid "Track Manufacturing Lots"
-msgstr "Üretim Partilerini İzle"
+msgstr "Üretim Lotlarını İzle"
 
 #. module: mrp
 #: field:mrp.product.produce,track_production:0
@@ -2067,7 +2068,7 @@ msgstr "Varyant"
 #. module: mrp
 #: field:mrp.bom.line,attribute_value_ids:0
 msgid "Variants"
-msgstr "Değişkenler"
+msgstr "Varyantlar"
 
 #. module: mrp
 #: selection:mrp.production,priority:0
@@ -2260,7 +2261,7 @@ msgstr "Ürün Ağaçlarındaki yan ürünleri yapılandırabilirsiniz.\nBu mod�
 msgid ""
 "You can not delete a Bill of Material with running manufacturing orders.\n"
 "Please close or cancel it first."
-msgstr ""
+msgstr "Aktif bir üretim emrinde kullanılan Ürün Ağacını silemezsiniz. Lütfen önce ilgili üretim emrini kapatın ya da iptal edin."
 
 #. module: mrp
 #: code:addons/mrp/stock.py:42

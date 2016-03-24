@@ -4,14 +4,17 @@
 # 
 # Translators:
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
+# jeffery chen fan <jeffery9@gmail.com>, 2016
+# 珠海-老天 <liangjia@qq.com>, 2015
+# 珠海-老天 <liangjia@qq.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo 8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-21 14:07+0000\n"
-"PO-Revision-Date: 2015-06-04 04:42+0000\n"
-"Last-Translator: Martin Trigaux\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/projects/p/odoo-8/language/zh_CN/)\n"
+"PO-Revision-Date: 2016-01-21 01:16+0000\n"
+"Last-Translator: jeffery chen fan <jeffery9@gmail.com>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/odoo/odoo-8/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -22,22 +25,22 @@ msgstr ""
 #: field:analytic.user.funct.grid,account_id:0
 #: model:ir.model,name:analytic_user_function.model_account_analytic_account
 msgid "Analytic Account"
-msgstr "辅助核算项"
+msgstr "分析账户"
 
 #. module: analytic_user_function
 #: model:ir.model,name:analytic_user_function.model_account_analytic_line
 msgid "Analytic Line"
-msgstr "辅助核算明细"
+msgstr "分析行"
 
 #. module: analytic_user_function
 #: field:analytic.user.funct.grid,create_uid:0
 msgid "Created by"
-msgstr "创建者"
+msgstr "创建人"
 
 #. module: analytic_user_function
 #: field:analytic.user.funct.grid,create_date:0
 msgid "Created on"
-msgstr "创建于"
+msgstr "创建时间"
 
 #. module: analytic_user_function
 #: view:account.analytic.account:analytic_user_function.view_account_analytic_account_form_inherit
@@ -68,17 +71,17 @@ msgstr "每用户的开票单价"
 #: view:analytic.user.funct.grid:analytic_user_function.analytic_user_funct_grid_form
 #: view:analytic.user.funct.grid:analytic_user_function.analytic_user_funct_grid_tree
 msgid "Invoicing Data"
-msgstr "发票数据"
+msgstr "开票数据"
 
 #. module: analytic_user_function
 #: field:analytic.user.funct.grid,write_uid:0
 msgid "Last Updated by"
-msgstr "最后更新"
+msgstr "最后更新人"
 
 #. module: analytic_user_function
 #: field:analytic.user.funct.grid,write_date:0
 msgid "Last Updated on"
-msgstr "最后一次更新"
+msgstr "最后更新时间"
 
 #. module: analytic_user_function
 #: view:account.analytic.account:analytic_user_function.view_account_analytic_account_form_inherit
@@ -87,7 +90,7 @@ msgid ""
 "                            to check if specific conditions are defined for a\n"
 "                            specific user. This allows to set invoicing\n"
 "                            conditions for a group of contracts."
-msgstr ""
+msgstr "Odoo 将循环搜索父帐 \n                            来检查是否为特定用户定义特定条件。\n                            这样做允许为一组合同设置账单条件。"
 
 #. module: analytic_user_function
 #: field:analytic.user.funct.grid,price:0
@@ -114,7 +117,7 @@ msgstr "服务"
 #: code:addons/analytic_user_function/analytic_user_function.py:138
 #, python-format
 msgid "There is no expense account defined for this product: \"%s\" (id:%d)"
-msgstr ""
+msgstr "产品 \"%s\" (id:%d)未定义费用科目。"
 
 #. module: analytic_user_function
 #: model:ir.model,name:analytic_user_function.model_hr_analytic_timesheet
@@ -134,9 +137,4 @@ msgstr "用户"
 #. module: analytic_user_function
 #: field:account.analytic.account,user_product_ids:0
 msgid "Users/Products Rel."
-msgstr "用户/相关产品"
-
-#. module: analytic_user_function
-#: view:hr_timesheet_sheet.sheet:analytic_user_function.hr_timesheet_sheet_form_inherit
-msgid "on_change_account_id(account_id, user_id, unit_amount)"
-msgstr ""
+msgstr "相关的用户/产品"

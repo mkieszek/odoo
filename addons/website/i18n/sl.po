@@ -9,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 14:08+0000\n"
-"PO-Revision-Date: 2015-06-04 05:30+0000\n"
-"Last-Translator: Martin Trigaux\n"
-"Language-Team: Slovenian (http://www.transifex.com/projects/p/odoo-8/language/sl/)\n"
+"POT-Creation-Date: 2015-07-22 08:25+0000\n"
+"PO-Revision-Date: 2015-11-23 12:35+0000\n"
+"Last-Translator: Matjaž Mozetič <m.mozetic@matmoz.si>\n"
+"Language-Team: Slovenian (http://www.transifex.com/odoo/odoo-8/language/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -63,6 +63,20 @@ msgid ""
 ",\n"
 "                the #1"
 msgstr ",\n                #1"
+
+#. module: website
+#: view:website:website.layout
+msgid ""
+",\n"
+"                  an awesome"
+msgstr ",\n                  izvrsten"
+
+#. module: website
+#: view:website:website.layout
+msgid ""
+",\n"
+"            Try the"
+msgstr ",\n            Poskusite"
 
 #. module: website
 #: view:website:website.info
@@ -184,7 +198,7 @@ msgstr "Dober način, da bi pritegnili bralčevo pozornost, je pripoved zgodbe.\
 #. module: website
 #: view:website:website.snippets
 msgid "A small explanation of this great"
-msgstr "Kratka obrazložitev tega odličnega"
+msgstr "Kratka obrazložitev te izjemne"
 
 #. module: website
 #: view:website:website.aboutus view:website:website.layout
@@ -582,7 +596,7 @@ msgstr "Kliknite za prilagajanje tega besedila"
 #: code:addons/website/static/src/xml/website.xml:43
 #, python-format
 msgid "Close"
-msgstr "Zaključi"
+msgstr "Zapri"
 
 #. module: website
 #. openerp-web
@@ -1766,6 +1780,16 @@ msgid "Open Source eCommerce"
 msgstr "Odprto kodni eCommerce"
 
 #. module: website
+#: view:website:website.layout
+msgid "Open Source CRM"
+msgstr "Odprto kodni CRM"
+
+#. module: website
+#: view:website:website.layout
+msgid "open source website builder"
+msgstr "odprto kodnim graditeljem spletne strani"
+
+#. module: website
 #. openerp-web
 #: code:addons/website/static/src/xml/website.editor.xml:56
 #, python-format
@@ -1918,6 +1942,21 @@ msgstr "Pictogram"
 #: view:website:website.snippets
 msgid "Point of Sale Questions"
 msgstr "Vprašanja prodajnega mesta"
+
+#. module: website
+#: view:website:website.layout
+msgid "Create a"
+msgstr "Ustavite"
+
+#. module: website
+#: view:website:website.layout
+msgid "free website"
+msgstr "brezplačno spletno stran"
+
+#. module: website
+#: view:website:website.layout
+msgid "with"
+msgstr "z"
 
 #. module: website
 #: view:website:website.layout
@@ -2489,7 +2528,7 @@ msgstr "Polna URL povezava za dostop do strežniškega dejanja preko spletne str
 msgid ""
 "The image could not be deleted because it is used in the\n"
 "               following pages or views:"
-msgstr "Strani ni bilo mogoče izbrisati, ker je uporabljena na naslednjih\n               straneh ali pogledih:"
+msgstr "Strani ni bilo mogoče izbrisati, ker je uporabljena na naslednjih\n               straneh ali prikazih:"
 
 #. module: website
 #: view:website:website.403
@@ -2892,7 +2931,7 @@ msgstr "Dobro opravljeno, ustvarili ste si domačo stran."
 #. module: website
 #: field:ir.ui.view,page:0
 msgid "Whether this view is a web page template (complete)"
-msgstr "Ali je ta pogled predloga spletne strani (celotna)"
+msgstr "Ali je ta prikaz predloga spletne strani (celotna)"
 
 #. module: website
 #: view:website:website.snippets
@@ -3071,7 +3110,7 @@ msgstr "tovarniške nastavitve"
 #. module: website
 #: view:website:website.snippets
 msgid "feature, in clear words."
-msgstr "funkcija v jasnih besedah"
+msgstr "funkcije v jasnih besedah."
 
 #. module: website
 #. openerp-web
