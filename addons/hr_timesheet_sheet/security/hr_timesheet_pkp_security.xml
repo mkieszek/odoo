@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<openerp>
+    <data noupdate="0">
+
+        <record id="rule_hr_timesheet_sheet_sheet_manager" model="ir.rule">
+            <field name="name">Rule Timesheet - Manager</field>
+            <field ref="model_hr_timesheet_sheet_sheet" name="model_id"/>
+            <field name="domain_force">['|','|',('create_uid','=',user.id),('user_id','=',user.id),('department_id.manager_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_hr_user'))]"/>
+        </record>
+        <record id="rule_hr_employee_manager" model="ir.rule">
+            <field name="name">Rule Employee - Manager</field>
+            <field ref="model_hr_employee" name="model_id"/>
+            <field name="domain_force">['|','|',('create_uid','=',user.id),('user_id','=',user.id),('parent_id.user_id','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_hr_user'))]"/>
+        </record>
+        <record id="rule_hr_analytic_timesheet_officer" model="ir.rule">
+        	<field name="name">Rule hr.analytic.timesheet Officer</field>
+        	<field ref="model_hr_analytic_timesheet" name="model_id"/>
+            <field name="domain_force">['|','|',('create_uid','=',user.id),('user_id','=',user.id),('sheet_id.department_id.manager_id.user_id','=',user.id)]</field>
+<!--             <field name="domain_force">[('create_uid','=',user.id)]</field> -->
+            <field name="groups" eval="[(4, ref('base.group_hr_user'))]"/>
+        </record>
+        <record id="rule_account_analytic_line_officer" model="ir.rule">
+        	<field name="name">Rule account.analytic.line Officer</field>
+        	<field ref="model_account_analytic_line" name="model_id"/>
+            <field name="domain_force">['|','|',('create_uid','=',user.id),('user_id','=',user.id),('department_id.manager_id.user_id','=',user.id)]</field>
+<!--             <field name="domain_force">[(1, '=', 1)]</field> -->
+            <field name="groups" eval="[(4, ref('base.group_hr_user'))]"/>
+        </record>
+    </data>
+</openerp>

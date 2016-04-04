@@ -20,6 +20,7 @@
 ##############################################################################
 
 import hr_timesheet_sheet
+import hr_timesheet_pkp
 import wizard
 import report
 import res_config

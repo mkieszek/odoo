@@ -47,11 +47,35 @@ class hr_timesheet_sheet(osv.osv):
                 'total_attendance': 0.0,
                 'total_timesheet': 0.0,
                 'total_difference': 0.0,
+                'godz_normalne': 0.0,
+                'godz_nieefektywne': 0.0,
+                'godz_nadliczbowe': 0.0,
+                'godz_nocne': 0.0,
+                'nieobecnosc': 0.0,
+                'uciazliwe': 0.0,
+                'kierowca': 0.0,
+                'niebezpieczne': 0.0,
+                'nadplacone': 0.0,
+                'budowa': 0.0,
+                
             })
             for period in sheet.period_ids:
                 res[sheet.id]['total_attendance'] += period.total_attendance
                 res[sheet.id]['total_timesheet'] += period.total_timesheet
                 res[sheet.id]['total_difference'] += period.total_attendance - period.total_timesheet
+            
+            for line in sheet.timesheet_ids:
+                res[sheet.id]['godz_normalne'] += line.godz_normalne
+                res[sheet.id]['godz_nieefektywne'] += line.godz_nieefektywne
+                res[sheet.id]['godz_nadliczbowe'] += line.godz_nadliczbowe
+                res[sheet.id]['godz_nocne'] += line.godz_nocne
+                res[sheet.id]['nieobecnosc'] += line.nieobecnosc
+                res[sheet.id]['uciazliwe'] += line.uciazliwe
+                res[sheet.id]['kierowca'] += line.kierowca
+                res[sheet.id]['budowa'] += line.budowa
+                
+                res[sheet.id]['niebezpieczne'] += line.niebezpieczne
+                res[sheet.id]['nadplacone'] += line.nadplacone
         return res
 
     def check_employee_attendance_state(self, cr, uid, sheet_id, context=None):
@@ -62,11 +86,26 @@ class hr_timesheet_sheet(osv.osv):
             raise osv.except_osv(('Warning!'),_('The timesheet cannot be validated as it does not contain an equal number of sign ins and sign outs.'))
         return True
 
-    def copy(self, cr, uid, ids, *args, **argv):
-        raise osv.except_osv(_('Error!'), _('You cannot duplicate a timesheet.'))
+    def copy(self, cr, uid, id, default=None, context=None):
+        timesheet_id =  super(hr_timesheet_sheet, self).copy(cr, uid, id, default, context)
+        
+        employee = self.pool.get('hr.employee').browse(cr, uid, default['employee_id'])
+        
+        timesheet_line_obj = self.pool.get('hr.analytic.timesheet')
+        
+        default_line = {'user_id': employee.user_id.id, 'sheet_id': timesheet_id}
+        
+        timesheet = self.browse(cr, uid, id)
+        
+        for timesheet_line in timesheet.timesheet_ids:
+            timesheet_line_obj.copy(cr, uid, timesheet_line.id, default_line)
+        #raise osv.except_osv(_('Error!'), _('You cannot duplicate a timesheet.'))
 
     def create(self, cr, uid, vals, context=None):
         if 'employee_id' in vals:
+            empl = self.pool.get('hr.employee').browse(cr, uid, vals['employee_id'], context=context)
+            vals['department_id'] = empl and empl.department_id and empl.department_id.id or False
+            
             if not self.pool.get('hr.employee').browse(cr, uid, vals['employee_id'], context=context).user_id:
                 raise osv.except_osv(_('Error!'), _('In order to create a timesheet for this employee, you must link him/her to a user.'))
             if not self.pool.get('hr.employee').browse(cr, uid, vals['employee_id'], context=context).product_id:
@@ -76,11 +115,21 @@ class hr_timesheet_sheet(osv.osv):
         if vals.get('attendances_ids'):
             # If attendances, we sort them by date asc before writing them, to satisfy the alternance constraint
             vals['attendances_ids'] = self.sort_attendances(cr, uid, vals['attendances_ids'], context=context)
+        
+        if 'date_from' in vals:
+            vals['date_to'] = vals['date_from']
+        if 'timesheet_ids' in vals:
+            for timesheet in vals['timesheet_ids']:
+                if len(timesheet) >= 3 and isinstance(timesheet[2], dict) and 'date' in timesheet[2]:
+                    timesheet[2]['date'] = vals['date_from']
+                
         return super(hr_timesheet_sheet, self).create(cr, uid, vals, context=context)
 
     def write(self, cr, uid, ids, vals, context=None):
         if 'employee_id' in vals:
             new_user_id = self.pool.get('hr.employee').browse(cr, uid, vals['employee_id'], context=context).user_id.id or False
+            empl = self.pool.get('hr.employee').browse(cr, uid, vals['employee_id'], context=context)
+            vals['department_id'] = empl and empl.department_id and empl.department_id.id or False
             if not new_user_id:
                 raise osv.except_osv(_('Error!'), _('In order to create a timesheet for this employee, you must link him/her to a user.'))
             if not self._sheet_date(cr, uid, ids, forced_user_id=new_user_id, context=context):
@@ -93,6 +142,13 @@ class hr_timesheet_sheet(osv.osv):
             # If attendances, we sort them by date asc before writing them, to satisfy the alternance constraint
             # In addition to the date order, deleting attendances are done before inserting attendances
             vals['attendances_ids'] = self.sort_attendances(cr, uid, vals['attendances_ids'], context=context)
+            
+        if 'timesheet_ids' in vals:
+            for timesheet in vals['timesheet_ids']:
+                
+                if len(timesheet) >= 3 and isinstance(timesheet[2], dict) and 'date' in timesheet[2]:
+                    timesheet[2]['date'] = self.browse(cr, uid, ids)[0].date_from
+            
         res = super(hr_timesheet_sheet, self).write(cr, uid, ids, vals, context=context)
         if vals.get('attendances_ids'):
             for timesheet in self.browse(cr, uid, ids):
@@ -179,8 +235,20 @@ class hr_timesheet_sheet(osv.osv):
         'account_ids': fields.one2many('hr_timesheet_sheet.sheet.account', 'sheet_id', 'Analytic accounts', readonly=True),
         'company_id': fields.many2one('res.company', 'Company'),
         'department_id':fields.many2one('hr.department','Department'),
+        'cpk_id': fields.related('department_id','cpk', type="many2one", relation='hr.timesheet.pkp.cpk',string="MPK", readonly=True, store=False),
         'timesheet_activity_count': fields.function(_count_all, type='integer', string='Timesheet Activities', multi=True),
         'attendance_count': fields.function(_count_all, type='integer', string="Attendances", multi=True),
+        'godz_normalne': fields.function(_total, method=True, string='Normalne', multi="_total"),
+        'godz_nieefektywne': fields.function(_total, method=True, string='Nieefektywne', multi="_total"),
+        'godz_nadliczbowe': fields.function(_total, method=True, string='Nadliczbowe', multi="_total"),
+        'godz_nocne': fields.function(_total, method=True, string='Nocne', multi="_total"),
+        'nieobecnosc': fields.many2one('hr.timesheet.pkp.nieobecnosc', 'Nieobecnosc'),
+        'uciazliwe': fields.function(_total, method=True, string='Uciążliwe', multi="_total"),
+        'kierowca': fields.function(_total, method=True, string='Dod. pojazd.', multi="_total"),
+        'budowa': fields.function(_total, method=True, string='Budowa', multi="_total"),
+        'niebezpieczne': fields.function(_total, method=True, string='Niebezpieczne', multi="_total"),
+        'nadplacone': fields.function(_total, method=True, string='Nadpłacone', multi="_total"),
+        'import': fields.boolean('Import'),
     }
 
     def _default_date_from(self, cr, uid, context=None):
@@ -208,13 +276,22 @@ class hr_timesheet_sheet(osv.osv):
     def _default_employee(self, cr, uid, context=None):
         emp_ids = self.pool.get('hr.employee').search(cr, uid, [('user_id','=',uid)], context=context)
         return emp_ids and emp_ids[0] or False
+    
+    def _default_department(self, cr, uid, context=None):
+        ids = self.pool.get('hr.employee').search(cr, uid, [('user_id','=',uid)], context=context)
+        dep_id = 0
+        for emp in self.pool.get('hr.employee').browse(cr, uid, ids):
+            dep_id = emp.department_id and emp.department_id.id or False
+        return dep_id
 
     _defaults = {
         'date_from' : _default_date_from,
         'date_to' : _default_date_to,
         'state': 'new',
         'employee_id': _default_employee,
-        'company_id': lambda self, cr, uid, c: self.pool.get('res.company')._company_default_get(cr, uid, 'hr_timesheet_sheet.sheet', context=c)
+        'department_id': _default_department,
+        'company_id': lambda self, cr, uid, c: self.pool.get('res.company')._company_default_get(cr, uid, 'hr_timesheet_sheet.sheet', context=c),
+        'import': False
     }
 
     def _sheet_date(self, cr, uid, ids, forced_user_id=False, context=None):
@@ -275,6 +352,7 @@ class hr_timesheet_sheet(osv.osv):
             user_id = empl_id.user_id.id
         return {'value': {'department_id': department_id, 'user_id': user_id,}}
 
+        
     # ------------------------------------------------
     # OpenChatter methods and notifications
     # ------------------------------------------------
@@ -286,7 +364,22 @@ class hr_timesheet_sheet(osv.osv):
             return False
         dom = ['&', ('state', '=', 'confirm'), ('employee_id', 'in', empids)]
         return dom
-
+    
+    def open_copy_timesheet(self, cr, uid, ids, context=None):
+        if context:
+            context['sheet_id'] = ids[0]
+        else:
+            context = {'sheet_id' : ids[0]}
+            
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Dodaj wiele produktów', 
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'hr.timesheet.copy.wizard',
+            'target': 'new',
+            'context': context,
+        }
 
 class account_analytic_line(osv.osv):
     _inherit = "account.analytic.line"
@@ -334,6 +427,27 @@ class hr_timesheet_line(osv.osv):
                 res[ts_line.id] = sheet_obj.name_get(cursor, user, sheet_ids, context=context)[0]
         return res
 
+    def _department_get(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        sheet_obj = self.pool.get('hr.analytic.timesheet')
+        
+        for timesheet in sheet_obj.browse(cr, 1, ids):
+            departament_id = timesheet and timesheet.sheet_id and timesheet.sheet_id.department_id and timesheet.sheet_id.department_id.id or False
+            res[timesheet.id] = departament_id
+        return res
+    
+    def _department_search(self, cr, uid, obj, name, args, context=None):
+        
+        res = []
+        """sheet_obj = self.pool.get('hr.analytic.timesheet')
+        timesheet_ids = sheet_obj.search(cr, uid, args)
+        for timesheet in sheet_obj.browse(cr, uid, timesheet_ids):
+            res.append(timesheet.line_id.id)
+        """
+        if not res:
+            return [('id', '=', 0)]
+        return [('id', 'in', res)]
+    
     def _get_hr_timesheet_sheet(self, cr, uid, ids, context=None):
         ts_line_ids = []
         for ts in self.browse(cr, uid, ids, context=context):
@@ -355,6 +469,7 @@ class hr_timesheet_line(osv.osv):
         ts_line_ids = self.pool.get('hr.analytic.timesheet').search(cr, uid, [('line_id', 'in', ids)])
         return ts_line_ids
 
+                
     _columns = {
         'sheet_id': fields.function(_sheet, string='Sheet', select="1",
             type='many2one', relation='hr_timesheet_sheet.sheet', ondelete="cascade",
@@ -364,8 +479,24 @@ class hr_timesheet_line(osv.osv):
                     'hr.analytic.timesheet': (lambda self,cr,uid,ids,context=None: ids, None, 10),
                   },
             ),
+        'department_id': fields.function(_department_get, string='Departament', type='many2one', relation='hr.department', fnct_search=_department_search),
+        'proces_id': fields.many2one('hr.timesheet.pkp.proces', 'Proces', required=True),
+        'obiekt_id': fields.many2one('hr.timesheet.pkp.obiekt', 'Obiekt', required=True),
+        'godz_normalne': fields.float('Normalne'),
+        'godz_nieefektywne': fields.float('Nieefektywne'),
+        'godz_nadliczbowe': fields.float('Nadliczbowe'),
+        'godz_nocne': fields.float('Noce'),
+        'nieobecnosc': fields.selection([('C', 'C'), ('W', 'W')], "Nieobecność"),
+        'uciazliwe': fields.float("Uciążliwe"),
+        'kierowca': fields.float('Dod. pojazd.'),
+        'niebezpieczne': fields.float('Niebezpieczne'),
+        'nadplacone': fields.float('Nadpłacone'),
+        'nadpracowane': fields.float('Nadpracowane'),
+        'import': fields.boolean('Import'),
+        'nieobecnosc_id': fields.related('sheet_id', 'nieobecnosc', relation='hr.timesheet.pkp.nieobecnosc', type='many2one', string='Nieobecność', readonly=True),
+        'budowa': fields.float('Budowa'),
     }
-
+    
     def write(self, cr, uid, ids, values, context=None):
         if isinstance(ids, (int, long)):
             ids = [ids]

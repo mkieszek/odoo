@@ -212,6 +212,10 @@ class CommonServer(object):
         try:
             sock.shutdown(socket.SHUT_RDWR)
         except socket.error, e:
+            if e.errno == errno.EBADF:
+                # Werkzeug > 0.9.6 closes the socket itself (see commit
+                # https://github.com/mitsuhiko/werkzeug/commit/4d8ca089)
+                return
             # On OSX, socket shutdowns both sides if any side closes it
             # causing an error 57 'Socket is not connected' on shutdown
             # of the other side (or something), see
@@ -609,7 +613,7 @@ class PreforkServer(CommonServer):
             _logger.info("Stopping gracefully")
             limit = time.time() + self.timeout
             for pid in self.workers.keys():
-                self.worker_kill(pid, signal.SIGTERM)
+                self.worker_kill(pid, signal.SIGINT)
             while self.workers and time.time() < limit:
                 self.process_zombie()
                 time.sleep(0.1)

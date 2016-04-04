@@ -35,7 +35,6 @@
                     <field name="sheet_id"/>
                     <field name="name" groups="analytic.group_analytic_accounting"/>
                     <field name="total" sum="Total"/>
-                    <field name="invoice_rate"/>
                 </tree>
             </field>
         </record>
@@ -63,20 +62,21 @@
             <field name="arch" type="xml">
                 <form string="Timesheet">
                 <header>
+                	<button name="open_copy_timesheet" type="object" string="Kopiuj kartę pracy" />
                     <button name="button_confirm" states="draft" string="Submit to Manager" type="object" class="oe_highlight"/>
                     <button name="done" states="confirm" string="Approve" type="workflow" groups="base.group_hr_user" class="oe_highlight"/>
                     <button name="action_set_to_draft" states="done" string="Set to Draft" type="object" />
                     <button name="cancel" states="confirm" string="Refuse" type="workflow" groups="base.group_hr_user" />
-                    <field name="state" widget="statusbar" statusbar_visible="new,confirm,done"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,confirm,done" invisible="1"/>
                 </header>
                 <sheet>
                     <div class="oe_right oe_button_box" name="buttons">
-                        <button type="action"
-                            name="%(act_hr_timesheet_sheet_sheet_2_hr_analytic_timesheet)d"
-                            class="oe_stat_button"
-                            icon="fa-clock-o">
-                            <field name="timesheet_activity_count" widget="statinfo" string="Timesheet" help="Timesheet Activities"/>
-                        </button>
+<!--                         <button type="action" -->
+<!--                             name="%(act_hr_timesheet_sheet_sheet_2_hr_analytic_timesheet)d" -->
+<!--                             class="oe_stat_button" -->
+<!--                             icon="fa-clock-o"> -->
+<!--                             <field name="timesheet_activity_count" widget="statinfo" string="Timesheet" help="Timesheet Activities"/> -->
+<!--                         </button> -->
                         <button type="action" groups="base.group_hr_attendance"
                             class="oe_stat_button" icon="fa-users"
                             name="%(act_hr_timesheet_sheet_sheet_2_hr_attendance)d">
@@ -91,34 +91,63 @@
                     <group>
                         <group>
                             <label for="date_from" string="Timesheet Period"/>
-                            <div><field name="date_from" class="oe_inline"/> to <field name="date_to" class="oe_inline"/></div>
+                            <div><field name="date_from" class="oe_inline" string="Data" /><field name="date_to" class="oe_inline" invisible="1"/></div>
                             <field name="name" invisible="1"/>
-                            <field name="department_id" invisible="1"/>
+                            <field name="department_id" invisible="0" readonly="True"/>
+                            <field name="cpk_id" readonly="True" />
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
+                        
                         <group groups="base.group_hr_attendance">
                             <field name="total_attendance" widget="float_time"/>
                             <field name="total_timesheet" widget="float_time"/>
                             <field name="total_difference" widget="float_time"/>
                         </group>
                     </group>
+                    <group col="2">
+                    	<group>
+                        	<field name="nieobecnosc"/>
+                        	<field name="godz_normalne" widget="float_time"/>
+                        	<field name="godz_nieefektywne" widget="float_time"/>
+                        	<field name="godz_nadliczbowe" widget="float_time"/>
+                        	<field name="godz_nocne" widget="float_time"/>
+                        </group>
+                        <group>
+                        	<field name="uciazliwe" widget="float_time"/>
+                        	<field name="kierowca" widget="float_time"/>
+                        	<field name="budowa" widget="float_time" />
+                        	<field name="niebezpieczne" widget="float_time"/>
+                        	<field name="nadplacone" widget="float_time"/>
+                        </group>
+                    </group>
                     <notebook>
-                        <page string="Summary">
+                        <!-- <page string="Summary">
                             <widget type="weekly_timesheet" attrs="{'readonly': [['state', 'not in', ['new', 'draft']]]}">
                             </widget>
-                        </page>
+                        </page> -->
                         <page string="Details">
                             <field context="{'employee_id': employee_id, 'user_id':user_id, 'timesheet_date_from': date_from, 'timesheet_date_to': date_to}" name="timesheet_ids" nolabel="1">
-                                <tree editable="top" string="Timesheet Activities">
-                                    <field name="date"/>
-                                    <field domain="[('type','in',['normal', 'contract']), ('state', '&lt;&gt;', 'close'),('use_timesheets','=',1)]" name="account_id" on_change="on_change_account_id(account_id, user_id)" context="{'default_use_timesheets': 1}"/>
+                                <tree editable="bottom" string="Timesheet Activities">
+                                    <field name="date" invisible="1"/>
+                                    <field name="proces_id" />
+                                    <field name="obiekt_id" />
+                                    <field domain="[('type','in',['normal', 'contract']), ('state', '&lt;&gt;', 'close'),('use_timesheets','=',1)]" name="account_id" on_change="on_change_account_id(account_id, user_id)" context="{'default_use_timesheets': 1}" string="Projekt"/>
                                     <field name="name"/>
-                                    <field name="unit_amount" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)" widget="float_time" string="Hours" sum="Hours"/>
-                                    <field name="to_invoice" widget="selection"/>
+                                    <field name="unit_amount" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)" widget="float_time" string="Hours" sum="Hours" invisible="1"/>
+                                    <field name="to_invoice" widget="selection" invisible="1"/>
                                     <field invisible="1" name="journal_id"/>
                                     <field invisible="1" name="product_id" domain="[('type','=','service')]" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)"/>
                                     <field invisible="1" name="product_uom_id" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)"/>
                                     <field invisible="1" name="amount"/>
+                                    <field name="godz_normalne" widget="float_time"/>
+                                    <field name="godz_nieefektywne" widget="float_time"/>
+                                    <field name="godz_nadliczbowe" widget="float_time"/>
+                                    <field name="godz_nocne" widget="float_time"/>
+                                    <field name="uciazliwe" widget="float_time"/>
+                                    <field name="kierowca" widget="float_time"/>
+                                    <field name="budowa" widget="float_time" />
+                                    <field name="niebezpieczne" widget="float_time"/>
+                                    <field name="nadplacone" widget="float_time"/>
                                     <field invisible="1" name="general_account_id"/>
                                     <field invisible="1" name="user_id" required="1"/>
                                 </tree>
@@ -332,7 +361,17 @@
                     <field name="employee_id"/>
                     <field name="date_from"/>
                     <field name="date_to"/>
-                    <field name="department_id" invisible="1"/>
+                    <field name="department_id" invisible="0"/>
+                    <field name="godz_normalne" widget="float_time" sum="Suma normalnych"/>
+                    <field name="godz_nieefektywne" widget="float_time" sum="Suma normalnych"/>
+                    <field name="godz_nadliczbowe" widget="float_time" sum="Suma normalnych"/>
+                    <field name="godz_nocne" widget="float_time" sum="Suma normalnych"/>
+                    <field name="nieobecnosc" />
+                    <field name="uciazliwe" widget="float_time" sum="Suma normalnych"/>
+                    <field name="kierowca" widget="float_time" sum="Suma normalnych"/>
+                    <field name="budowa" widget="float_time" sum="Suma" />
+                    <field name="niebezpieczne" widget="float_time" sum="Suma normalnych"/>
+                    <field name="nadplacone" widget="float_time" sum="Suma normalnych"/>
                     <field name="total_attendance" widget="float_time" groups="base.group_hr_attendance"/>
                     <field name="total_timesheet" widget="float_time"/>
                     <field name="total_difference" widget="float_time" groups="base.group_hr_attendance"/>
