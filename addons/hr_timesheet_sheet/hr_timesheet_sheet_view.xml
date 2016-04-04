@@ -129,9 +129,9 @@
                             <field context="{'employee_id': employee_id, 'user_id':user_id, 'timesheet_date_from': date_from, 'timesheet_date_to': date_to}" name="timesheet_ids" nolabel="1">
                                 <tree editable="bottom" string="Timesheet Activities">
                                     <field name="date" invisible="1"/>
-                                    <field name="proces_id" />
-                                    <field name="obiekt_id" />
-                                    <field domain="[('type','in',['normal', 'contract']), ('state', '&lt;&gt;', 'close'),('use_timesheets','=',1)]" name="account_id" on_change="on_change_account_id(account_id, user_id)" context="{'default_use_timesheets': 1}" string="Projekt"/>
+                                    <field name="proces_id" options="{'no_create': 1, 'no_create_edit': 1}" />
+                                    <field name="obiekt_id" options="{'no_create': 1, 'no_create_edit': 1}" />
+                                    <field domain="[('type','in',['normal', 'contract']), ('state', 'not in',['close','cancelled']),('use_timesheets','=',1)]" options="{'no_create': 1, 'no_create_edit': 1}" name="account_id" on_change="on_change_account_id(account_id, user_id)" context="{'default_use_timesheets': 1}" string="Projekt"/>
                                     <field name="name"/>
                                     <field name="unit_amount" on_change="on_change_unit_amount(product_id, unit_amount, False, product_uom_id,journal_id)" widget="float_time" string="Hours" sum="Hours" invisible="1"/>
                                     <field name="to_invoice" widget="selection" invisible="1"/>

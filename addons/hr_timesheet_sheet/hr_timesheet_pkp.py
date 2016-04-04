@@ -232,7 +232,7 @@ class account_analytic_account(osv.osv):
     def name_search(self, cr, uid, name='', args=None, operator='ilike', context=None, limit=0):
         if not args:
             args = []
-        
+
         if name:
             # Be sure name_search is symetric to name_get
             #name = name.split(' / ')[-1]
@@ -243,3 +243,4 @@ class account_analytic_account(osv.osv):
             ids = self.search(cr, uid, args, limit=limit, context=context)
        
         return self.name_get(cr, uid, ids, context)
+    
