@@ -5,13 +5,15 @@
 # Translators:
 # Jonathan S <jonathan.c.strom@gmail.com>, 2016
 # Kristoffer Grundström <kristoffer.grundstrom1983@gmail.com>, 2015-2016
+# Leif Persson <leifpz54@gmail.com>, 2016
+# Patrik Lermon <patrik.lermon@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo 9.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-17 14:09+0000\n"
-"PO-Revision-Date: 2016-04-11 07:54+0000\n"
-"Last-Translator: Jonathan S <jonathan.c.strom@gmail.com>\n"
+"PO-Revision-Date: 2016-05-26 14:24+0000\n"
+"Last-Translator: Patrik Lermon <patrik.lermon@gmail.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/odoo/odoo-9/language/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -243,7 +245,7 @@ msgid ""
 "<span class=\"panel-title\">\n"
 "                                        <strong>Accountant</strong> (Advanced access)\n"
 "                                    </span>"
-msgstr "<span class=\"panel-title\">\n<strong>Revisor</strong> (Avancerad åtkomst)\n</span>"
+msgstr "<span class=\"panel-title\">\n<strong>Ekonom</strong> (Avancerad åtkomst)\n</span>"
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_planner
@@ -251,7 +253,7 @@ msgid ""
 "<span class=\"panel-title\">\n"
 "                                        <strong>Advisor</strong> (Full access)\n"
 "                                    </span>"
-msgstr "<span class=\"panel-title\">\n<strong>Rådgivare</strong> (Fullständig åtkomst)\n</span>"
+msgstr "<span class=\"panel-title\">\n<strong>Controller</strong> (Fullständig åtkomst)\n</span>"
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_planner
@@ -1132,7 +1134,7 @@ msgstr ""
 #. module: account
 #: model:ir.actions.act_window,name:account.open_account_journal_dashboard_kanban
 msgid "Accounting Dashboard"
-msgstr ""
+msgstr "Översikt"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_invoice_date
@@ -3036,7 +3038,7 @@ msgstr "Kunder"
 #. module: account
 #: model:ir.ui.menu,name:account.menu_board_journal_1
 msgid "Dashboard"
-msgstr "Instrumentpanel"
+msgstr "Översikt"
 
 #. module: account
 #. openerp-web
@@ -5727,7 +5729,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_message_needaction_counter
 #: model:ir.model.fields,field_description:account.field_account_invoice_message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Antalet åtgärder"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_cashbox_line_number
@@ -5748,13 +5750,13 @@ msgstr ""
 #: model:ir.model.fields,help:account.field_account_bank_statement_message_needaction_counter
 #: model:ir.model.fields,help:account.field_account_invoice_message_needaction_counter
 msgid "Number of messages which requires an action"
-msgstr ""
+msgstr "Antal meddelanden som kräver en åtgärd"
 
 #. module: account
 #: model:ir.model.fields,help:account.field_account_bank_statement_message_unread_counter
 #: model:ir.model.fields,help:account.field_account_invoice_message_unread_counter
 msgid "Number of unread messages"
-msgstr ""
+msgstr "Antalet olästa meddelanden"
 
 #. module: account
 #. openerp-web
@@ -6326,7 +6328,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account.view_account_config_settings
 #: model:ir.ui.view,arch_db:account.view_account_payment_search
 msgid "Payments"
-msgstr ""
+msgstr "Betalningar"
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_journal_dashboard_kanban_view
@@ -7191,7 +7193,7 @@ msgstr ""
 #: model:ir.ui.view,arch_db:account.view_account_invoice_filter
 #: model:ir.ui.view,arch_db:account.view_account_invoice_report_search
 msgid "Salesperson"
-msgstr ""
+msgstr "Säljare"
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.view_account_journal_search
@@ -8464,7 +8466,7 @@ msgstr "Att fakturera"
 #. module: account
 #: model:ir.ui.view,arch_db:account.invoice_supplier_tree
 msgid "To Pay"
-msgstr ""
+msgstr "Att Betala"
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_planner
@@ -8665,7 +8667,7 @@ msgstr "Styckpris"
 #: model:ir.model.fields,field_description:account.field_account_invoice_line_uom_id
 #: model:ir.model.fields,field_description:account.field_account_move_line_product_uom_id
 msgid "Unit of Measure"
-msgstr "Mätenhet"
+msgstr "Måttenhet"
 
 #. module: account
 #: model:ir.ui.view,arch_db:account.account_planner
@@ -8677,7 +8679,7 @@ msgstr ""
 #. module: account
 #: model:ir.actions.act_window,name:account.act_account_journal_2_account_invoice_opened
 msgid "Unpaid Invoices"
-msgstr ""
+msgstr "Obetalda fakturor"
 
 #. module: account
 #: selection:account.move,state:0
@@ -8700,7 +8702,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_message_unread
 #: model:ir.model.fields,field_description:account.field_account_invoice_message_unread
 msgid "Unread Messages"
-msgstr ""
+msgstr "Olästa meddelanden"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_bank_statement_message_unread_counter

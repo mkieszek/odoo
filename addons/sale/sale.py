@@ -54,7 +54,9 @@ class SaleOrder(models.Model):
             invoice_ids = order.order_line.mapped('invoice_lines').mapped('invoice_id')
             # Search for invoices which have been 'cancelled' (filter_refund = 'modify' in
             # 'account.invoice.refund')
-            invoice_ids |= invoice_ids.search([('origin', 'like', order.name)])
+            # use like as origin may contains multiple references (e.g. 'SO01, SO02')
+            refunds = invoice_ids.search([('origin', 'like', order.name)])
+            invoice_ids |= refunds.filtered(lambda r: order.name in [origin.strip() for origin in r.origin.split(',')])
             # Search for refunds as well
             refund_ids = self.env['account.invoice'].browse()
             if invoice_ids:
@@ -529,9 +531,9 @@ class SaleOrderLine(models.Model):
             for invoice_line in line.invoice_lines:
                 if invoice_line.invoice_id.state != 'cancel':
                     if invoice_line.invoice_id.type == 'out_invoice':
-                        qty_invoiced += invoice_line.quantity
+                        qty_invoiced += self.env['product.uom']._compute_qty_obj(invoice_line.uom_id, invoice_line.quantity, line.product_uom)
                     elif invoice_line.invoice_id.type == 'out_refund':
-                        qty_invoiced -= invoice_line.quantity
+                        qty_invoiced -= self.env['product.uom']._compute_qty_obj(invoice_line.uom_id, invoice_line.quantity, line.product_uom)
             line.qty_invoiced = qty_invoiced
 
     @api.depends('price_subtotal', 'product_uom_qty')
@@ -543,17 +545,9 @@ class SaleOrderLine(models.Model):
     def _compute_tax_id(self):
         for line in self:
             fpos = line.order_id.fiscal_position_id or line.order_id.partner_id.property_account_position_id
-            if fpos:
-                # The superuser is used by website_sale in order to create a sale order. We need to make
-                # sure we only select the taxes related to the company of the partner. This should only
-                # apply if the partner is linked to a company.
-                if self.env.uid == SUPERUSER_ID and line.order_id.company_id:
-                    taxes = fpos.map_tax(line.product_id.taxes_id).filtered(lambda r: r.company_id == line.order_id.company_id)
-                else:
-                    taxes = fpos.map_tax(line.product_id.taxes_id)
-                line.tax_id = taxes
-            else:
-                line.tax_id = line.product_id.taxes_id if line.product_id.taxes_id else False
+            # If company_id is set, always filter taxes by the company
+            taxes = line.product_id.taxes_id.filtered(lambda r: not line.company_id or r.company_id == line.company_id)
+            line.tax_id = fpos.map_tax(taxes) if fpos else taxes
 
     @api.multi
     def _prepare_order_line_procurement(self, group_id=False):
