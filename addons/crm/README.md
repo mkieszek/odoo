@@ -2,7 +2,7 @@ Odoo CRM
 --------
 
 Boost sales productivity, improve win rates, grow revenue with the Odoo
-<a href="https://www.odoo.com/page/crm">Open Source CRM</a>.
+<a href="https://www.odoo.com/app/crm">Open Source CRM</a>.
 
 Manage your sales funnel with no effort. Attract leads, follow-up on phone
 calls and meetings. Analyse the quality of your leads to make informed
@@ -19,7 +19,7 @@ Lead Management Made Easy
 -------------------------
 
 Create leads automatically from incoming emails. Analyse leads efficiency and
-compare performance by campaigns, channels or sales team.
+compare performance by campaigns, channels or Sales Team.
 
 Find duplicates, merge leads and assign them to the right salesperson in one
 operation. Spend less time on administration and more time on qualifying leads.
@@ -42,7 +42,7 @@ company uses Microsoft Outlook or Gmail, no one needs to change the way they
 work, so everyone stays productive.
 
 Route, sort and filter incoming emails automatically. Odoo CRM handles incoming
-emails and route them to the right opportunities or sales team. New leads are
+emails and route them to the right opportunities or Sales Team. New leads are
 created on the fly and interested salespersons are notified automatically.
 
 Collaborative Agenda
@@ -55,10 +55,10 @@ see what your team is busy with.
 Lead Automation and Marketing Campaigns
 ---------------------------------------
 
-Drive performance by automating tasks with Odoo <a href="https://www.odoo.com/page/crm">CRM</a>.
+Drive performance by automating tasks with Odoo <a href="https://www.odoo.com/app/crm">CRM</a>.
 
 Use our marketing campaigns to automate lead acquisition, follow ups and
-promotions. Define automated actions (e.g. ask a salesperson to call, send an
+promotions. Define automation rules (e.g. ask a salesperson to call, send an
 email, ...) based on triggers (no activity since 20 days, answered a
 promotional email, etc.)
 
@@ -76,18 +76,18 @@ sales performance at every stage of your customer relationship.
 Drive Engagement with Gamification
 ----------------------------------
 
-### Leverage sales' natural desire for competition
+### Leverage your team's natural desire for competition
 
 Reinforce good habits and improve win rates with real-time recognition and
 rewards inspired by [game mechanics](http://en.wikipedia.org/wiki/Gamification).
-Align sales teams around clear business objectives with challenges, personal
+Align Sales Teams around clear business objectives with challenges, personal
 objectives and team leader boards.
 
 ### Leaderboards
 
-Promote leaders and competition amongst sales team with performance ratios.
+Promote leaders and competition amongst Sales Team with performance ratios.
 
-### Personnal Objectives
+### Personal Objectives
 
 Assign clear goals to users to align them with the company objectives.
 

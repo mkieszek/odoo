@@ -2,7 +2,7 @@ Odoo Supply Chain
 -----------------
 
 Automate requisition-to-pay, control invoicing with the Odoo
-<a href="https://www.odoo.com/page/purchase">Open Source Supply Chain</a>.
+<a href="https://www.odoo.com/app/purchase">Open Source Supply Chain</a>.
 
 Automate procurement propositions, launch request for quotations, track
 purchase orders, manage vendors' information, control products reception and
@@ -47,7 +47,7 @@ Import Vendor Pricelists
 Take smart purchase decisions using the best prices.  Easily import vendor's
 pricelists to make smarter purchase decisions based on promotions, prices
 depending on quantities and special contract conditions. You can even base your
-sales price depending on your vendor's prices.
+sale price depending on your vendor's prices.
 
 Control Products and Invoices
 -----------------------------

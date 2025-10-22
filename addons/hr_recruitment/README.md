@@ -2,7 +2,7 @@ Manage Recruitment and Job applications
 ---------------------------------------
 
 Publish, promote and organize your job offers with the Odoo
-<a href="https://www.odoo.com/page/recruitment">Open Source Recruitment Application</a>.
+<a href="https://www.odoo.com/app/recruitment">Open Source Recruitment Application</a>.
 
 Organize your job board, promote your job announces and keep track of
 application submissions easily. Follow every applicant and build up a database
@@ -37,10 +37,3 @@ time by automating some communications with email templates.
 Documents like resumes and motivation letters are indexed automatically,
 allowing you to easily find for specific skills and build up a database of
 profiles.
-
-Integrated Surveys
-------------------
-
-Create your own interview canvas based on our best practices. Use the survey
-designer to adapt questions to your own process. Ask the applicant to fill in
-the survey online, or the interviewer to use it during real interviews.

@@ -1,82 +1,109 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from openerp.osv import fields, osv
-from openerp.tools.translate import _
-import openerp.addons.decimal_precision as dp
-from openerp.exceptions import UserError
+from odoo import api, fields, models, _
+from odoo.exceptions import UserError
+from odoo.tools import float_is_zero
 
-class change_production_qty(osv.osv_memory):
+
+class ChangeProductionQty(models.TransientModel):
     _name = 'change.production.qty'
-    _description = 'Change Quantity of Products'
+    _description = 'Change Production Qty'
 
-    _columns = {
-        'product_qty': fields.float('Product Qty', digits_compute=dp.get_precision('Product Unit of Measure'), required=True),
-    }
+    mo_id = fields.Many2one('mrp.production', 'Manufacturing Order',
+        required=True, ondelete='cascade')
+    product_qty = fields.Float(
+        'Quantity To Produce',
+        digits='Product Unit', required=True)
 
-    def default_get(self, cr, uid, fields, context=None):
-        """ To get default values for the object.
-        @param self: The object pointer.
-        @param cr: A database cursor
-        @param uid: ID of the user currently logged in
-        @param fields: List of fields for which we want default values
-        @param context: A standard dictionary
-        @return: A dictionary which of fields with values.
-        """
-        if context is None:
-            context = {}
-        res = super(change_production_qty, self).default_get(cr, uid, fields, context=context)
-        prod_obj = self.pool.get('mrp.production')
-        prod = prod_obj.browse(cr, uid, context.get('active_id'), context=context)
-        if 'product_qty' in fields:
-            res.update({'product_qty': prod.product_qty})
+    @api.model
+    def default_get(self, fields):
+        res = super(ChangeProductionQty, self).default_get(fields)
+        if 'mo_id' in fields and not res.get('mo_id') and self.env.context.get('active_model') == 'mrp.production' and self.env.context.get('active_id'):
+            res['mo_id'] = self.env.context['active_id']
+        if 'product_qty' in fields and not res.get('product_qty') and res.get('mo_id'):
+            res['product_qty'] = self.env['mrp.production'].browse(res['mo_id']).product_qty
         return res
 
-    def _update_product_to_produce(self, cr, uid, prod, qty, context=None):
-        move_lines_obj = self.pool.get('stock.move')
-        for m in prod.move_created_ids:
-            move_lines_obj.write(cr, uid, [m.id], {'product_uom_qty': qty})
-
-    def change_prod_qty(self, cr, uid, ids, context=None):
+    @api.model
+    def _update_finished_moves(self, production, new_qty, old_qty):
+        """ Update finished product and its byproducts. This method only update
+        the finished moves not done or cancel and just increase or decrease
+        their quantity according the unit_ratio. It does not use the BoM, BoM
+        modification during production would not be taken into consideration.
         """
-        Changes the Quantity of Product.
-        @param self: The object pointer.
-        @param cr: A database cursor
-        @param uid: ID of the user currently logged in
-        @param ids: List of IDs selected
-        @param context: A standard dictionary
-        @return:
-        """
-        record_id = context and context.get('active_id',False)
-        assert record_id, _('Active Id not found')
-        prod_obj = self.pool.get('mrp.production')
-        bom_obj = self.pool.get('mrp.bom')
-        move_obj = self.pool.get('stock.move')
-        for wiz_qty in self.browse(cr, uid, ids, context=context):
-            prod = prod_obj.browse(cr, uid, record_id, context=context)
-            prod_obj.write(cr, uid, [prod.id], {'product_qty': wiz_qty.product_qty})
-            prod_obj.action_compute(cr, uid, [prod.id])
+        modification = {}
+        push_moves = self.env['stock.move']
+        for move in production.move_finished_ids:
+            if move.state in ('done', 'cancel'):
+                continue
+            qty = (new_qty - old_qty) * move.unit_factor
+            modification[move] = (move.product_uom_qty + qty, move.product_uom_qty)
+            if self._need_quantity_propagation(move, qty):
+                push_moves |= move.copy({'product_uom_qty': qty})
+            else:
+                move.write({'product_uom_qty': move.product_uom_qty + qty})
 
-            for move in prod.move_lines:
-                bom_point = prod.bom_id
-                bom_id = prod.bom_id.id
-                if not bom_point:
-                    bom_id = bom_obj._bom_find(cr, uid, product_id=prod.product_id.id, context=context)
-                    if not bom_id:
-                        raise UserError(_("Cannot find bill of material for this product."))
-                    prod_obj.write(cr, uid, [prod.id], {'bom_id': bom_id})
-                    bom_point = bom_obj.browse(cr, uid, [bom_id])[0]
+        if push_moves:
+            push_moves._action_confirm()
+        production.move_finished_ids._action_assign()
 
-                if not bom_id:
-                    raise UserError(_("Cannot find bill of material for this product."))
+        return modification
 
-                factor = prod.product_qty * prod.product_uom.factor / bom_point.product_uom.factor
-                product_details, workcenter_details = \
-                    bom_obj._bom_explode(cr, uid, bom_point, prod.product_id, factor / bom_point.product_qty, [], context=context)
-                for r in product_details:
-                    if r['product_id'] == move.product_id.id:
-                        move_obj.write(cr, uid, [move.id], {'product_uom_qty': r['product_qty']})
-            if prod.move_prod_id:
-                move_obj.write(cr, uid, [prod.move_prod_id.id], {'product_uom_qty' :  wiz_qty.product_qty})
-            self._update_product_to_produce(cr, uid, prod, wiz_qty.product_qty, context=context)
+    @api.model
+    def _need_quantity_propagation(self, move, qty):
+        return move.move_dest_ids and not move.product_uom.is_zero(qty)
+
+    def change_prod_qty(self):
+        precision = self.env['decimal.precision'].precision_get('Product Unit')
+        for wizard in self:
+            production = wizard.mo_id
+            old_production_qty = production.product_qty
+            new_production_qty = wizard.product_qty
+
+            factor = new_production_qty / old_production_qty
+            update_info = production._update_raw_moves(factor)
+            documents = {}
+            for move, old_qty, new_qty in update_info:
+                iterate_key = production._get_document_iterate_key(move)
+                if iterate_key:
+                    document = self.env['stock.picking']._log_activity_get_documents({move: (new_qty, old_qty)}, iterate_key, 'UP')
+                    for key, value in document.items():
+                        if documents.get(key):
+                            documents[key] += [value]
+                        else:
+                            documents[key] = [value]
+            production._log_manufacture_exception(documents)
+            self._update_finished_moves(production, new_production_qty, old_production_qty)
+            production.write({'product_qty': new_production_qty})
+            if not production.product_uom_id.is_zero(production.qty_producing) and not production.workorder_ids:
+                production.qty_producing = new_production_qty
+                production._set_qty_producing()
+
+            for wo in production.workorder_ids:
+                operation = wo.operation_id
+                wo.duration_expected = wo._get_duration_expected(ratio=new_production_qty / old_production_qty)
+                quantity = wo.qty_production - wo.qty_produced
+                if production.product_id.tracking == 'serial':
+                    quantity = 1.0 if not float_is_zero(quantity, precision_digits=precision) else 0.0
+                else:
+                    quantity = quantity if (quantity > 0 and not float_is_zero(quantity, precision_digits=precision)) else 0
+                wo._update_qty_producing(quantity)
+                if wo.qty_produced < wo.qty_production and wo.state == 'done':
+                    wo.state = 'progress'
+                if wo.qty_produced == wo.qty_production and wo.state == 'progress':
+                    wo.state = 'done'
+                # assign moves; last operation receive all unassigned moves
+                # TODO: following could be put in a function as it is similar as code in _workorders_create
+                # TODO: only needed when creating new moves
+                moves_raw = production.move_raw_ids.filtered(lambda move: move.operation_id == operation and move.state not in ('done', 'cancel'))
+                if wo == production.workorder_ids[-1]:
+                    moves_raw |= production.move_raw_ids.filtered(lambda move: not move.operation_id)
+                moves_finished = production.move_finished_ids.filtered(lambda move: move.operation_id == operation) #TODO: code does nothing, unless maybe by_products?
+                moves_raw.mapped('move_line_ids').write({'workorder_id': wo.id})
+                (moves_finished + moves_raw).write({'workorder_id': wo.id})
+
+        # run scheduler for moves forecasted to not have enough in stock
+        self.mo_id.filtered(lambda mo: mo.state in ['confirmed', 'progress']).move_raw_ids._trigger_scheduler()
+
         return {}

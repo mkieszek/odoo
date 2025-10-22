@@ -1,53 +1,150 @@
-# Bulgarian translation for openobject-addons
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* bus
+#
+# Translators:
+# Nikola Iliev, 2023
+# Albena Mincheva <albena_vicheva@abv.bg>, 2023
+# aleksandar ivanov, 2023
+# Maria Boyadjieva <marabo2000@gmail.com>, 2023
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-08-14 13:08+0000\n"
-"PO-Revision-Date: 2014-11-24 20:03+0000\n"
-"Last-Translator: Dimitar Dimitrov <dimitrovden@gmail.com>\n"
-"Language-Team: Bulgarian <bg@li.org>\n"
+"Project-Id-Version: Odoo Server 16.0beta\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-05-16 13:49+0000\n"
+"PO-Revision-Date: 2022-09-22 05:45+0000\n"
+"Last-Translator: Maria Boyadjieva <marabo2000@gmail.com>, 2023\n"
+"Language-Team: Bulgarian (https://app.transifex.com/odoo/teams/41243/bg/)\n"
+"Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-11-25 07:32+0000\n"
-"X-Generator: Launchpad (build 17252)\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. module: bus
-#: field:bus.bus,channel:0
+#: model:ir.model.fields.selection,name:bus.selection__bus_presence__status__away
+msgid "Away"
+msgstr "Извън"
+
+#. module: bus
+#: model:ir.model.fields,field_description:bus.field_bus_bus__channel
 msgid "Channel"
 msgstr "Канал"
 
 #. module: bus
-#: field:bus.bus,create_date:0
-msgid "Create date"
-msgstr "Дата на създаване"
+#: model:ir.model,name:bus.model_bus_bus
+msgid "Communication Bus"
+msgstr ""
 
 #. module: bus
-#: field:bus.bus,create_uid:0
+#: model:ir.model,name:bus.model_res_partner
+msgid "Contact"
+msgstr "Контакт"
+
+#. module: bus
+#: model:ir.model.fields,field_description:bus.field_bus_bus__create_uid
 msgid "Created by"
 msgstr "Създадено от"
 
 #. module: bus
-#: field:bus.bus,id:0
+#: model:ir.model.fields,field_description:bus.field_bus_bus__create_date
+msgid "Created on"
+msgstr "Създадено на"
+
+#. module: bus
+#: model:ir.model.fields,field_description:bus.field_bus_bus__display_name
+#: model:ir.model.fields,field_description:bus.field_bus_presence__display_name
+msgid "Display Name"
+msgstr "Име за показване"
+
+#. module: bus
+#: model:ir.model.fields,field_description:bus.field_bus_bus__id
+#: model:ir.model.fields,field_description:bus.field_bus_presence__id
 msgid "ID"
+msgstr "ID"
+
+#. module: bus
+#: model:ir.model.fields,field_description:bus.field_bus_presence__status
+#: model:ir.model.fields,field_description:bus.field_res_partner__im_status
+#: model:ir.model.fields,field_description:bus.field_res_users__im_status
+msgid "IM Status"
+msgstr "Статус IM "
+
+#. module: bus
+#: model:ir.model.fields,field_description:bus.field_bus_presence__last_poll
+msgid "Last Poll"
+msgstr "Последна анкета"
+
+#. module: bus
+#: model:ir.model.fields,field_description:bus.field_bus_presence__last_presence
+msgid "Last Presence"
+msgstr "Последно присъствие"
+
+#. module: bus
+#: model:ir.model.fields,field_description:bus.field_bus_bus__write_uid
+msgid "Last Updated by"
+msgstr "Последно актуализирано от"
+
+#. module: bus
+#: model:ir.model.fields,field_description:bus.field_bus_bus__write_date
+msgid "Last Updated on"
+msgstr "Последно актуализирано на"
+
+#. module: bus
+#: model:ir.model.fields,field_description:bus.field_bus_bus__message
+msgid "Message"
+msgstr "Съобщение"
+
+#. module: bus
+#: model:ir.model,name:bus.model_ir_model
+msgid "Models"
+msgstr "Модели"
+
+#. module: bus
+#: model:ir.model.fields.selection,name:bus.selection__bus_presence__status__offline
+msgid "Offline"
+msgstr "Офлайн"
+
+#. module: bus
+#: model:ir.model.fields.selection,name:bus.selection__bus_presence__status__online
+msgid "Online"
+msgstr "Онлайн"
+
+#. module: bus
+#. odoo-javascript
+#: code:addons/bus/static/src/services/assets_watchdog_service.js:0
+msgid "Refresh"
 msgstr ""
 
 #. module: bus
-#: field:bus.bus,write_uid:0
-msgid "Last Updated by"
-msgstr "Последно обновено от"
+#. odoo-javascript
+#: code:addons/bus/static/src/services/assets_watchdog_service.js:0
+msgid "The page appears to be out of date."
+msgstr ""
 
 #. module: bus
-#: field:bus.bus,write_date:0
-msgid "Last Updated on"
-msgstr "Последно обновено на"
+#: model:ir.model,name:bus.model_res_users
+msgid "User"
+msgstr "Потребител"
 
 #. module: bus
-#: field:bus.bus,message:0
-msgid "Message"
-msgstr "Съобщение"
+#: model:ir.model,name:bus.model_bus_presence
+msgid "User Presence"
+msgstr "Потребителско присъствие"
+
+#. module: bus
+#: model:ir.model.fields,field_description:bus.field_bus_presence__user_id
+msgid "Users"
+msgstr "Потребители"
+
+#. module: bus
+#. odoo-python
+#: code:addons/bus/controllers/home.py:0
+msgid "Your password is the default (admin)! If this system is exposed to untrusted users it is important to change it immediately for security reasons. I will keep nagging you about it!"
+msgstr ""
+
+#. module: bus
+#: model:ir.model,name:bus.model_ir_websocket
+msgid "websocket message handling"
+msgstr ""

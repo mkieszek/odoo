@@ -1,84 +1,118 @@
-# Turkish translation for openobject-addons
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* base_vat
+#
+# Translators:
+# Ediz Duman <neps1192@gmail.com>, 2022
+# abc Def <hdogan1974@gmail.com>, 2022
+# Levent Karakaş <levent@mektup.at>, 2022
+# Murat Kaplan <muratk@projetgrup.com>, 2022
+# Umur Akın <umura@projetgrup.com>, 2022
+# Tugay Hatıl <tugayh@projetgrup.com>, 2023
+# Ertuğrul Güreş <ertugrulg@projetgrup.com>, 2023
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-08-14 13:08+0000\n"
-"PO-Revision-Date: 2014-10-11 07:00+0000\n"
-"Last-Translator: Ayhan KIZILTAN <Unknown>\n"
-"Language-Team: Turkish <tr@li.org>\n"
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-05-16 13:49+0000\n"
+"PO-Revision-Date: 2022-09-22 05:45+0000\n"
+"Last-Translator: Ertuğrul Güreş <ertugrulg@projetgrup.com>, 2023\n"
+"Language-Team: Turkish (https://app.transifex.com/odoo/teams/41243/tr/)\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-10-12 07:19+0000\n"
-"X-Generator: Launchpad (build 17196)\n"
-
-#. module: base_vat
-#: view:res.partner:base_vat.view_partner_form
-msgid "Check Validity"
-msgstr "Geçerliliğini Kontrol et"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: base_vat
 #: model:ir.model,name:base_vat.model_res_company
 msgid "Companies"
-msgstr "Firmalar"
+msgstr "Şirketler"
 
 #. module: base_vat
-#: code:addons/base_vat/base_vat.py:114
-#, python-format
-msgid "Error!"
-msgstr "Hata!"
-
-#. module: base_vat
-#: help:res.company,vat_check_vies:0
-msgid ""
-"If checked, Partners VAT numbers will be fully validated against EU's VIES "
-"service rather than via a simple format validation (checksum)."
-msgstr ""
-"Eğer işaretlenirse, Paydaşın KDV numarası basit biçim onayı yerine Avrupa "
-"Birliği VIES servisinden kontrol edilecek."
-
-#. module: base_vat
-#: code:addons/base_vat/base_vat.py:130
-#, python-format
-msgid "Importing VAT Number [%s] is not valid !"
-msgstr "İçeaktarılan KDV Numarası [%s] geçerli değil!"
+#: model:ir.model,name:base_vat.model_res_config_settings
+msgid "Config Settings"
+msgstr "Yapılandırma Ayarları"
 
 #. module: base_vat
 #: model:ir.model,name:base_vat.model_res_partner
-msgid "Partner"
-msgstr "Paydaş"
+msgid "Contact"
+msgstr "Kontak"
 
 #. module: base_vat
-#: code:addons/base_vat/base_vat.py:153
-#, python-format
+#: model:ir.model,name:base_vat.model_account_fiscal_position
+msgid "Fiscal Position"
+msgstr "Mali Koşul"
+
+#. module: base_vat
+#: model_terms:ir.ui.view,arch_db:base_vat.res_config_settings_view_form
+msgid "If this checkbox is ticked, you will not be able to save a contact if its VAT number cannot be verified by the European VIES service."
+msgstr "Eğer kontrol kutusu işaretli ise ve vergi numarası European VIES servisi tarafından doğrulanmamışsa, bir bağlantı kaydedemezsiniz."
+
+#. module: base_vat
+#: model:ir.model.fields,field_description:base_vat.field_res_partner__vies_failed_message
+#: model:ir.model.fields,field_description:base_vat.field_res_users__vies_failed_message
+msgid "Technical field display a message to the user if the VIES check fails."
+msgstr "Teknik alan, VIES kontrolü başarısız olursa kullanıcıya bir mesaj görüntüler."
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
 msgid ""
-"The VAT number [%s] for partner [%s] does not seem to be valid. \n"
-"Note: the expected format is %s"
+"The %(vat_label)s number [%(wrong_vat)s] does not seem to be valid. \n"
+"Note: the expected format is %(expected_format)s"
 msgstr ""
-"KDV numarası [%s] iş ortağı [%s] için geçerli görünmüyor. \n"
-"Not: umulan biçim %s"
+"%(vat_label)s numarası [%(wrong_vat)s] geçerli görünmüyor.\n"
+"Not: beklenen biçim %(expected_format)s."
 
 #. module: base_vat
-#: code:addons/base_vat/base_vat.py:152
-#, python-format
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
 msgid ""
-"The VAT number [%s] for partner [%s] either failed the VIES VAT validation "
-"check or did not respect the expected format %s."
+"The %(vat_label)s number [%(wrong_vat)s] for %(record_label)s does not seem to be valid. \n"
+"Note: the expected format is %(expected_format)s"
 msgstr ""
-"KDV numarası [%s] iş ortağı [%s] için VIES KDV denetimini geçemedi yada "
-"umulan %s b,ç,mine uymadı."
+"%(record_label)s için %(vat_label)s numarası [%(wrong_vat)s] geçerli görünmüyor.\n"
+"Not: beklenen biçim %(expected_format)s"
 
 #. module: base_vat
-#: field:res.company,vat_check_vies:0
-msgid "VIES VAT Check"
-msgstr "VIES KDV Denetimi"
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+msgid "The VAT number %s failed the VIES VAT validation check."
+msgstr "KDV numarası %s, VIES KDV doğrulama kontrolünde başarısız oldu."
 
 #. module: base_vat
-#: view:res.partner:base_vat.view_partner_form
-msgid "e.g. BE0477472701"
-msgstr "örn. BE0477472701"
+#. odoo-python
+#: code:addons/base_vat/models/account_fiscal_position.py:0
+msgid "The country detected for this foreign VAT number does not match the one set on this fiscal position."
+msgstr "Bu yabancı vergi numarası için tespit edilen ülke, bu mali koşulda ayarlanan ülke ile eşleşmiyor."
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+msgid "VAT"
+msgstr "VKN/TCKN"
+
+#. module: base_vat
+#: model:ir.model.fields,field_description:base_vat.field_res_company__vat_check_vies
+#: model:ir.model.fields,field_description:base_vat.field_res_config_settings__vat_check_vies
+msgid "Verify VAT Numbers"
+msgstr "Vergi No Doğrulama"
+
+#. module: base_vat
+#: model_terms:ir.ui.view,arch_db:base_vat.res_config_settings_view_form
+msgid "Verify VAT numbers using the European VIES service"
+msgstr "Avrupa VIES servisini kullanarak Vergi No Doğrulama"
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/account_fiscal_position.py:0
+msgid "fiscal position [%s]"
+msgstr "mali koşul [%s]"
+
+#. module: base_vat
+#. odoo-python
+#: code:addons/base_vat/models/res_partner.py:0
+msgid "partner [%s]"
+msgstr "kontak [%s]"

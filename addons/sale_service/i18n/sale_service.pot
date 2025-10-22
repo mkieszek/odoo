@@ -1,14 +1,14 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* sale_service
+# 	* sale_service
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-21 14:08+0000\n"
-"PO-Revision-Date: 2015-01-21 14:08+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2025-09-11 14:01+0000\n"
+"PO-Revision-Date: 2025-09-11 14:01+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,75 +16,16 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sale_service
-#: field:project.task.type,closed:0
-msgid "Close"
+#: model:ir.model.fields,field_description:sale_service.field_sale_order_line__display_name
+msgid "Display Name"
 msgstr ""
 
 #. module: sale_service
-#: field:product.template,auto_create_task:0
-msgid "Create Task Automatically"
+#: model:ir.model.fields,field_description:sale_service.field_sale_order_line__id
+msgid "ID"
 msgstr ""
 
 #. module: sale_service
-#: view:project.task:sale_service.view_sale_service_inherit_form2
-msgid "Order Line"
-msgstr ""
-
-#. module: sale_service
-#: model:ir.model,name:sale_service.model_procurement_order
-#: field:project.task,procurement_id:0
-msgid "Procurement"
-msgstr ""
-
-#. module: sale_service
-#: model:ir.model,name:sale_service.model_product_product
-msgid "Product"
-msgstr ""
-
-#. module: sale_service
-#: model:ir.model,name:sale_service.model_product_template
-msgid "Product Template"
-msgstr ""
-
-#. module: sale_service
-#: field:product.template,project_id:0
-msgid "Project"
-msgstr ""
-
-#. module: sale_service
-#: view:product.template:sale_service.view_product_task_form
-msgid "Project Management Information"
-msgstr ""
-
-#. module: sale_service
-#: field:project.task,sale_line_id:0
+#: model:ir.model,name:sale_service.model_sale_order_line
 msgid "Sales Order Line"
 msgstr ""
-
-#. module: sale_service
-#: model:ir.model,name:sale_service.model_project_task
-#: field:procurement.order,task_id:0
-msgid "Task"
-msgstr ""
-
-#. module: sale_service
-#: model:ir.model,name:sale_service.model_project_task_type
-msgid "Task Stage"
-msgstr ""
-
-#. module: sale_service
-#: code:addons/sale_service/models/sale_service.py:96
-#, python-format
-msgid "Task created"
-msgstr ""
-
-#. module: sale_service
-#: help:project.task.type,closed:0
-msgid "Tasks in this stage are considered as closed."
-msgstr ""
-
-#. module: sale_service
-#: help:product.template,auto_create_task:0
-msgid "Tick this option if you want to create a task automatically each time this product is sold"
-msgstr ""
-

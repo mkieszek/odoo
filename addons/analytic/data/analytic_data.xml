@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data noupdate="1">
-
-        <!-- Analytic-account-related subtypes for messaging / Chatter -->
-        <record id="mt_account_pending" model="mail.message.subtype">
-            <field name="name">Contract to Renew</field>
-            <field name="res_model">account.analytic.account</field>
-            <field name="default" eval="False"/>
-            <field name="description">Pending</field>
-        </record>
-        <record id="mt_account_closed" model="mail.message.subtype">
-            <field name="name">Contract Finished</field>
-            <field name="res_model">account.analytic.account</field>
-            <field name="default" eval="False"/>
-            <field name="description">Closed</field>
-        </record>
-        <record id="mt_account_opened" model="mail.message.subtype">
-            <field name="name">Contract Opened</field>
-            <field name="res_model">account.analytic.account</field>
-            <field name="default" eval="False"/>
-            <field name="description">Opened</field>
+        <record id="decimal_percentage_analytic" model="decimal.precision">
+            <field name="name">Percentage Analytic</field>
+            <field name="digits" eval="2"/>
         </record>
 
+        <!--
+            Save which plan is used for Projects. Once it is set, even if not used, it cannot be changed safely without a SQL script.
+            The other plans will generate dynamic columns, so changing this param would require renaming the columns also.
+        -->
+        <function model="ir.config_parameter" name="set_int" eval="('analytic.project_plan', 1)"/>
+        <record id="analytic_plan_projects" model="account.analytic.plan" forcecreate="0">
+            <field name="name">Project</field>
+            <field name="default_applicability">optional</field>
+        </record>
     </data>
-</openerp>
+</odoo>

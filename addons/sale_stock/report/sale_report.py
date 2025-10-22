@@ -1,30 +1,21 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
- 
-from openerp.osv import fields, osv
-from openerp import tools
 
-class sale_report(osv.osv):
+from odoo import fields, models
+
+
+class SaleReport(models.Model):
     _inherit = "sale.report"
-    _columns = {
-        'shipped': fields.boolean('Shipped', readonly=True),
-        'shipped_qty_1': fields.integer('# of Shipped Lines', readonly=True),
-        'warehouse_id': fields.many2one('stock.warehouse', 'Warehouse',readonly=True),
-        'state': fields.selection([
-            ('draft', 'Draft Quotation'),
-            ('sent', 'Quotation Sent'),
-            ('waiting_date', 'Waiting Schedule'),
-            ('manual', 'Sale to Invoice'),
-            ('progress', 'Sale Order'),
-            ('shipping_except', 'Shipping Exception'),
-            ('invoice_except', 'Invoice Exception'),
-            ('done', 'Done'),
-            ('cancel', 'Cancelled')
-            ], 'Order Status', readonly=True),
-    }
 
-    def _select(self):
-        return  super(sale_report, self)._select() + ", s.warehouse_id as warehouse_id, s.shipped, s.shipped::integer as shipped_qty_1"
+    warehouse_id = fields.Many2one('stock.warehouse', 'Warehouse', readonly=True)
 
-    def _group_by(self):
-        return super(sale_report, self)._group_by() + ", s.warehouse_id, s.shipped"
+    def _select_additional_fields(self):
+        res = super()._select_additional_fields()
+        res['warehouse_id'] = "s.warehouse_id"
+        return res
+
+    def _group_by_sale(self):
+        res = super()._group_by_sale()
+        res += """,
+            s.warehouse_id"""
+        return res

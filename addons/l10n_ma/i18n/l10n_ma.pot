@@ -1,14 +1,14 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* l10n_ma
+# 	* l10n_ma
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 7.0alpha\n"
+"Project-Id-Version: Odoo Server 18.3a1+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-24 02:53+0000\n"
-"PO-Revision-Date: 2012-11-24 02:53+0000\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2025-04-02 12:25+0000\n"
+"PO-Revision-Date: 2025-04-02 12:25+0000\n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,128 +16,59 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_imm
-msgid "Immobilisations"
+#: model:ir.model,name:l10n_ma.model_account_chart_template
+msgid "Account Chart Template"
 msgstr ""
 
 #. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_ach
-msgid "Charges Achats"
+#: model:ir.model.fields,field_description:l10n_ma.field_base_document_layout__company_details
+msgid "Company Details"
 msgstr ""
 
 #. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_tpl
-msgid "Titres de placement"
+#: model:ir.model,name:l10n_ma.model_base_document_layout
+msgid "Company Document Layout"
 msgstr ""
 
 #. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_vue
-msgid "Vue"
+#: model:ir.model,name:l10n_ma.model_res_partner
+msgid "Contact"
 msgstr ""
 
 #. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_dct
-msgid "Dettes à court terme"
+#: model:ir.model.fields,field_description:l10n_ma.field_account_chart_template__display_name
+#: model:ir.model.fields,field_description:l10n_ma.field_base_document_layout__display_name
+#: model:ir.model.fields,field_description:l10n_ma.field_res_partner__display_name
+msgid "Display Name"
 msgstr ""
 
 #. module: l10n_ma
-#: sql_constraint:l10n.ma.report:0
-msgid "The code report must be unique !"
+#: model:ir.model.fields,help:l10n_ma.field_base_document_layout__company_details
+msgid "Header text displayed at the top of all reports."
 msgstr ""
 
 #. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_stk
-msgid "Stocks"
+#. odoo-python
+#: code:addons/l10n_ma/models/res_partner.py:0
+#: model_terms:ir.ui.view,arch_db:l10n_ma.view_company_form
+#: model_terms:ir.ui.view,arch_db:l10n_ma.view_partner_property_form
+msgid "ICE"
 msgstr ""
 
 #. module: l10n_ma
-#: field:l10n.ma.line,code:0
-msgid "Variable Name"
+#. odoo-python
+#: code:addons/l10n_ma/models/res_partner.py:0
+msgid "ICE number should have exactly 15 digits."
 msgstr ""
 
 #. module: l10n_ma
-#: field:l10n.ma.line,definition:0
-msgid "Definition"
+#: model_terms:ir.ui.view,arch_db:l10n_ma.report_invoice_document
+msgid "ICE:"
 msgstr ""
 
 #. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_dlt
-msgid "Dettes à long terme"
+#: model:ir.model.fields,field_description:l10n_ma.field_account_chart_template__id
+#: model:ir.model.fields,field_description:l10n_ma.field_base_document_layout__id
+#: model:ir.model.fields,field_description:l10n_ma.field_res_partner__id
+msgid "ID"
 msgstr ""
-
-#. module: l10n_ma
-#: field:l10n.ma.line,name:0
-#: field:l10n.ma.report,name:0
-msgid "Name"
-msgstr ""
-
-#. module: l10n_ma
-#: field:l10n.ma.report,line_ids:0
-msgid "Lines"
-msgstr ""
-
-#. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_tax
-msgid "Taxes"
-msgstr ""
-
-#. module: l10n_ma
-#: field:l10n.ma.line,report_id:0
-msgid "Report"
-msgstr ""
-
-#. module: l10n_ma
-#: model:ir.model,name:l10n_ma.model_l10n_ma_line
-msgid "Report Lines for l10n_ma"
-msgstr ""
-
-#. module: l10n_ma
-#: sql_constraint:l10n.ma.line:0
-msgid "The variable name must be unique !"
-msgstr ""
-
-#. module: l10n_ma
-#: model:ir.model,name:l10n_ma.model_l10n_ma_report
-msgid "Report for l10n_ma_kzc"
-msgstr ""
-
-#. module: l10n_ma
-#: field:l10n.ma.report,code:0
-msgid "Code"
-msgstr ""
-
-#. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_per
-msgid "Charges Personnel"
-msgstr ""
-
-#. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_liq
-msgid "Liquidité"
-msgstr ""
-
-#. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_pdt
-msgid "Produits"
-msgstr ""
-
-#. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_reg
-msgid "Régularisation"
-msgstr ""
-
-#. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_cp
-msgid "Capitaux Propres"
-msgstr ""
-
-#. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_cre
-msgid "Créances"
-msgstr ""
-
-#. module: l10n_ma
-#: model:account.account.type,name:l10n_ma.cpt_type_aut
-msgid "Charges Autres"
-msgstr ""
-

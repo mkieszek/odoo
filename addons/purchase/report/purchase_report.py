@@ -1,137 +1,161 @@
-# -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 #
 # Please note that these reports are not multi-currency !!!
 #
 
-from openerp.osv import fields,osv
-from openerp import tools
+from odoo import fields, models
+from odoo.models import Query
+from odoo.tools.sql import SQL
 
-class purchase_report(osv.osv):
-    _name = "purchase.report"
-    _description = "Purchases Orders"
+
+class PurchaseReport(models.Model):
+    _name = 'purchase.report'
+    _description = "Purchase Report"
     _auto = False
-    _columns = {
-        'date': fields.datetime('Order Date', readonly=True, help="Date on which this document has been created"),  # TDE FIXME master: rename into date_order
-        'state': fields.selection([('draft', 'Request for Quotation'),
-                                     ('confirmed', 'Waiting Vendor Ack'),
-                                      ('approved', 'Approved'),
-                                      ('except_picking', 'Shipping Exception'),
-                                      ('except_invoice', 'Invoice Exception'),
-                                      ('done', 'Done'),
-                                      ('cancel', 'Cancelled')],'Order Status', readonly=True),
-        'product_id':fields.many2one('product.product', 'Product', readonly=True),
-        'picking_type_id': fields.many2one('stock.warehouse', 'Warehouse', readonly=True),
-        'location_id': fields.many2one('stock.location', 'Destination', readonly=True),
-        'partner_id':fields.many2one('res.partner', 'Vendor', readonly=True),
-        'pricelist_id':fields.many2one('product.pricelist', 'Pricelist', readonly=True),
-        'date_approve':fields.date('Date Approved', readonly=True),
-        'expected_date':fields.date('Expected Date', readonly=True),
-        'validator' : fields.many2one('res.users', 'Validated By', readonly=True),
-        'product_uom' : fields.many2one('product.uom', 'Reference Unit of Measure', required=True),
-        'company_id':fields.many2one('res.company', 'Company', readonly=True),
-        'user_id':fields.many2one('res.users', 'Responsible', readonly=True),
-        'delay':fields.float('Days to Validate', digits=(16,2), readonly=True),
-        'delay_pass':fields.float('Days to Deliver', digits=(16,2), readonly=True),
-        'quantity': fields.float('Product Quantity', readonly=True),  # TDE FIXME master: rename into unit_quantity
-        'price_total': fields.float('Total Price', readonly=True),
-        'price_average': fields.float('Average Price', readonly=True, group_operator="avg"),
-        'negociation': fields.float('Purchase-Standard Price', readonly=True, group_operator="avg"),
-        'price_standard': fields.float('Products Value', readonly=True, group_operator="sum"),
-        'nbr': fields.integer('# of Lines', readonly=True),  # TDE FIXME master: rename into nbr_lines
-        'category_id': fields.many2one('product.category', 'Product Category', readonly=True),
-        'product_tmpl_id': fields.many2one('product.template', 'Product Template', readonly=True),
-        'country_id': fields.many2one('res.country', 'Partner Country', readonly=True),
-        'fiscal_position_id': fields.many2one('account.fiscal.position', string='Fiscal Position', oldname='fiscal_position', readonly=True),
-        'account_analytic_id': fields.many2one('account.analytic.account', 'Analytic Account', readonly=True),
-        'commercial_partner_id': fields.many2one('res.partner', 'Commercial Entity', readonly=True),
-    }
-    _order = 'date desc, price_total desc'
-    def init(self, cr):
-        tools.sql.drop_view_if_exists(cr, 'purchase_report')
-        cr.execute("""
-            create or replace view purchase_report as (
-                WITH currency_rate (currency_id, rate, date_start, date_end) AS (
-                    SELECT r.currency_id, r.rate, r.name AS date_start,
-                        (SELECT name FROM res_currency_rate r2
-                        WHERE r2.name > r.name AND
-                            r2.currency_id = r.currency_id
-                         ORDER BY r2.name ASC
-                         LIMIT 1) AS date_end
-                    FROM res_currency_rate r
-                )
-                select
+    _order = 'date_order desc, price_total desc'
+
+    date_order = fields.Datetime('Order Date', readonly=True)
+    state = fields.Selection([
+        ('draft', 'Draft RFQ'),
+        ('sent', 'RFQ Sent'),
+        ('to approve', 'To Approve'),
+        ('purchase', 'Purchase Order'),
+        ('cancel', 'Cancelled')
+    ], 'Status', readonly=True)
+    product_id = fields.Many2one('product.product', 'Product', readonly=True)
+    partner_id = fields.Many2one('res.partner', 'Vendor', readonly=True)
+    date_approve = fields.Datetime('Confirmation Date', readonly=True)
+    product_uom_id = fields.Many2one('uom.uom', 'Reference Unit of Measure', readonly=True)
+    company_id = fields.Many2one('res.company', 'Company', readonly=True)
+    currency_id = fields.Many2one('res.currency', 'Currency', readonly=True)
+    user_id = fields.Many2one('res.users', 'Buyer', readonly=True)
+    delay = fields.Float('Days to Confirm', digits=(16, 2), readonly=True, aggregator='avg', help="Amount of time between purchase approval and order by date.")
+    delay_pass = fields.Float('Days to Receive', digits=(16, 2), readonly=True, aggregator='avg',
+                              help="Amount of time between date planned and order by date for each purchase order line.")
+    price_total = fields.Monetary('Total', readonly=True)
+    price_average = fields.Monetary('Average Cost', readonly=True, aggregator="avg")
+    nbr_lines = fields.Integer('# of Lines', readonly=True)
+    category_id = fields.Many2one('product.category', 'Product Category', readonly=True)
+    product_tmpl_id = fields.Many2one('product.template', 'Product Template', readonly=True)
+    country_id = fields.Many2one('res.country', 'Partner Country', readonly=True)
+    fiscal_position_id = fields.Many2one('account.fiscal.position', string='Fiscal Position', readonly=True)
+    commercial_partner_id = fields.Many2one('res.partner', 'Commercial Entity', readonly=True)
+    weight = fields.Float('Gross Weight', readonly=True)
+    volume = fields.Float('Volume', readonly=True)
+    order_id = fields.Many2one('purchase.order', 'Order', readonly=True)
+    untaxed_total = fields.Monetary('Untaxed Total', readonly=True)
+    qty_ordered = fields.Float('Qty Ordered', readonly=True)
+    qty_received = fields.Float('Qty Received', readonly=True)
+    qty_billed = fields.Float('Qty Billed', readonly=True)
+    qty_to_be_billed = fields.Float('Qty to be Billed', readonly=True)
+
+    @property
+    def _table_query(self) -> SQL:
+        ''' Report needs to be dynamic to take into account multi-company selected + multi-currency rates '''
+        return SQL("%s %s %s %s", self._select(), self._from(), self._where(), self._group_by())
+
+    def _select(self) -> SQL:
+        return SQL(
+            """
+                SELECT
+                    po.id as order_id,
                     min(l.id) as id,
-                    s.date_order as date,
-                    l.state,
-                    s.date_approve,
-                    s.minimum_planned_date as expected_date,
-                    s.dest_address_id,
-                    s.pricelist_id,
-                    s.validator,
-                    spt.warehouse_id as picking_type_id,
-                    s.partner_id as partner_id,
-                    s.create_uid as user_id,
-                    s.company_id as company_id,
-                    s.fiscal_position_id as fiscal_position_id,
+                    po.date_order as date_order,
+                    po.state,
+                    po.date_approve,
+                    po.dest_address_id,
+                    po.partner_id as partner_id,
+                    po.user_id as user_id,
+                    po.company_id as company_id,
+                    po.fiscal_position_id as fiscal_position_id,
                     l.product_id,
                     p.product_tmpl_id,
                     t.categ_id as category_id,
-                    t.uom_id as product_uom,
-                    s.location_id as location_id,
-                    sum(l.product_qty/u.factor*u2.factor) as quantity,
-                    extract(epoch from age(s.date_approve,s.date_order))/(24*60*60)::decimal(16,2) as delay,
-                    extract(epoch from age(l.date_planned,s.date_order))/(24*60*60)::decimal(16,2) as delay_pass,
-                    count(*) as nbr,
-                    sum(l.price_unit*cr.rate*l.product_qty)::decimal(16,2) as price_total,
-                    avg(100.0 * (l.price_unit*cr.rate*l.product_qty) / NULLIF(ip.value_float*l.product_qty/u.factor*u2.factor, 0.0))::decimal(16,2) as negociation,
-                    sum(ip.value_float*l.product_qty/u.factor*u2.factor)::decimal(16,2) as price_standard,
-                    (sum(l.product_qty*cr.rate*l.price_unit)/NULLIF(sum(l.product_qty/u.factor*u2.factor),0.0))::decimal(16,2) as price_average,
+                    c.currency_id,
+                    t.uom_id as product_uom_id,
+                    extract(epoch from age(po.date_approve,po.date_order))/(24*60*60)::decimal(16,2) as delay,
+                    extract(epoch from age(l.date_planned,po.date_order))/(24*60*60)::decimal(16,2) as delay_pass,
+                    count(*) as nbr_lines,
+                    sum(l.price_total / COALESCE(po.currency_rate, 1.0))::decimal(16,2) * account_currency_table.rate as price_total,
+                    (sum(l.product_qty * l.price_unit / COALESCE(po.currency_rate, 1.0))/NULLIF(sum(l.product_qty * line_uom.factor / product_uom.factor),0.0))::decimal(16,2) * account_currency_table.rate as price_average,
                     partner.country_id as country_id,
                     partner.commercial_partner_id as commercial_partner_id,
-                    analytic_account.id as account_analytic_id
-                from purchase_order_line l
-                    join purchase_order s on (l.order_id=s.id)
-                    join res_partner partner on s.partner_id = partner.id
-                        left join product_product p on (l.product_id=p.id)
-                            left join product_template t on (p.product_tmpl_id=t.id)
-                            LEFT JOIN ir_property ip ON (ip.name='standard_price' AND ip.res_id=CONCAT('product.template,',t.id) AND ip.company_id=s.company_id)
-                    left join product_uom u on (u.id=l.product_uom)
-                    left join product_uom u2 on (u2.id=t.uom_id)
-                    left join stock_picking_type spt on (spt.id=s.picking_type_id)
-                    left join account_analytic_account analytic_account on (l.account_analytic_id = analytic_account.id)
-                    join currency_rate cr on (cr.currency_id = s.currency_id and
-                        cr.date_start <= coalesce(s.date_order, now()) and
-                        (cr.date_end is null or cr.date_end > coalesce(s.date_order, now())))
-                group by
-                    s.company_id,
-                    s.create_uid,
-                    s.partner_id,
-                    u.factor,
-                    s.location_id,
-                    l.price_unit,
-                    s.date_approve,
-                    l.date_planned,
-                    l.product_uom,
-                    s.minimum_planned_date,
-                    s.pricelist_id,
-                    s.validator,
-                    s.dest_address_id,
-                    s.fiscal_position_id,
-                    l.product_id,
-                    p.product_tmpl_id,
-                    t.categ_id,
-                    s.date_order,
-                    l.state,
-                    spt.warehouse_id,
-                    u.uom_type,
-                    u.category_id,
-                    t.uom_id,
-                    u.id,
-                    u2.factor,
-                    partner.country_id,
-                    partner.commercial_partner_id,
-                    analytic_account.id
-            )
-        """)
+                    sum(p.weight * l.product_qty * line_uom.factor / product_uom.factor) as weight,
+                    sum(p.volume * l.product_qty * line_uom.factor / product_uom.factor) as volume,
+                    sum(l.price_subtotal / COALESCE(po.currency_rate, 1.0))::decimal(16,2) * account_currency_table.rate as untaxed_total,
+                    sum(l.product_qty * line_uom.factor / product_uom.factor) as qty_ordered,
+                    sum(l.qty_received * line_uom.factor / product_uom.factor) as qty_received,
+                    sum(l.qty_invoiced * line_uom.factor / product_uom.factor) as qty_billed,
+                    case when t.purchase_method = 'purchase'
+                         then sum(l.product_qty * line_uom.factor / product_uom.factor) - sum(l.qty_invoiced * line_uom.factor / product_uom.factor)
+                         else sum(l.qty_received * line_uom.factor / product_uom.factor) - sum(l.qty_invoiced * line_uom.factor / product_uom.factor)
+                    end as qty_to_be_billed
+            """,
+        )
+
+    def _from(self) -> SQL:
+        return SQL(
+            """
+            FROM
+            purchase_order_line l
+                join purchase_order po on (l.order_id=po.id)
+                join res_partner partner on po.partner_id = partner.id
+                    left join product_product p on (l.product_id=p.id)
+                        left join product_template t on (p.product_tmpl_id=t.id)
+                left join res_company C ON C.id = po.company_id
+                left join uom_uom line_uom on (line_uom.id=l.product_uom_id)
+                left join uom_uom product_uom on (product_uom.id=t.uom_id)
+                left join %(currency_table)s ON account_currency_table.company_id = po.company_id
+            """,
+            currency_table=self.env['res.currency']._get_simple_currency_table(self.env.companies),
+        )
+
+    def _where(self) -> SQL:
+        return SQL(
+            """
+            WHERE
+                l.display_type IS NULL
+            """,
+        )
+
+    def _group_by(self) -> SQL:
+        return SQL(
+            """
+            GROUP BY
+                po.company_id,
+                po.user_id,
+                po.partner_id,
+                line_uom.factor,
+                c.currency_id,
+                l.price_unit,
+                po.date_approve,
+                l.date_planned,
+                l.product_uom_id,
+                po.dest_address_id,
+                po.fiscal_position_id,
+                l.product_id,
+                p.product_tmpl_id,
+                t.categ_id,
+                po.date_order,
+                po.state,
+                t.uom_id,
+                t.purchase_method,
+                line_uom.id,
+                product_uom.factor,
+                partner.country_id,
+                partner.commercial_partner_id,
+                po.id,
+                account_currency_table.rate
+            """,
+        )
+
+    def _read_group_select(self, aggregate_spec: str, query: Query) -> SQL:
+        """ This override allows us to correctly calculate the average price of products. """
+        if aggregate_spec != 'price_average:avg':
+            return super()._read_group_select(aggregate_spec, query)
+        return SQL(
+            'SUM(%(f_price)s * %(f_qty)s) / NULLIF(SUM(%(f_qty)s), 0.0)',
+            f_qty=self._field_to_sql(self._table, 'qty_ordered', query),
+            f_price=self._field_to_sql(self._table, 'price_average', query),
+        )

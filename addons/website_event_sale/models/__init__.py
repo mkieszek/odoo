@@ -1,3 +1,4 @@
-import product
-import website
-import sale_order
+from . import product
+from . import product_pricelist
+from . import sale_order
+from . import sale_order_line

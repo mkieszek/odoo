@@ -1,24 +1,29 @@
-# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from openerp.addons.web import http
-from openerp.addons.web.http import request
-from openerp.addons.website.controllers.main import Website
-from openerp.addons.website_portal.controllers.main import website_account
+from werkzeug.exceptions import BadRequest
+
+from odoo import _
+from odoo.http import Controller, request, route
+from odoo.tools.mail import email_re
 
 
-class website_sale_stock(website_account):
+class WebsiteSaleStock(Controller):
 
-    @http.route([
-        '/my/orders/<int:order>',
-    ], type='http', auth='user', website=True)
-    def orders_followup(self, order=None, **post):
-        response = super(website_sale_stock, self).orders_followup(order=order, **post)
+    @route('/shop/add/stock_notification', type='jsonrpc', auth='public', website=True)
+    def add_stock_email_notification(self, email, product_id):
+        # TDE FIXME: seems a bit open
+        if not email_re.match(email):
+            raise BadRequest(_("Invalid Email"))
 
-        order = response.qcontext['order']
-        shipping_lines = request.env['stock.move'].sudo().search([('picking_id', 'in', order.picking_ids.ids)])
-        order_shipping_lines = {sl.product_id.id: sl.picking_id for sl in shipping_lines}
+        product = request.env['product.product'].browse(int(product_id))
+        partner = request.env['mail.thread'].sudo()._partner_find_from_emails_single([email])
 
-        response.qcontext.update({
-            'order_shipping_lines': order_shipping_lines,
-        })
-        return response
+        if not product._has_stock_notification(partner):
+            product.sudo().stock_notification_partner_ids += partner
+
+        if request.website.is_public_user():
+            request.session['product_with_stock_notification_enabled'] = list(
+                set(request.session.get('product_with_stock_notification_enabled', []))
+                | {product_id}
+            )
+            request.session['stock_notification_email'] = email

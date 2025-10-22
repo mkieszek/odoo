@@ -1,96 +1,59 @@
-# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from openerp import api
-from openerp.osv import fields, osv
+from odoo import fields, models, _
+from odoo.exceptions import ValidationError
+from odoo.fields import Domain
 
 
-class sale_order(osv.osv):
+class SaleOrder(models.Model):
     _inherit = "sale.order"
 
-    def action_button_confirm(self, cr, uid, ids, context=None):
-        # TDE note: This method works on a list of one id (see sale/sale.py) so working on ids[0] seems safe.
-        res = super(sale_order, self).action_button_confirm(cr, uid, ids, context=context)
-        redirect_to_event_registration = any(line.event_id for order in self.browse(cr, uid, ids, context=context) for line in order.order_line)
-        if redirect_to_event_registration:
-            event_ctx = dict(context, default_sale_order_id=ids[0])
-            return self.pool.get('ir.actions.act_window').for_xml_id(cr, uid, 'event_sale', 'action_sale_order_event_registration', event_ctx)
-        else:
-            return res
+    attendee_count = fields.Integer('Attendee Count', compute='_compute_attendee_count')
 
+    def write(self, vals):
+        """ Synchronize partner from SO to registrations. This is done notably
+        in website_sale controller shop/address that updates customer, but not
+        only. """
+        result = super(SaleOrder, self).write(vals)
+        if any(line.service_tracking == 'event' for line in self.order_line) and vals.get('partner_id'):
+            registrations_toupdate = self.env['event.registration'].sudo().search([('sale_order_id', 'in', self.ids)])
+            registrations_toupdate.write({'partner_id': vals['partner_id']})
+        return result
 
-class sale_order_line(osv.osv):
-    _inherit = 'sale.order.line'
-    _columns = {
-        'event_id': fields.many2one(
-            'event.event', 'Event',
-            help="Choose an event and it will automatically create a registration for this event."),
-        'event_ticket_id': fields.many2one(
-            'event.event.ticket', 'Event Ticket',
-            help="Choose an event ticket and it will automatically create a registration for this event ticket."),
-        # those 2 fields are used for dynamic domains and filled by onchange
-        # TDE: really necessary ? ...
-        'event_type_id': fields.related('product_id', 'event_type_id', type='many2one', relation="event.type", string="Event Type"),
-        'event_ok': fields.related('product_id', 'event_ok', string='event_ok', type='boolean'),
-    }
+    def action_confirm(self):
+        res = super(SaleOrder, self).action_confirm()
 
-    def _prepare_order_line_invoice_line(self, cr, uid, line, account_id=False, context=None):
-        res = super(sale_order_line, self)._prepare_order_line_invoice_line(cr, uid, line, account_id=account_id, context=context)
-        if line.event_id:
-            event = self.pool['event.event'].read(cr, uid, line.event_id.id, ['name'], context=context)
-            res['name'] = '%s: %s' % (res.get('name', ''), event['name'])
+        for so in self:
+            if not any(line.service_tracking == 'event' for line in so.order_line):
+                continue
+            so_lines_missing_events = so.order_line.filtered(lambda line: line.service_tracking == 'event' and not line.event_id)
+            if so_lines_missing_events:
+                so_lines_descriptions = "".join(f"\n- {so_line_description.name}" for so_line_description in so_lines_missing_events)
+                raise ValidationError(_("Please make sure all your event related lines are configured before confirming this order:%s", so_lines_descriptions))
+            # Initialize registrations
+            so.order_line._init_registrations()
+            if len(self) == 1:
+                return self.env['ir.actions.act_window'].with_context(
+                    default_sale_order_id=so.id
+                )._for_xml_id('event_sale.action_sale_order_event_registration')
         return res
 
-    def product_id_change(self, cr, uid, ids, pricelist, product, qty=0, uom=False,
-                          qty_uos=0, uos=False, name='', partner_id=False, lang=False,
-                          update_tax=True, date_order=False, packaging=False,
-                          fiscal_position_id=False, flag=False, context=None):
-        """ check product if event type """
-        res = super(sale_order_line, self).product_id_change(cr, uid, ids, pricelist, product, qty=qty, uom=uom, qty_uos=qty_uos, uos=uos, name=name, partner_id=partner_id, lang=lang, update_tax=update_tax, date_order=date_order, packaging=packaging, fiscal_position_id=fiscal_position_id, flag=flag, context=context)
-        if product:
-            product_res = self.pool.get('product.product').browse(cr, uid, product, context=context)
-            if product_res.event_ok:
-                res['value'].update(event_type_id=product_res.event_type_id.id,
-                                    event_ok=product_res.event_ok)
-            else:
-                res['value'].update(event_type_id=False,
-                                    event_ok=False)
-        return res
+    def action_view_attendee_list(self):
+        action = self.env["ir.actions.actions"]._for_xml_id("event.event_registration_action_tree")
+        action['domain'] = [('sale_order_id', 'in', self.ids)]
+        return action
 
-    @api.multi
-    def _update_registrations(self, confirm=True, registration_data=None):
-        """ Create or update registrations linked to a sale order line. A sale
-        order line has a product_uom_qty attribute that will be the number of
-        registrations linked to this line. This method update existing registrations
-        and create new one for missing one. """
-        Registration = self.env['event.registration']
-        registrations = Registration.search([('sale_order_line_id', 'in', self.ids)])
-        for so_line in [l for l in self if l.event_id]:
-            existing_registrations = registrations.filtered(lambda self: self.sale_order_line_id.id == so_line.id)
-            if confirm:
-                existing_registrations.filtered(lambda self: self.state != 'open').confirm_registration()
-            else:
-                existing_registrations.filtered(lambda self: self.state == 'cancel').do_draft()
+    def _compute_attendee_count(self):
+        sale_orders_data = self.env['event.registration']._read_group(
+            [('sale_order_id', 'in', self.ids),
+             ('state', '!=', 'cancel')],
+            ['sale_order_id'], ['__count'],
+        )
+        attendee_count_data = {
+            sale_order.id: count for sale_order, count in sale_orders_data
+        }
+        for sale_order in self:
+            sale_order.attendee_count = attendee_count_data.get(sale_order.id, 0)
 
-            for count in range(int(so_line.product_uom_qty) - len(existing_registrations)):
-                registration = {}
-                if registration_data:
-                    registration = registration_data.pop()
-                # TDE CHECK: auto confirmation
-                registration['sale_order_line_id'] = so_line
-                self.env['event.registration'].with_context(registration_force_draft=True).create(
-                    Registration._prepare_attendee_values(registration))
-        return True
-
-    def button_confirm(self, cr, uid, ids, context=None):
-        """ Override confirmation of the sale order line in order to create
-        or update the possible event registrations linked to the sale. """
-        '''
-        create registration with sales order
-        '''
-        res = super(sale_order_line, self).button_confirm(cr, uid, ids, context=context)
-        self._update_registrations(cr, uid, ids, confirm=True, context=context)
-        return res
-
-    def onchange_event_ticket_id(self, cr, uid, ids, event_ticket_id=False, context=None):
-        price = event_ticket_id and self.pool["event.event.ticket"].browse(cr, uid, event_ticket_id, context=context).price or False
-        return {'value': {'price_unit': price}}
+    def _get_product_catalog_domain(self):
+        return super()._get_product_catalog_domain() & Domain('service_tracking', '!=', 'event')

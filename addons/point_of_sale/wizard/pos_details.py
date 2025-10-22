@@ -1,39 +1,39 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-import time
-from openerp.osv import osv, fields
+from datetime import timedelta
+
+from odoo import api, fields, models
 
 
-class pos_details(osv.osv_memory):
-    _name = 'pos.details'
-    _description = 'Sales Details'
+class PosDetailsWizard(models.TransientModel):
+    _name = 'pos.details.wizard'
+    _description = 'Point of Sale Details Report'
 
-    _columns = {
-        'date_start': fields.date('Date Start', required=True),
-        'date_end': fields.date('Date End', required=True),
-        'user_ids': fields.many2many('res.users', 'pos_details_report_user_rel', 'user_id', 'wizard_id', 'Salespeople'),
-    }
-    _defaults = {
-        'date_start': fields.date.context_today,
-        'date_end': fields.date.context_today,
-    }
+    def _default_start_date(self):
+        """ Find the earliest start_date of the latests sessions """
+        values = self.env['pos.session']._read_group([
+            ('config_id', '!=', False),
+            ('start_at', '>', self.env.cr.now() - timedelta(days=2))
+        ], groupby=['config_id'], aggregates=['start_at:max'])
+        mapping = dict(values)
+        return (mapping and min(mapping.values())) or self.env.cr.now()
 
-    def print_report(self, cr, uid, ids, context=None):
-        """
-         To get the date and print the report
-         @param self: The object pointer.
-         @param cr: A database cursor
-         @param uid: ID of the user currently logged in
-         @param context: A standard dictionary
-         @return : retrun report
-        """
-        if context is None:
-            context = {}
-        datas = {'ids': context.get('active_ids', [])}
-        res = self.read(cr, uid, ids, ['date_start', 'date_end', 'user_ids'], context=context)
-        res = res and res[0] or {}
-        datas['form'] = res
-        if res.get('id',False):
-            datas['ids']=[res['id']]
-        return self.pool['report'].get_action(cr, uid, [], 'point_of_sale.report_detailsofsales', data=datas, context=context)
+    start_date = fields.Datetime(required=True, default=_default_start_date)
+    end_date = fields.Datetime(required=True, default=fields.Datetime.now)
+    pos_config_ids = fields.Many2many('pos.config', 'pos_detail_configs',
+        default=lambda s: s.env['pos.config'].search([]))
+
+    @api.onchange('start_date')
+    def _onchange_start_date(self):
+        if self.start_date and self.end_date and self.end_date < self.start_date:
+            self.end_date = self.start_date
+
+    @api.onchange('end_date')
+    def _onchange_end_date(self):
+        if self.end_date and self.start_date and self.end_date < self.start_date:
+            self.start_date = self.end_date
+
+    def generate_report(self):
+        data = {'date_start': self.start_date, 'date_stop': self.end_date, 'config_ids': self.pos_config_ids.ids}
+        return self.env.ref('point_of_sale.sale_details_report').report_action([], data=data)

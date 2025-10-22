@@ -1,7 +1,7 @@
-Odoo Blogs
+Odoo Blog
 ----------
 
-Write, Design, Promote and Engage with <a href="https://www.odoo.com/page/blog-engine">Odoo Blogs</a>.
+Write, Design, Promote and Engage with <a href="https://www.odoo.com/app/blog">Odoo Blog</a>.
 
 Express yourself with the Odoo enterprise grade blogging platform. Write
 beautiful blog posts, engage with visitors, translate content and moderate
@@ -33,7 +33,7 @@ Translated versions are updated automatically once translated by professionals
 Engage With Your Visitors
 -------------------------
 
-The integrated live chat feature allows you to start chatting in real time with
+The integrated website live chat feature allows you to start chatting in real time with
 your visitors to get feedback on your recent posts or get ideas to write new
 posts.
 

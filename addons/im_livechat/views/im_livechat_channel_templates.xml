@@ -2,18 +2,28 @@
 <odoo>
     <data>
 
-        <!-- Template rendering the external HTML support page -->
-        <template id="support_page" name="Livechat Support Page">
+        <!--
+            Integrate Livechat Conversation in the Discuss
+        -->
+        <!--
+            Template rendering the external HTML support page
+        -->
+        <template id="support_page" name="Livechat : Support Page">
             &lt;!DOCTYPE html&gt;
             <html style="height: 100%">
                 <head>
                     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
                     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-                    <title><t t-esc="channel_name"/> Livechat Support Page</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                    <title><t t-out="channel_name"/> Livechat Support Page</title>
 
                     <!-- Call the external Bundle to render the css, js, and js loader tags -->
-                    <t t-call="im_livechat.external_loader"/>
+                    <t t-out="channel.script_external"/>
 
+                    <script>
+                        window.odoo ??= {};
+                        window.odoo.csrf_token = "<t t-out="request.csrf_token(None)"/>";
+                    </script>
                     <style type="text/css">
                         body {
                             height: 100%;
@@ -52,112 +62,56 @@
                             text-shadow: 0 1px 0 rgba(34, 52, 72, 0.2);
                             text-align: center;
                         }
-                        .main h1 {
-                            font-size: 54px;
+                        .channel_name {
+                            font-size: clamp(2.5rem, 6vw, 3.5rem);
+                            overflow-wrap: break-word;
                         }
                         .main div {
                             font-style: italic;
+                            font-size: 1rem;
                         }
                     </style>
                 </head>
 
                 <body>
                      <div class="main" style="opacity: 1;">
-                        <h1 class="channel_name"><t t-esc="channel_name"/></h1>
-                        <div>Live Chat Powered by <strong>Odoo</strong>.</div>
+                        <h1 class="channel_name"><t t-out="channel.name"/></h1>
+                        <div>Website Live Chat Powered by <strong>Odoo</strong>.</div>
                     </div>
                 </body>
             </html>
         </template>
 
-
-        <!-- Template rendering all the scripts required to execute the Livechat from an external page (which not contain Odoo) -->
-        <template id="external_loader" name="All the scripts to launch the LiveSupport from an external Web Page">
-            <!-- css style -->
-            <link t-att-href="'%s/web/css/im_livechat.external_lib' % (url)" rel="stylesheet"/>
+        <!--
+            Template rendering all the scripts required to execute the Livechat from an external page (which not contain Odoo)
+        -->
+        <template id="external_loader" name="Livechat : external_script field of livechat channel">
+            <!-- the loader -->
+            <script defer="defer" t-attf-src="{{url}}/im_livechat/loader/{{channel_id}}" type="text/javascript"/>
             <!-- js of all the required lib (internal and external) -->
-            <script t-att-src="'%s/web/js/im_livechat.external_lib' % (url)" type="text/javascript" async="async" />
-            <!-- the loader -->
-            <script t-att-src="'%s/im_livechat/loader/%s/%i' % (url, dbname, channel)" type="text/javascript" async="async" />
-        </template>
-
-        <!-- Template rendering all the scripts required to execute the Livechat from a page containing Odoo -->
-        <template id="internal_loader" name="All the scripts to launch the LiveSupport from an internal Web Page">
-            <!-- css style -->
-            <link t-att-href="'%s/web/css/im_livechat.internal_lib' % (url)" rel="stylesheet"/>
-            <!-- js of all the required lib -->
-            <script t-att-src="'%s/web/js/im_livechat.internal_lib' % (url)" type="text/javascript" />
-            <!-- the loader -->
-            <script t-att-src="'%s/im_livechat/loader/%s/%i' % (url, dbname, channel)" type="text/javascript" />
-        </template>
-
-        <!-- Bundle of External Librairies of the Livechat -->
-        <template id="external_lib" name="External Librairies of the Livechat, required to make it work">
-            <!-- OpenERP minimal lib -->
-            <script type="text/javascript" src="/web/static/lib/underscore/underscore.js"></script>
-            <script type="text/javascript" src="/web/static/lib/underscore.string/lib/underscore.string.js"></script>
-            <!-- jQuery -->
-            <script type="text/javascript" src="/web/static/lib/jquery/jquery.js"></script>
-            <script type="text/javascript" src="/web/static/lib/jquery/jquery.browser.js"></script>
-            <script type="text/javascript" src="/web/static/lib/jquery.timeago/jquery.timeago.js"></script>
-            <script type="text/javascript" src="/web/static/lib/jquery.ba-bbq/jquery.ba-bbq.js"></script>
-
-            <!-- Qweb2 lib -->
-            <script type="text/javascript" src="/web/static/lib/qweb/qweb2.js"></script>
-            <!-- Odoo JS Framework -->
-            <script type="text/javascript" src="/web/static/src/js/boot.js"></script>
-            <script type="text/javascript" src="/web/static/src/js/framework/class.js"></script>
-            <script type="text/javascript" src="/web/static/src/js/framework/translation.js"></script>
-            <script type="text/javascript" src="/web/static/src/js/framework/ajax.js"></script>
-            <script type="text/javascript" src="/web/static/src/js/framework/time.js"></script>
-            <script type="text/javascript" src="/web/static/src/js/framework/mixins.js"></script>
-            <script type="text/javascript" src="/web/static/src/js/framework/widget.js"></script>
-            <script type="text/javascript" src="/web/static/src/js/framework/registry.js"></script>
-            <script type="text/javascript" src="/web/static/src/js/framework/session.js"></script>
-            <script type="text/javascript" src="/web/static/src/js/framework/utils.js"></script>
-            <script type="text/javascript" src="/web/static/src/js/framework/core.js"></script>
-            <script type="text/javascript" src="/web/static/src/js/framework/session_instance.js"></script>
-
-            <!-- add the internal lib -->
-            <t t-call="im_livechat.internal_lib"/>
-        </template>
-
-        <!-- Bundle of Librairies of the Bus, Chat, Livechat -->
-        <template id="internal_lib" name="Librairies of the Livechat">
-            <!-- Momentjs -->
-            <script type="text/javascript" src="/web/static/lib/moment/moment.js"></script>
-            <!-- IM module -->
-            <script type="text/javascript" src="/bus/static/src/js/bus.js"></script>
-            <script type="text/javascript" src="/im_chat/static/src/js/im_chat_common.js"></script>
-            <script type="text/javascript" src="/im_livechat/static/src/js/im_livechat.js"></script>
-            <!-- CSS -->
-            <link rel="stylesheet" href="/im_chat/static/src/css/im_chat_common.css"></link>
-            <link rel="stylesheet" href="/im_livechat/static/src/css/im_livechat.css"/>
+            <script defer="defer" t-attf-src="{{url}}/im_livechat/assets_embed.js" type="text/javascript" />
         </template>
 
         <!-- the js code to initialize the LiveSupport object -->
-        <template id="loader" name="Javascript initializing the LiveSupport">
-            <t t-translate="off">
-            $(function() {
-                odoo.define('im_livechat.livesupport', function (require) {
-                    var im_livechat = require('im_livechat.im_livechat');
-                    window.livesupport = new im_livechat.LiveSupport(
-                        "<t t-esc="url"/>",
-                        "<t t-esc="dbname"/>",
-                        <t t-esc="channel"/>,
-                        {
-                            buttonText: "<t t-esc="buttonText"/>",
-                            inputPlaceholder: "<t t-esc="inputPlaceholder"/>",
-                            defaultMessage: "<t t-esc="defaultMessage"/>" || '',
-                            auto: window.oe_im_livechat_auto || false,
-                            defaultUsername: "<t t-esc="username"/>" || undefined,
-                        },
-                        <t t-raw="rule"/>
-                    );
+        <template id="loader" name="Livechat : Javascript appending the livechat button">
+            <t t-translation="off">
+                if (!window.odoo) {
+                    window.odoo = {};
+                }
+                odoo.__session_info__ = odoo.__session_info__ || {
+                    websocket_worker_version: <t t-out="json.dumps(info.get('websocket_worker_version', ''))"/>
+                }
+                odoo.__session_info__ = Object.assign(odoo.__session_info__, {
+                    livechatData: {
+                        can_load_livechat: <t t-out="'true' if info['available'] else 'false'"/>,
+                        serverUrl: "<t t-out="info['server_url']"/>",
+                        options: <t t-out="json.dumps(info.get('options', {}))"/>,
+                    },
+                    test_mode: <t t-out="'true' if test_mode_enabled else 'false'"/>,
                 });
-            });
             </t>
         </template>
+
 
     </data>
 </odoo>

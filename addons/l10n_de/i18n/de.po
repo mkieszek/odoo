@@ -1,68 +1,152 @@
-# German translation for openobject-addons
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_de
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-12-15 15:05+0000\n"
-"PO-Revision-Date: 2014-08-14 16:10+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: German <de@li.org>\n"
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-25 14:42+0000\n"
+"PO-Revision-Date: 2021-07-29 13:09+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-15 07:21+0000\n"
-"X-Generator: Launchpad (build 17156)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.3\n"
 
 #. module: l10n_de
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_non_eu_sale_skr03
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_non_eu_sale_skr04
-msgid "Kunde Ausland"
-msgstr "Kunde Ausland"
+#. odoo-python
+#: code:addons/l10n_de/models/ir_attachment.py:0
+#, python-format
+msgid "%(attachment_name)s (detached by %(user)s on %(date)s)"
+msgstr "%(attachment_name)s (getrennt von %(user)s am %(date)s)"
 
 #. module: l10n_de
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_eu_no_id_sale_skr03
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_eu_no_id_sale_skr04
-msgid "Kunde EU (ohne USt-ID)"
-msgstr "Kunde EU (ohne USt-ID)"
+#: model:ir.model.fields,help:l10n_de.field_account_tax__l10n_de_datev_code
+msgid "4 digits code use by Datev"
+msgstr "4-stelliger Code zur Verwendung durch Datev"
 
 #. module: l10n_de
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_non_eu_purchase_skr03
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_non_eu_purchase_skr04
-msgid "Lieferant Ausland"
-msgstr "Lieferant Ausland"
-
-#. module: l10n_de
-#: model:ir.module.module,shortdesc:l10n_de.module_meta_information
-msgid "Deutschland - SKR03 and SKR04"
-msgstr "Deutschland - SKR03 und SKR04"
-
-#. module: l10n_de
-#: model:ir.module.module,description:l10n_de.module_meta_information
+#: model_terms:ir.ui.view,arch_db:l10n_de.view_account_secure_entries_wizard
 msgid ""
-"Dieses  Modul beinhaltet einen deutschen Kontenrahmen basierend auf dem "
-"SKR03."
+"<i>By securing entries, you make them unchangeable.</i>\n"
+"                        <br/>\n"
+"                        <i>This is required by law to ensure complete and traceable bookkeeping in accordance with GoBD.</i>"
 msgstr ""
-"Dieses  Modul beinhaltet einen deutschen Kontenrahmen basierend auf dem "
-"SKR03."
+"<i>Mit der Festschreibung machen Sie Ihre Buchungen unveränderbar.</i>\n"
+"                        <br/>\n"
+"                        <i>Dies verlangt der Gesetzgeber für eine lückenlose und nachvollziehbare Buchhaltung gemäß GoBD.</i>"
 
 #. module: l10n_de
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_eu_vat_id_purchase_skr03
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_eu_vat_id_purchase_skr04
-msgid "Lieferant EU Unternehmen (mit USt-ID)"
-msgstr "Lieferant EU Unternehmen (mit USt-ID)"
+#: model:ir.model,name:l10n_de.model_account_account
+msgid "Account"
+msgstr "Konto"
 
 #. module: l10n_de
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_eu_no_id_purchase_skr03
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_eu_no_id_purchase_skr04
-msgid "Lieferant EU (ohne Ust-ID)"
-msgstr "Lieferant EU (ohne Ust-ID)"
+#: model:ir.model,name:l10n_de.model_account_chart_template
+msgid "Account Chart Template"
+msgstr "Kontenplan Vorlage"
 
 #. module: l10n_de
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_eu_vat_id_sale_skr03
-#: model:account.fiscal.position.template,name:l10n_de.fiscal_position_eu_vat_id_sale_skr04
-msgid "Kunde EU Unternehmen (mit USt-ID)"
-msgstr "Kunde EU Unternehmen (mit USt-ID)"
+#: model:ir.model,name:l10n_de.model_ir_attachment
+msgid "Attachment"
+msgstr "Dateianhang"
+
+#. module: l10n_de
+#: model:ir.model.fields,help:l10n_de.field_res_company__l10n_de_widnr
+msgid "Business identification number."
+msgstr "Wirtschafts-Identifikationsnummer."
+
+#. module: l10n_de
+#: model:ir.model,name:l10n_de.model_res_company
+msgid "Companies"
+msgstr "Unternehmen"
+
+#. module: l10n_de
+#: model:ir.model,name:l10n_de.model_account_journal
+msgid "Journal"
+msgstr "Journal"
+
+#. module: l10n_de
+#: model:ir.model,name:l10n_de.model_account_move
+msgid "Journal Entry"
+msgstr "Journalbuchung"
+
+#. module: l10n_de
+#: model:ir.model.fields,field_description:l10n_de.field_account_tax__l10n_de_datev_code
+msgid "L10N De Datev Code"
+msgstr "L10N De Datev Code"
+
+#. module: l10n_de
+#: model:ir.model,name:l10n_de.model_product_template
+msgid "Product"
+msgstr "Produkt"
+
+#. module: l10n_de
+#: model:ir.model,name:l10n_de.model_ir_actions_report
+msgid "Report Action"
+msgstr "Bericht Aktion"
+
+#. module: l10n_de
+#: model:ir.model.fields,field_description:l10n_de.field_res_company__l10n_de_stnr
+msgid "St.-Nr."
+msgstr "St.-Nr."
+
+#. module: l10n_de
+#: model:ir.model,name:l10n_de.model_account_tax
+msgid "Tax"
+msgstr "Steuer"
+
+#. module: l10n_de
+#: model:ir.model.fields,help:l10n_de.field_res_company__l10n_de_stnr
+msgid ""
+"Tax number. Scheme: ??FF0BBBUUUUP, e.g.: 2893081508152 "
+"https://de.wikipedia.org/wiki/Steuernummer"
+msgstr ""
+"Steuernummer. Scheme: ??FF0BBBUUUUP, e.g.: 2893081508152 "
+"https://de.wikipedia.org/wiki/Steuernummer"
+
+#. module: l10n_de
+#: model:ir.model.fields,field_description:l10n_de.field_res_company__l10n_de_widnr
+msgid "W-IdNr."
+msgstr "W-IdNr."
+
+#. module: l10n_de
+#. odoo-python
+#: code:addons/l10n_de/models/account_account.py:0
+#, python-format
+msgid "You can not change the code of an account."
+msgstr "Sie können den Code eines Kontos nicht ändern."
+
+#. module: l10n_de
+#. odoo-python
+#: code:addons/l10n_de/models/res_company.py:0
+#, python-format
+msgid "You cannot change the fiscal country."
+msgstr "Sie können das Steuerland nicht ändern."
+
+#. module: l10n_de
+#. odoo-python
+#: code:addons/l10n_de/models/ir_attachment.py:0
+#, python-format
+msgid "You cannot remove parts of the audit trail."
+msgstr "Sie können keine Teile des Prüfpfads entfernen."
+
+#. module: l10n_de
+#. odoo-python
+#: code:addons/l10n_de/models/res_company.py:0
+#, python-format
+msgid "Your company's SteuerNummer is not compatible with your state"
+msgstr ""
+"Die Steuernummer Ihres Unternehmens ist nicht mit Ihrem Bundesland "
+"kompatibel."
+
+#. module: l10n_de
+#. odoo-python
+#: code:addons/l10n_de/models/res_company.py:0
+#, python-format
+msgid "Your company's SteuerNummer is not valid"
+msgstr "Die Steuernummer Ihres Unternehmens ist nicht gültig."

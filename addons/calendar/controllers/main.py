@@ -1,71 +1,119 @@
-import simplejson
-import openerp
-import openerp.http as http
-from openerp.http import request
-import openerp.addons.web.controllers.main as webmain
-import json
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
+import odoo.http as http
+
+from odoo.http import request
+from odoo.tools.misc import get_lang
 
 
-class meeting_invitation(http.Controller):
+class CalendarController(http.Controller):
 
+    # YTI Note: Keep id and kwargs only for retrocompatibility purpose
     @http.route('/calendar/meeting/accept', type='http', auth="calendar")
-    def accept(self, db, token, action, id, **kwargs):
-        registry = openerp.modules.registry.RegistryManager.get(db)
-        attendee_pool = registry.get('calendar.attendee')
-        with registry.cursor() as cr:
-            attendee_id = attendee_pool.search(cr, openerp.SUPERUSER_ID, [('access_token', '=', token), ('state', '!=', 'accepted')])
-            if attendee_id:
-                attendee_pool.do_accept(cr, openerp.SUPERUSER_ID, attendee_id)
-        return self.view(db, token, action, id, view='form')
+    def accept_meeting(self, token, id, **kwargs):
+        attendee = request.env['calendar.attendee'].sudo().search([
+            ('access_token', '=', token),
+            ('state', '!=', 'accepted')])
+        attendee.do_accept()
+        return self.view_meeting(token, id)
+
+    @http.route('/calendar/recurrence/accept', type='http', auth="calendar")
+    def accept_recurrence(self, token, id, **kwargs):
+        attendee = request.env['calendar.attendee'].sudo().search([
+            ('access_token', '=', token),
+            ('state', '!=', 'accepted')])
+        if attendee:
+            attendees = request.env['calendar.attendee'].sudo().search([
+                ('event_id', 'in', attendee.event_id.recurrence_id.calendar_event_ids.ids),
+                ('partner_id', '=', attendee.partner_id.id),
+                ('state', '!=', 'accepted'),
+            ])
+            attendees.do_accept()
+        return self.view_meeting(token, id)
 
     @http.route('/calendar/meeting/decline', type='http', auth="calendar")
-    def declined(self, db, token, action, id):
-        registry = openerp.modules.registry.RegistryManager.get(db)
-        attendee_pool = registry.get('calendar.attendee')
-        with registry.cursor() as cr:
-            attendee_id = attendee_pool.search(cr, openerp.SUPERUSER_ID, [('access_token', '=', token), ('state', '!=', 'declined')])
-            if attendee_id:
-                attendee_pool.do_decline(cr, openerp.SUPERUSER_ID, attendee_id)
-        return self.view(db, token, action, id, view='form')
+    def decline_meeting(self, token, id, **kwargs):
+        attendee = request.env['calendar.attendee'].sudo().search([
+            ('access_token', '=', token),
+            ('state', '!=', 'declined')])
+        attendee.do_decline()
+        return self.view_meeting(token, id)
+
+    @http.route('/calendar/recurrence/decline', type='http', auth="calendar")
+    def decline_recurrence(self, token, id, **kwargs):
+        attendee = request.env['calendar.attendee'].sudo().search([
+            ('access_token', '=', token),
+            ('state', '!=', 'declined')])
+        if attendee:
+            attendees = request.env['calendar.attendee'].sudo().search([
+                ('event_id', 'in', attendee.event_id.recurrence_id.calendar_event_ids.ids),
+                ('partner_id', '=', attendee.partner_id.id),
+                ('state', '!=', 'declined'),
+            ])
+            attendees.do_decline()
+        return self.view_meeting(token, id)
 
     @http.route('/calendar/meeting/view', type='http', auth="calendar")
-    def view(self, db, token, action, id, view='calendar'):
-        registry = openerp.modules.registry.RegistryManager.get(db)
-        meeting_pool = registry.get('calendar.event')
-        attendee_pool = registry.get('calendar.attendee')
-        partner_pool = registry.get('res.partner')
-        with registry.cursor() as cr:
-            attendee = attendee_pool.search_read(cr, openerp.SUPERUSER_ID, [('access_token', '=', token)], [])
+    def view_meeting(self, token, id, **kwargs):
+        attendee = request.env['calendar.attendee'].sudo().search([
+            ('access_token', '=', token),
+            ('event_id', '=', int(id))])
+        if not attendee:
+            return request.not_found()
+        timezone = attendee.partner_id.tz
+        lang = attendee.partner_id.lang or get_lang(request.env).code
+        event = request.env['calendar.event'].with_context(tz=timezone, lang=lang).sudo().browse(int(id))
+        company = event.user_id and event.user_id.company_id or event.create_uid.company_id
 
-            if attendee and attendee[0] and attendee[0].get('partner_id'):
-                partner_id = int(attendee[0].get('partner_id')[0])
-                tz = partner_pool.read(cr, openerp.SUPERUSER_ID, partner_id, ['tz'])['tz']
-            else:
-                tz = False
+        # If user is internal and logged, redirect to form view of event
+        # otherwise, display the simplifyed web page with event informations
+        if request.env.user._is_internal():
+            return request.redirect('/odoo/calendar.event/%s?db=%s' % (id, request.env.cr.dbname))
 
-            attendee_data = meeting_pool.get_attendee(cr, openerp.SUPERUSER_ID, id, dict(tz=tz))
+        # NOTE : we don't use request.render() since:
+        # - we need a template rendering which is not lazy, to render before cursor closing
+        # - we need to display the template in the language of the user (not possible with
+        #   request.render())
+        response_content = request.env['ir.ui.view'].with_context(lang=lang)._render_template(
+            'calendar.invitation_page_anonymous', {
+                'company': company,
+                'event': event,
+                'attendee': attendee,
+            })
+        return request.make_response(response_content, headers=[('Content-Type', 'text/html')])
 
-        if attendee:
-            attendee_data['current_attendee'] = attendee[0]
-
-        values = dict(init="s.calendar.event('%s', '%s', '%s', '%s' , '%s');" % (db, action, id, 'form', json.dumps(attendee_data)))
-        return request.render('web.webclient_bootstrap', values)
+    @http.route('/calendar/meeting/join', type='http', auth="user", website=True)
+    def calendar_join_meeting(self, token, **kwargs):
+        event = request.env['calendar.event'].sudo().search([
+            ('access_token', '=', token)])
+        if not event:
+            return request.not_found()
+        event.action_join_meeting(request.env.user.partner_id.id)
+        attendee = request.env['calendar.attendee'].sudo().search([('partner_id', '=', request.env.user.partner_id.id), ('event_id', '=', event.id)])
+        return request.redirect('/calendar/meeting/view?token=%s&id=%s' % (attendee.access_token, event.id))
 
     # Function used, in RPC to check every 5 minutes, if notification to do for an event or not
-    @http.route('/calendar/notify', type='json', auth="none")
+    @http.route('/calendar/notify', type='jsonrpc', auth="user")
     def notify(self):
-        registry = request.registry
-        uid = request.session.uid
-        context = request.session.context
-        with registry.cursor() as cr:
-            res = registry.get("calendar.alarm_manager").get_next_notif(cr, uid, context=context)
-            return res
+        return request.env['calendar.alarm_manager'].get_next_notif()
 
-    @http.route('/calendar/notify_ack', type='json', auth="none")
-    def notify_ack(self, type=''):
-        registry = request.registry
-        uid = request.session.uid
-        context = request.session.context
-        with registry.cursor() as cr:
-            res = registry.get("res.partner")._set_calendar_last_notif_ack(cr, uid, context=context)
-            return res
+    @http.route('/calendar/notify_ack', type='jsonrpc', auth="user")
+    def notify_ack(self):
+        return request.env['res.partner'].sudo()._set_calendar_last_notif_ack()
+
+    @http.route('/calendar/join_videocall/<string:access_token>', type='http', auth='public')
+    def calendar_join_videocall(self, access_token):
+        event = request.env['calendar.event'].sudo().search([('access_token', '=', access_token)])
+        if not event:
+            return request.not_found()
+
+        # if channel doesn't exist
+        if not event.videocall_channel_id:
+            event._create_videocall_channel()
+
+        return request.redirect(event.videocall_channel_id.invitation_url)
+
+    @http.route('/calendar/check_credentials', type='jsonrpc', auth='user')
+    def check_calendar_credentials(self):
+        # method should be overwritten by sync providers
+        return request.env['res.users'].check_calendar_credentials()

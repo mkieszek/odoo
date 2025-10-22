@@ -1,2 +1,5 @@
 # -*- coding: utf-8 -*-
-import main
+
+from . import home
+from . import main
+from . import websocket

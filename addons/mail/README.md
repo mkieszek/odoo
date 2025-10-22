@@ -2,7 +2,7 @@ Odoo Enterprise Social Network
 ------------------------------
 
 Connect with experts, follow what interests you, share documents and promote
-best practices with Odoo <a href="https://www.odoo.com/page/enterprise-social-network">Enterprise Social Network</a>. Get work done with
+best practices with Odoo <a href="https://www.odoo.com/app/discuss">Enterprise Social Network</a>. Get work done with
 effective collaboration across departments, geographies, documents and business
 applications. All of this while decreasing email overload.
 
@@ -46,7 +46,7 @@ Collaborate securely
 Set the right security policy; public, private or on invitation only --
 according to the information sensitivity.
 
-A Twitter-like Network For Your Company
+A Twitter-like Network For My Company
 ---------------------------------------
 
 Make every employee feel more connected and engaged with twitter-like features

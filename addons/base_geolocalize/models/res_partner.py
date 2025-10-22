@@ -1,70 +1,64 @@
-# -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-try:
-    import simplejson as json
-except ImportError:
-    import json     # noqa
-import urllib
-
-from openerp.osv import osv, fields
-from openerp import tools
-from openerp.tools.translate import _
-from openerp.exceptions import UserError
+from odoo import api, fields, models, modules, _
+from odoo.tools import config
 
 
-def geo_find(addr):
-    url = 'https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address='
-    url += urllib.quote(addr.encode('utf8'))
-
-    try:
-        result = json.load(urllib.urlopen(url))
-    except Exception, e:
-        raise UserError(_('Cannot contact geolocation servers. Please make sure that your internet connection is up and running (%s).') % e)
-    if result['status'] != 'OK':
-        return None
-
-    try:
-        geo = result['results'][0]['geometry']['location']
-        return float(geo['lat']), float(geo['lng'])
-    except (KeyError, ValueError):
-        return None
-
-
-def geo_query_address(street=None, zip=None, city=None, state=None, country=None):
-    if country and ',' in country and (country.endswith(' of') or country.endswith(' of the')):
-        # put country qualifier in front, otherwise GMap gives wrong results,
-        # e.g. 'Congo, Democratic Republic of the' => 'Democratic Republic of the Congo'
-        country = '{1} {0}'.format(*country.split(',', 1))
-    return tools.ustr(', '.join(filter(None, [street,
-                                              ("%s %s" % (zip or '', city or '')).strip(),
-                                              state,
-                                              country])))
-
-
-class res_partner(osv.osv):
+class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    _columns = {
-        'partner_latitude': fields.float('Geo Latitude', digits=(16, 5)),
-        'partner_longitude': fields.float('Geo Longitude', digits=(16, 5)),
-        'date_localization': fields.date('Geo Localization Date'),
-    }
+    date_localization = fields.Date(string='Geolocation Date')
 
-    def geo_localize(self, cr, uid, ids, context=None):
-        # Don't pass context to browse()! We need country names in english below
-        for partner in self.browse(cr, uid, ids):
-            if not partner:
-                continue
-            result = geo_find(geo_query_address(street=partner.street,
-                                                zip=partner.zip,
-                                                city=partner.city,
-                                                state=partner.state_id.name,
-                                                country=partner.country_id.name))
+    def write(self, vals):
+        # Reset latitude/longitude in case we modify the address without
+        # updating the related geolocation fields
+        if any(field in vals for field in ['street', 'zip', 'city', 'state_id', 'country_id']) \
+                and not all('partner_%s' % field in vals for field in ['latitude', 'longitude']):
+            vals.update({
+                'partner_latitude': 0.0,
+                'partner_longitude': 0.0,
+            })
+        return super().write(vals)
+
+    @api.model
+    def _geo_localize(self, street='', zip='', city='', state='', country=''):
+        geo_obj = self.env['base.geocoder']
+        search = geo_obj.geo_query_address(street=street, zip=zip, city=city, state=state, country=country)
+        result = geo_obj.geo_find(search, force_country=country)
+        if result is None:
+            search = geo_obj.geo_query_address(city=city, state=state, country=country)
+            result = geo_obj.geo_find(search, force_country=country)
+        return result
+
+    def geo_localize(self):
+        # We need country names in English below
+        if not self.env.context.get('force_geo_localize') and (
+            self.env.context.get('import_file')
+            or modules.module.current_test
+            or not self.env.registry.ready
+        ):
+            return False
+        partners_not_geo_localized = self.env['res.partner']
+        for partner in self.with_context(lang='en_US'):
+            result = self._geo_localize(partner.street,
+                                        partner.zip,
+                                        partner.city,
+                                        partner.state_id.name,
+                                        partner.country_id.name)
+
             if result:
-                self.write(cr, uid, [partner.id], {
+                partner.write({
                     'partner_latitude': result[0],
                     'partner_longitude': result[1],
-                    'date_localization': fields.date.context_today(self, cr, uid, context=context)
-                }, context=context)
+                    'date_localization': fields.Date.context_today(partner)
+                })
+            else:
+                partners_not_geo_localized |= partner
+        if partners_not_geo_localized:
+            self.env.user._bus_send("simple_notification", {
+                'type': 'danger',
+                'title': _("Warning"),
+                'message': _('No match found for %(partner_names)s address(es).',
+                             partner_names=', '.join(partners_not_geo_localized.mapped('display_name')))
+            })
         return True

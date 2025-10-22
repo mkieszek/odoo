@@ -1,2 +1,3 @@
-# -*- coding: utf-8 -*-
-import main
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+
+from . import main

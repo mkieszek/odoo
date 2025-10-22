@@ -1,39 +1,49 @@
-# Turkish translation for openobject-addons
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_margin
+#
+# Translators:
+# Murat Kaplan <muratk@projetgrup.com>, 2022
+# abc Def <hdogan1974@gmail.com>, 2022
+# Martin Trigaux, 2022
+# Ediz Duman <neps1192@gmail.com>, 2022
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-08-14 13:09+0000\n"
-"PO-Revision-Date: 2014-08-14 16:10+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Turkish <tr@li.org>\n"
+"Project-Id-Version: Odoo Server saas~14.4\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-07-12 07:50+0000\n"
+"PO-Revision-Date: 2022-09-22 05:54+0000\n"
+"Last-Translator: Ediz Duman <neps1192@gmail.com>, 2022\n"
+"Language-Team: Turkish (https://app.transifex.com/odoo/teams/41243/tr/)\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-15 07:49+0000\n"
-"X-Generator: Launchpad (build 17156)\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. module: sale_margin
-#: field:sale.order.line,purchase_price:0
-msgid "Cost Price"
-msgstr "Maliyet Fiyatı"
+#: model:ir.model.fields,field_description:sale_margin.field_sale_order_line__purchase_price
+msgid "Cost"
+msgstr "Maliyet"
 
 #. module: sale_margin
-#: help:sale.order,margin:0
-msgid ""
-"It gives profitability by calculating the difference between the Unit Price "
-"and the cost price."
-msgstr "Birim fiyat ve maliyet fiyatı arasındaki farkı hesaplayarak verir."
-
-#. module: sale_margin
-#: field:sale.order,margin:0
-#: field:sale.order.line,margin:0
+#: model:ir.model.fields,field_description:sale_margin.field_sale_order__margin
+#: model:ir.model.fields,field_description:sale_margin.field_sale_order_line__margin
+#: model:ir.model.fields,field_description:sale_margin.field_sale_report__margin
 msgid "Margin"
-msgstr "Oran"
+msgstr "Marj"
+
+#. module: sale_margin
+#: model:ir.model.fields,field_description:sale_margin.field_sale_order__margin_percent
+#: model:ir.model.fields,field_description:sale_margin.field_sale_order_line__margin_percent
+msgid "Margin (%)"
+msgstr "Marj (%)"
+
+#. module: sale_margin
+#: model:ir.model,name:sale_margin.model_sale_report
+msgid "Sales Analysis Report"
+msgstr "Satış Analizi Raporu"
 
 #. module: sale_margin
 #: model:ir.model,name:sale_margin.model_sale_order

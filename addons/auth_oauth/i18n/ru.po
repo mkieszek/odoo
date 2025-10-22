@@ -1,182 +1,244 @@
-# Russian translation for openobject-addons
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
-# This file is distributed under the same license as the openobject-addons package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* auth_oauth
 #
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: openobject-addons\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2014-08-14 13:08+0000\n"
-"PO-Revision-Date: 2014-08-14 16:10+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Russian <ru@li.org>\n"
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-26 21:55+0000\n"
+"PO-Revision-Date: 2024-01-30 15:14+0400\n"
+"Last-Translator: \n"
+"Language-Team: Russian (https://app.transifex.com/odoo/teams/41243/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-08-15 06:55+0000\n"
-"X-Generator: Launchpad (build 17156)\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #. module: auth_oauth
-#: code:addons/auth_oauth/controllers/main.py:99
-#, python-format
+#: model_terms:ir.ui.view,arch_db:auth_oauth.providers
+msgid "- or -"
+msgstr "- или -"
+
+#. module: auth_oauth
+#: model_terms:ir.ui.view,arch_db:auth_oauth.res_config_settings_view_form
+msgid "<i class=\"oi oi-fw oi-arrow-right\"/>Tutorial"
+msgstr "<i class=\"oi oi-fw oi-arrow-right\"/>Учебное пособие"
+
+#. module: auth_oauth
+#. odoo-python
+#: code:addons/auth_oauth/controllers/main.py:0
 msgid "Access Denied"
-msgstr ""
+msgstr "Доступ запрещён"
 
 #. module: auth_oauth
-#: field:base.config.settings,auth_oauth_facebook_enabled:0
-msgid "Allow users to sign in with Facebook"
-msgstr ""
-
-#. module: auth_oauth
-#: field:base.config.settings,auth_oauth_google_enabled:0
+#: model:ir.model.fields,field_description:auth_oauth.field_res_config_settings__auth_oauth_google_enabled
 msgid "Allow users to sign in with Google"
-msgstr ""
+msgstr "Разрешите пользователям входить в систему с помощью Google"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,enabled:0
+#: model_terms:ir.ui.view,arch_db:auth_oauth.res_config_settings_view_form
+msgid "Allow users to sign in with their Google account"
+msgstr "Разрешить пользователям входить в свою учетную запись Google."
+
+#. module: auth_oauth
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__enabled
 msgid "Allowed"
-msgstr ""
+msgstr "Разрешить"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,auth_endpoint:0
-msgid "Authentication URL"
-msgstr ""
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__auth_endpoint
+msgid "Authorization URL"
+msgstr "URL-адрес авторизации"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,body:0
-msgid "Body"
-msgstr ""
-
-#. module: auth_oauth
-#: field:auth.oauth.provider,css_class:0
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__css_class
 msgid "CSS class"
-msgstr ""
+msgstr "CSS класс"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,client_id:0
-#: field:base.config.settings,auth_oauth_facebook_client_id:0
-#: field:base.config.settings,auth_oauth_google_client_id:0
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__client_id
+#: model:ir.model.fields,field_description:auth_oauth.field_res_config_settings__auth_oauth_google_client_id
 msgid "Client ID"
-msgstr ""
+msgstr "ID клиента"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,create_uid:0
+#: model_terms:ir.ui.view,arch_db:auth_oauth.res_config_settings_view_form
+msgid "Client ID:"
+msgstr "ID клиента:"
+
+#. module: auth_oauth
+#: model:ir.model,name:auth_oauth.model_res_config_settings
+msgid "Config Settings"
+msgstr "Параметры конфигурации"
+
+#. module: auth_oauth
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Создано"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,create_date:0
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Создано"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,data_endpoint:0
-msgid "Data URL"
-msgstr ""
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__data_endpoint
+msgid "Data Endpoint"
+msgstr "Конечная точка данных"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,id:0
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__display_name
+msgid "Display Name"
+msgstr "Отображаемое имя"
+
+#. module: auth_oauth
+#: model_terms:ir.ui.view,arch_db:auth_oauth.res_config_settings_view_form
+msgid "Google Authentication"
+msgstr "Аутентификация Google"
+
+#. module: auth_oauth
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,write_uid:0
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Последнее обновление"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,write_date:0
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Последнее обновление"
 
 #. module: auth_oauth
-#: field:res.users,oauth_access_token:0
+#: model:ir.model.fields,help:auth_oauth.field_auth_oauth_provider__body
+msgid "Link text in Login Dialog"
+msgstr "Текст ссылки в диалоге входа в систему"
+
+#. module: auth_oauth
+#: model:auth.oauth.provider,body:auth_oauth.provider_facebook
+msgid "Log in with Facebook"
+msgstr "Войти с Facebook"
+
+#. module: auth_oauth
+#: model:auth.oauth.provider,body:auth_oauth.provider_google
+msgid "Log in with Google"
+msgstr "Войти через Google"
+
+#. module: auth_oauth
+#: model:auth.oauth.provider,body:auth_oauth.provider_openerp
+msgid "Log in with Odoo.com"
+msgstr "Войдите в систему с помощью Odoo.com"
+
+#. module: auth_oauth
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__body
+msgid "Login button label"
+msgstr "Ярлык кнопки входа в систему"
+
+#. module: auth_oauth
+#: model:ir.model.fields,field_description:auth_oauth.field_res_users__oauth_access_token
 msgid "OAuth Access Token"
-msgstr ""
+msgstr "OAuth Access Token"
 
 #. module: auth_oauth
-#: field:res.users,oauth_provider_id:0
+#: model:ir.model.fields,field_description:auth_oauth.field_res_users__oauth_provider_id
 msgid "OAuth Provider"
-msgstr ""
+msgstr "Поставщик OAuth"
 
 #. module: auth_oauth
 #: model:ir.ui.menu,name:auth_oauth.menu_oauth_providers
+#: model_terms:ir.ui.view,arch_db:auth_oauth.res_config_settings_view_form
 msgid "OAuth Providers"
-msgstr ""
+msgstr "Провайдеры OAuth"
 
 #. module: auth_oauth
-#: sql_constraint:res.users:0
+#: model:ir.model.constraint,message:auth_oauth.constraint_res_users_uniq_users_oauth_provider_oauth_uid
 msgid "OAuth UID must be unique per provider"
-msgstr ""
+msgstr "Идентификатор OAuth UID должен быть уникальным для каждого провайдера"
 
 #. module: auth_oauth
-#: field:res.users,oauth_uid:0
+#: model:ir.model.fields,field_description:auth_oauth.field_res_users__oauth_uid
 msgid "OAuth User ID"
-msgstr ""
+msgstr "Идентификатор пользователя OAuth"
 
 #. module: auth_oauth
 #: model:ir.model,name:auth_oauth.model_auth_oauth_provider
 msgid "OAuth2 provider"
-msgstr ""
+msgstr "Провайдер OAuth2"
 
 #. module: auth_oauth
-#: view:res.users:auth_oauth.view_users_form
+#: model_terms:ir.ui.view,arch_db:auth_oauth.view_users_form
 msgid "Oauth"
-msgstr ""
+msgstr "Oauth"
 
 #. module: auth_oauth
-#: help:res.users,oauth_uid:0
+#: model:ir.model.fields,help:auth_oauth.field_res_users__oauth_uid
 msgid "Oauth Provider user_id"
-msgstr ""
+msgstr "Oauth Provider user_id"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,name:0
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__name
 msgid "Provider name"
-msgstr ""
+msgstr "Имя поставщика услуг"
 
 #. module: auth_oauth
 #: model:ir.actions.act_window,name:auth_oauth.action_oauth_provider
 msgid "Providers"
-msgstr ""
+msgstr "Провайдеры"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,scope:0
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__scope
 msgid "Scope"
-msgstr ""
+msgstr "Сфера"
 
 #. module: auth_oauth
-#: code:addons/auth_oauth/controllers/main.py:97
-#, python-format
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__sequence
+msgid "Sequence"
+msgstr "Последовательность"
+
+#. module: auth_oauth
+#: model:ir.model.fields,field_description:auth_oauth.field_res_config_settings__server_uri_google
+msgid "Server uri"
+msgstr "Сервер url"
+
+#. module: auth_oauth
+#. odoo-python
+#: code:addons/auth_oauth/controllers/main.py:0
 msgid "Sign up is not allowed on this database."
-msgstr ""
+msgstr "Регистрация в этой базе данных запрещена."
+
+#. module: auth_oauth
+#: model:ir.model,name:auth_oauth.model_ir_config_parameter
+msgid "System Parameter"
+msgstr "Параметр Системы"
 
 #. module: auth_oauth
 #: model:ir.model,name:auth_oauth.model_res_users
-msgid "Users"
-msgstr ""
+msgid "User"
+msgstr "Пользователь"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,validation_endpoint:0
-msgid "Validation URL"
-msgstr ""
+#: model:ir.model.fields,field_description:auth_oauth.field_auth_oauth_provider__validation_endpoint
+msgid "UserInfo URL"
+msgstr "URL UserInfo"
 
 #. module: auth_oauth
-#: code:addons/auth_oauth/controllers/main.py:101
-#, python-format
-msgid ""
-"You do not have access to this database or your invitation has expired. "
-"Please ask for an invitation and be sure to follow the link in your "
-"invitation email."
-msgstr ""
+#. odoo-python
+#: code:addons/auth_oauth/controllers/main.py:0
+msgid "You do not have access to this database or your invitation has expired. Please ask for an invitation and be sure to follow the link in your invitation email."
+msgstr "У вас нет доступа к этой базе данных или срок действия вашего приглашения истек. Пожалуйста, запросите приглашение и обязательно перейдите по ссылке в письме с приглашением."
 
 #. module: auth_oauth
-#: view:auth.oauth.provider:auth_oauth.view_oauth_provider_form
-#: view:auth.oauth.provider:auth_oauth.view_oauth_provider_list
+#: model_terms:ir.ui.view,arch_db:auth_oauth.view_oauth_provider_form
+#: model_terms:ir.ui.view,arch_db:auth_oauth.view_oauth_provider_tree
 msgid "arch"
-msgstr ""
+msgstr "арка"
 
 #. module: auth_oauth
-#: field:auth.oauth.provider,sequence:0
-msgid "unknown"
-msgstr ""
+#: model_terms:ir.ui.view,arch_db:auth_oauth.res_config_settings_view_form
+msgid "e.g. 1234-xyz.apps.googleusercontent.com"
+msgstr "например, 1234-xyz.apps.googleusercontent.com"
