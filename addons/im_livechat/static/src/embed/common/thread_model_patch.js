@@ -1,4 +1,4 @@
-import { fields } from "@mail/core/common/record";
+import { fields } from "@mail/model/export";
 import { Thread } from "@mail/core/common/thread_model";
 import "@mail/discuss/core/common/thread_model_patch";
 import { generateEmojisOnHtml } from "@mail/utils/common/format";
@@ -118,13 +118,13 @@ patch(Thread.prototype, {
             });
             this.messages.push(temporaryMsg);
             this?.chatbot?._simulateTyping(2 ** 31 - 1);
-            const thread = await this.store.env.services["im_livechat.livechat"].persist(this);
+            const channel = await this.store.env.services["im_livechat.livechat"].persist(this);
             temporaryMsg.author_id = this.store.self; // Might have been created after persist.
-            if (!thread) {
+            if (!channel) {
                 return;
             }
-            await thread.isLoadedDeferred;
-            return thread.post(...arguments).then(() => thread.readyToSwapDeferred.resolve());
+            await channel.isLoadedDeferred;
+            return channel.post(...arguments).then(() => channel.readyToSwapDeferred.resolve());
         }
         const message = await super.post(...arguments);
         await this.chatbot?.processAnswer(message);

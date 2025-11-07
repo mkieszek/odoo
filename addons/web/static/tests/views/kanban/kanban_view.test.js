@@ -88,6 +88,7 @@ import { KanbanRenderer } from "@web/views/kanban/kanban_renderer";
 import { kanbanView } from "@web/views/kanban/kanban_view";
 import { ViewButton } from "@web/views/view_button/view_button";
 import { AnimatedNumber } from "@web/views/view_components/animated_number";
+import { TOUCH_SELECTION_THRESHOLD } from "@web/views/utils";
 import { WebClient } from "@web/webclient/webclient";
 
 const { IrAttachment } = webModels;
@@ -4178,8 +4179,6 @@ test("empty kanban with sample data", async () => {
         message: "there should be 10 sample records",
     });
     expect(".o_view_nocontent").toHaveCount(1);
-    expect(".ribbon").toHaveCount(1);
-    expect(".ribbon").toHaveText("SAMPLE DATA");
 
     await toggleSearchBarMenu();
     await toggleMenuItem("Match nothing");
@@ -4187,7 +4186,6 @@ test("empty kanban with sample data", async () => {
     expect(".o_content").not.toHaveClass("o_view_sample_data");
     expect(".o_kanban_record:not(.o_kanban_ghost)").toHaveCount(0);
     expect(".o_view_nocontent").toHaveCount(1);
-    expect(".ribbon").toHaveCount(0);
 });
 
 test("empty grouped kanban with sample data and many2many_tags", async () => {
@@ -4307,14 +4305,12 @@ test("non empty kanban with sample data", async () => {
     expect(".o_content").not.toHaveClass("o_view_sample_data");
     expect(".o_kanban_record:not(.o_kanban_ghost)").toHaveCount(4);
     expect(".o_view_nocontent").toHaveCount(0);
-    expect(".ribbon").toHaveCount(0);
 
     await toggleSearchBarMenu();
     await toggleMenuItem("Match nothing");
 
     expect(".o_content").not.toHaveClass("o_view_sample_data");
     expect(".o_kanban_record:not(.o_kanban_ghost)").toHaveCount(0);
-    expect(".ribbon").toHaveCount(0);
 });
 
 test("empty grouped kanban with sample data: add a column", async () => {
@@ -8405,7 +8401,7 @@ test("selection can be enabled by long touch", async () => {
     });
     expect(".o_selection_box").toHaveCount(0);
     await drag(".o_kanban_record:nth-of-type(2)");
-    await advanceTime(400);
+    await advanceTime(TOUCH_SELECTION_THRESHOLD);
     expect(".o_selection_box").toHaveCount(1);
 });
 
@@ -8427,7 +8423,7 @@ test("selection can be enabled by long touch with drag & drop enabled", async ()
     });
     expect(".o_selection_box").toHaveCount(0);
     const { drop } = await drag(".o_kanban_record:nth-of-type(1)");
-    await advanceTime(400);
+    await advanceTime(TOUCH_SELECTION_THRESHOLD);
     expect(".o_selection_box").toHaveCount(0, {
         message: "touch delay is longer when drag & drop is enabled",
     });

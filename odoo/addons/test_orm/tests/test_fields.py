@@ -11,7 +11,7 @@ from PIL import Image
 from odoo import Command, fields, models
 from odoo.exceptions import AccessError, MissingError, UserError, ValidationError
 from odoo.fields import Domain
-from odoo.tests import Form, TransactionCase, tagged, users
+from odoo.tests import TransactionCase, tagged, users
 from odoo.tools import float_repr, mute_logger
 from odoo.tools.image import image_data_uri
 
@@ -1111,6 +1111,12 @@ class TestFields(TransactionCaseWithUserDemo, TransactionExpressionCase):
         self.assertFalse(record.filtered_domain([('name', 'like', 'F')]))
         self.assertFalse(record.filtered_domain([('name', 'ilike', 'f')]))
 
+    def test_20_like_multiline(self):
+        """ test filtered_domain() on multiline fields. """
+        record = self.env['test_orm.mixed'].create({'comment1': 'Foo\nBar'})
+        self.assertTrue(record.filtered_domain([('comment1', 'like', 'Bar')]))
+        self.assertTrue(record.filtered_domain([('comment1', 'ilike', 'bar')]))
+
     def test_21_date(self):
         """ test date fields """
         record = self.env['test_orm.mixed'].create({})
@@ -1931,21 +1937,23 @@ class TestFields(TransactionCaseWithUserDemo, TransactionExpressionCase):
         existing.categories
 
         # invalidate 'categories' for the assertQueryCount
+        self.env.transaction.clear_access_cache()
         records.invalidate_model(['categories'])
-        with self.assertQueryCount(4):
+        with self.assertQueryCount(5):
             # <categories>.__get__(existing)
+            #  -> records.check_access('read')
+            #      -> records._check_access('read')
+            #          -> records.sudo().filtered_domain(...)
+            #              -> <name>.__get__(existing)
+            #                  -> records._fetch_field(<name>)
+            #                      -> records.fetch(['name', ...])
+            #                          -> ONE QUERY to read ['name', ...] of records
+            #                          -> ONE QUERY for deleted.exists() / code: forbidden = missing.exists()
+            #      -> ONE QUERY for records.exists() / MissingError during _check_access
+            #  -> ONE QUERY for records.exists()
             #  -> records._fetch_field(<categories>)
             #      -> records.fetch(['categories'])
-            #          -> records.check_access('read')
-            #              -> records._check_access('read')
-            #                  -> records.sudo().filtered_domain(...)
-            #                      -> <name>.__get__(existing)
-            #                          -> records._fetch_field(<name>)
-            #                              -> records.fetch(['name', ...])
-            #                                  -> ONE QUERY to read ['name', ...] of records
-            #                                  -> ONE QUERY for deleted.exists() / code: forbidden = missing.exists()
-            #          -> ONE QUERY for records.exists() / code: self = self.exists()
-            #          -> ONE QUERY to read the many2many of existing
+            #              -> ONE QUERY to read the many2many of existing
             existing.categories
 
         # this one must trigger a MissingError
@@ -2355,7 +2363,7 @@ class TestFields(TransactionCaseWithUserDemo, TransactionExpressionCase):
 
         # read the related field discussion_name
         self.assertNotEqual(message.sudo().env, message.env)
-        self.assertEqual(message.discussion_name, discussion.name)
+        self.assertEqual(message.discussion_name, discussion.sudo().name)
 
     def test_43_new_related(self):
         """ test the behavior of one2many related fields """
@@ -4826,44 +4834,6 @@ class TestComputeSudo(TransactionCaseWithUserDemo):
         self.assertEqual(record.with_user(self.user_demo).name_for_uid, self.user_demo.name)
 
 
-@tagged('at_install', '-post_install')  # LEGACY at_install
-class test_shared_cache(TransactionCaseWithUserDemo):
-    def test_shared_cache_computed_field(self):
-        # Test case: Check that the shared cache is not used if a compute_sudo stored field
-        # is computed IF there is an ir.rule defined on this specific model.
-
-        # Real life example:
-        # A user can only see its own timesheets on a task, but the field "Planned Hours",
-        # which is stored-compute_sudo, should take all the timesheet lines into account
-        # However, when adding a new line and then recomputing the value, no existing line
-        # from another user is binded on self, then the value is erased and saved on the
-        # database.
-
-        task = self.env['test_orm.model_shared_cache_compute_parent'].create({
-            'name': 'Shared Task'})
-        self.env['test_orm.model_shared_cache_compute_line'].create({
-            'user_id': self.env.ref('base.user_admin').id,
-            'parent_id': task.id,
-            'amount': 1,
-        })
-        self.assertEqual(task.total_amount, 1)
-
-        self.env.flush_all()
-        self.env.invalidate_all()  # Start fresh, as it would be the case on 2 different sessions.
-
-        task = task.with_user(self.user_demo)
-        with Form(task) as task_form:
-            # Use demo has no access to the already existing line
-            self.assertEqual(len(task_form.line_ids), 0)
-            # But see the real total_amount
-            self.assertEqual(task_form.total_amount, 1)
-            # Now let's add a new line (and retrigger the compute method)
-            with task_form.line_ids.new() as line:
-                line.amount = 2
-            # The new value for total_amount, should be 3, not 2.
-            self.assertEqual(task_form.total_amount, 2)
-
-
 @tagged('unlink_constraints')
 @tagged('at_install', '-post_install')  # LEGACY at_install
 class TestUnlinkConstraints(TransactionCase):
@@ -5250,16 +5220,7 @@ class TestModifiedPerformance(TransactionCase):
                    "test_orm_modified_line"."create_date"
             FROM "test_orm_modified_line"
             WHERE "test_orm_modified_line"."id" IN %s
-        """, """
-            SELECT "test_orm_modified_line"."id",
-                   "test_orm_modified_line"."parent_id"
-            FROM "test_orm_modified_line"
-            WHERE "test_orm_modified_line"."id" IN %s
         """], flush=False):
-            # Two requests:
-            # - one for fetch modified_line_a_child_child data (invalidate just before)
-            # - one because modified_line_a_child.parent_id (invalidate just before because we invalidate inverse in `_invalidate_cache`,
-            # see TODO) -> We should change that
             self.modified_line_a_child_child.price = 4
         self.assertEqual(self.modified_line_a_child_child.total_price_quantity, 20)
         self.assertEqual(self.modified_line_a_child.total_price_quantity, 30)

@@ -7,7 +7,7 @@
     'category': 'Sales/Point of Sale',
     'sequence': 40,
     'summary': 'Handle checkouts and payments for shops and restaurants.',
-    'depends': ['resource', 'stock_account', 'barcodes', 'html_editor', 'digest', 'phone_validation', 'partner_autocomplete', 'iot_base', 'google_address_autocomplete'],
+    'depends': ['resource', 'stock_account', 'barcodes', 'html_editor', 'digest', 'phone_validation', 'partner_autocomplete', 'google_address_autocomplete'],
     'uninstall_hook': 'uninstall_hook',
     'data': [
         'security/point_of_sale_security.xml',
@@ -123,9 +123,8 @@
             ('include', 'web._assets_core'),
             ("remove", "web/static/src/core/browser/router.js"),
             ("remove", "web/static/src/core/debug/**/*"),
-            "web/static/src/libs/fontawesome/css/font-awesome.css",
+            ('include', 'web.icons_fonts'),
             "web/static/src/views/fields/formatters.js",
-            "web/static/lib/odoo_ui_icons/*",
             "point_of_sale/static/src/utils.js",
             'bus/static/src/services/bus_service.js',
             'bus/static/src/services/worker_service.js',
@@ -134,8 +133,6 @@
             'bus/static/src/multi_tab_shared_worker_service.js',
             'bus/static/src/multi_tab_fallback_service.js',
             'bus/static/src/workers/*',
-            'iot_base/static/src/network_utils/*',
-            'iot_base/static/src/device_controller.js',
         ],
 
         # Main PoS assets, they are loaded in the PoS UI
@@ -163,7 +160,6 @@
             # scss variables and utilities
             'point_of_sale/static/src/scss/pos_variables_extra.scss',
             'web/static/src/scss/bootstrap_overridden.scss',
-            'web/static/src/scss/fontawesome_overridden.scss',
             'web/static/fonts/fonts.scss',
             "web/static/src/scss/ui.scss",
 
@@ -208,8 +204,6 @@
             "barcodes/static/tests/legacy/helpers.js",
             "web/static/tests/legacy/helpers/utils.js",
             "web/static/tests/legacy/helpers/cleanup.js",
-            'iot_base/static/src/network_utils/*',
-            'iot_base/static/src/device_controller.js',
         ],
         # Bundle that starts the pos, loaded on /pos/ui
         'point_of_sale.assets_prod': [
@@ -233,6 +227,7 @@
             "point_of_sale/static/tests/pos/tours/utils/common.js",
             "point_of_sale/static/tests/generic_helpers/order_widget_util.js",
             "point_of_sale/static/tests/generic_helpers/utils.js",
+            "point_of_sale/static/tests/customer_display/customer_display_utils.js",
             "point_of_sale/static/tests/customer_display/customer_display_tour.js",
         ],
         'point_of_sale.assets_debug': [

@@ -52,7 +52,7 @@ class DiscussChannel(models.Model):
     _description = 'Discussion Channel'
     _mail_flat_thread = False
     _mail_post_access = 'read'
-    _inherit = ["mail.thread", "bus.listener.mixin"]
+    _inherit = ["mail.thread", "bus.sync.mixin"]
 
     MAX_BOUNCE_LIMIT = 10
 
@@ -77,6 +77,9 @@ class DiscussChannel(models.Model):
     image_128 = fields.Image("Image", max_width=128, max_height=128)
     avatar_128 = fields.Image("Avatar", max_width=128, max_height=128, compute='_compute_avatar_128')
     avatar_cache_key = fields.Char(compute="_compute_avatar_cache_key")
+    discuss_category_id = fields.Many2one(
+        "discuss.category", string="Category", ondelete="set null", index=True
+    )
     channel_partner_ids = fields.Many2many(
         'res.partner', string='Partners',
         compute='_compute_channel_partner_ids', inverse='_inverse_channel_partner_ids',
@@ -454,57 +457,18 @@ class DiscussChannel(models.Model):
                         channels=failing_channels.mapped("name"),
                     )
                 )
-
-        def get_field_name(field_description):
-            if isinstance(field_description, Store.Attr):
-                return field_description.field_name
-            return field_description
-
-        def get_field_value(channel, field_description):
-            if isinstance(field_description, Store.Attr):
-                if field_description.predicate and not field_description.predicate(channel):
-                    return None
-            if isinstance(field_description, Store.Relation):
-                return field_description._get_value(channel).records
-            if isinstance(field_description, Store.Attr):
-                return field_description._get_value(channel)
-            return channel[field_description]
-
-        def get_vals(channel):
-            return {
-                subchannel: {
-                    get_field_name(field_description): (
-                        get_field_value(channel, field_description),
-                        field_description,
-                    )
-                    for field_description in field_descriptions
-                }
-                for subchannel, field_descriptions in self._sync_field_names().items()
-            }
-
-        old_vals = {channel: get_vals(channel) for channel in self}
         result = super().write(vals)
-        for channel in self:
-            new_subchannel_vals = get_vals(channel)
-            for subchannel, values in new_subchannel_vals.items():
-                diff = []
-                for field_name, (value, field_description) in values.items():
-                    if value != old_vals[channel][subchannel][field_name][0]:
-                        diff.append(field_description)
-                if diff:
-                    Store(
-                        bus_channel=channel,
-                        bus_subchannel=subchannel,
-                    ).add(channel, diff).bus_send()
         if vals.get('group_ids'):
             self._subscribe_users_automatically()
         return result
 
     def _sync_field_names(self):
         # keys are bus subchannel names, values are lists of field names to sync
-        res = defaultdict(list)
+        res = super()._sync_field_names()
         res[None] += [
             Store.Attr("avatar_cache_key", predicate=is_channel_or_group),
+            # sudo: discuss.category - guests can read categories of accessible channels
+            Store.One("discuss_category_id", ["name", "sequence"], sudo=True),
             "channel_type",
             "create_uid",
             "default_display_mode",
@@ -1194,6 +1158,9 @@ class DiscussChannel(models.Model):
         channels += self.env["discuss.channel"].search(pinned_member_domain)
         return channels
 
+    def _get_store_target(self):
+        return {"bus_channel": self, "bus_subchannel": None}
+
     def _to_store_defaults(self, target: Store.Target):
         # As the method uses partial recordsets with filtered (that lose the prefetch ids) it is
         # best to prefetch these computed fields once to avoid doing partial queries multiple times,
@@ -1225,6 +1192,8 @@ class DiscussChannel(models.Model):
         bus_last_id = self.env["bus.bus"].sudo()._bus_last_id()
         res = [
             Store.Attr("avatar_cache_key", predicate=is_channel_or_group),
+            # sudo: discuss.category - guests can read categories of accessible channels
+            Store.One("discuss_category_id", ["name", "sequence"], sudo=True),
             "channel_type",
             "create_uid",
             Store.Many(
@@ -1428,16 +1397,19 @@ class DiscussChannel(models.Model):
             """, member_query))
             members = cursor_self.env['discuss.channel.member'].browse([r[0] for r in to_update])
             channel2message = members.channel_id._get_last_messages().grouped('channel_id')
+            updated_members_by_channel = defaultdict(cursor_self.env["discuss.channel.member"].browse)
             for member in members:
                 last_message = channel2message[member.channel_id]
                 if member.fetched_message_id != last_message:
                     member.fetched_message_id = last_message
-                    member.channel_id._bus_send('discuss.channel.member/fetched', {
-                        'channel_id': member.channel_id.id,
-                        'id': member.id,
-                        'last_message_id': last_message.id,
-                        'partner_id': cursor_self.env.user.partner_id.id,
-                    })
+                    updated_members_by_channel[member.channel_id] |= member
+            for channel in updated_members_by_channel:
+                store = Store(bus_channel=channel)
+                store.add(updated_members_by_channel[channel], fields=[
+                    Store.One("channel_id", []),
+                    "fetched_message_id",
+                    *cursor_self.env["discuss.channel.member"]._to_store_persona(store.target, [])
+                ]).bus_send()
 
     def channel_set_custom_name(self, name):
         self.ensure_one()

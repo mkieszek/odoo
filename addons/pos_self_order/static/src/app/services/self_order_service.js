@@ -21,10 +21,6 @@ import {
 } from "@point_of_sale/utils";
 import { getOrderLineValues } from "./card_utils";
 import {
-    getTaxesAfterFiscalPosition,
-    getTaxesValues,
-} from "@point_of_sale/app/models/utils/tax_utils";
-import {
     changesToOrder,
     filterChangeByCategories,
 } from "@point_of_sale/app/models/utils/order_change";
@@ -172,12 +168,9 @@ export class SelfOrder extends Reactive {
     getAvailableCategories() {
         let now = luxon.DateTime.now();
         now = now.hour + now.minute / 60;
-        const isKiosk = this.config.self_ordering_mode === "kiosk";
         const availableCategories = this.productCategories
             .filter(
-                (c) =>
-                    this.productByCategIds[c.id]?.length > 0 ||
-                    (isKiosk && c.child_ids.some((child) => child.id in this.productByCategIds))
+                (c) => this.productByCategIds[c.id]?.length > 0 || c.associatedProducts?.length > 0
             )
             .sort((a, b) => a.sequence - b.sequence);
         return availableCategories.filter((c) => {
@@ -547,6 +540,15 @@ export class SelfOrder extends Reactive {
     }
 
     cancelOrder() {
+        if (
+            this.config.self_ordering_mode === "kiosk" &&
+            this.hasPaymentMethod() &&
+            typeof this.currentOrder.id === "number"
+        ) {
+            this.cancelBackendOrder();
+            return;
+        }
+
         const lineToDelete = [];
         for (const line of this.currentOrder.lines) {
             const changes = line.changes;
@@ -586,6 +588,20 @@ export class SelfOrder extends Reactive {
         }
     }
 
+    async cancelBackendOrder() {
+        try {
+            await rpc("/pos-self-order/remove-order", {
+                access_token: this.access_token,
+                order_id: this.currentOrder.id,
+                order_access_token: this.currentOrder.access_token,
+            });
+            this.currentOrder.state = "cancel";
+            this.router.navigate("default");
+        } catch (error) {
+            this.handleErrorNotification(error);
+        }
+    }
+
     async sendDraftOrderToServer() {
         if (
             Object.keys(this.currentOrder.changes).length === 0 ||
@@ -595,9 +611,9 @@ export class SelfOrder extends Reactive {
         }
 
         try {
+            this.currentOrder.setOrderPrices();
             const tableIdentifier = this.router.getTableIdentifier([]);
             let uuid = this.selectedOrderUuid;
-            this.currentOrder.recomputeOrderData();
             const data = await rpc(
                 `/pos-self-order/process-order/${this.config.self_ordering_mode}`,
                 {
@@ -633,7 +649,7 @@ export class SelfOrder extends Reactive {
     async getUserDataFromServer(tokens = []) {
         const tableIdentifier = this.router.getTableIdentifier([]);
         const dbAccessToken = this.models["pos.order"]
-            .filter((o) => o.state === "draft" && typeof o.id === "number")
+            .filter((o) => o.state === "draft" && o.isSynced)
             .map((order) => ({
                 access_token: order.access_token,
                 state: order.state,
@@ -708,7 +724,6 @@ export class SelfOrder extends Reactive {
                 cleanOrders = true;
             } else if (error?.data?.name === "odoo.exceptions.UserError") {
                 message = error.data.message;
-                this.resetTableIdentifier();
             }
         } else if (error instanceof ConnectionLostError) {
             this.dialog.add(NetworkConnectionLostPopup, {
@@ -795,21 +810,18 @@ export class SelfOrder extends Reactive {
             ? this.currentOrder.preset_id?.pricelist_id
             : this.config.pricelist_id;
         const price = productTemplate.getPrice(pricelist, 1, 0, false, product);
-        let taxes = productTemplate.taxes_id;
 
         if (!product) {
             product = productTemplate;
         }
 
-        // Fiscal position.
-        const order = this.currentOrder;
-        if (order && order.fiscal_position_id) {
-            taxes = getTaxesAfterFiscalPosition(taxes, order.fiscal_position_id, this.models);
-        }
-
         // Taxes computation.
-        const taxesData = getTaxesValues(taxes, price, 1, product, {}, this.company, this.currency);
-
+        const order = this.currentOrder;
+        const taxesData = product.getTaxDetails({
+            price_unit: price,
+            quantity: 1,
+            fiscalPosition: order?.fiscal_position_id || false,
+        });
         return { pricelist_price: price, ...taxesData };
     }
     getProductDisplayPrice(productTemplate, product) {

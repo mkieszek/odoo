@@ -53,7 +53,6 @@ DEFAULT_BLOCKED_THIRD_PARTY_DOMAINS = '\n'.join([  # noqa: FLY002
     'instagram.com', 'instagr.am', 'ig.me',
     'vimeo.com',  # 'player.vimeo.com', 'vimeo.com',
     'dailymotion.com', 'dai.ly',
-    'youku.com',  # 'player.youku.com', 'youku.com',
     'tudou.com',
     'facebook.com', 'facebook.net', 'fb.com', 'fb.me', 'fb.watch',
     'tiktok.com',
@@ -2247,8 +2246,7 @@ class Website(models.Model):
                 ORDER BY _best_similarity DESC
                 LIMIT 1000
             """, SQL("\nUNION ALL\n").join(subqueries))  # UNION ALL allows to hit GIST indexes in subplans.
-            self.env.cr.execute(query)
-            ids = {row[0] for row in self.env.cr.fetchall()}
+            ids = {row[0] for row in self.env.execute_query(query)}
             domain = Domain.AND([domain, Domain([('id', 'in', list(ids))])])
             records = model.search_read(domain, direct_fields, limit=limit)
             for record in records:

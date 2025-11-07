@@ -352,7 +352,7 @@ registry.category("web_tour.tours").add("ShowTaxExcludedTour", {
             Dialog.confirm("Open Register"),
 
             ProductScreen.clickDisplayedProduct("Test Product", true, "1", "100.0"),
-            ProductScreen.totalAmountIs("110.0"),
+            ProductScreen.totalAmountIs("100.0"), // Order total is also displayed excluding tax
             Chrome.endTour(),
         ].flat(),
 });
@@ -367,10 +367,14 @@ registry.category("web_tour.tours").add("limitedProductPricelistLoading", {
             ProductScreen.selectedOrderlineHas("Test Product 1", "1", "80.0"),
 
             scan_barcode("0100201"),
+            ProductScreen.enterLotNumber("1", "lot"),
             ProductScreen.selectedOrderlineHas("Test Product 2", "1", "100.0", "White"),
 
             scan_barcode("0100202"),
+            ProductScreen.enterLotNumber("1", "lot"),
             ProductScreen.selectedOrderlineHas("Test Product 2", "1", "120.0", "Red"),
+
+            ProductScreen.totalAmountIs("300.0"),
 
             refresh(),
             inLeftSide([
@@ -1176,5 +1180,31 @@ registry.category("web_tour.tours").add("test_preset_customer_selection", {
             PartnerList.clickPartner("Test Partner"),
             ProductScreen.customerIsSelected("Test Partner"),
             Chrome.endTour(),
+        ].flat(),
+});
+
+registry.category("web_tour.tours").add("test_product_info_product_inventory", {
+    steps: () =>
+        [
+            Chrome.startPoS(),
+            Dialog.confirm("Open Register"),
+
+            inLeftSide([
+                ...scan_barcode("product_variant_0"),
+                ...ProductScreen.clickControlButton("Info"),
+                {
+                    trigger: ".section-inventory-body :contains(100)",
+                },
+                Dialog.confirm("Close"),
+            ]),
+
+            inLeftSide([
+                ...scan_barcode("product_variant_1"),
+                ...ProductScreen.clickControlButton("Info"),
+                {
+                    trigger: ".section-inventory-body :contains(200)",
+                },
+                Dialog.confirm("Close"),
+            ]),
         ].flat(),
 });

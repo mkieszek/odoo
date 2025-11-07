@@ -40,7 +40,7 @@ def get_db_branch(server_url):
 
 @toggleable
 @require_db
-def check_git_branch(server_url=None):
+def check_git_branch(server_url=None, force=False):
     """Update the Odoo code using git to match the branch of the connected database.
     This method will also update the Python requirements and system packages, based
     on requirements.txt and packages.txt files.
@@ -48,21 +48,27 @@ def check_git_branch(server_url=None):
     If the database cannot be reached, we fetch the last changes from the current branch.
 
     :param server_url: The URL of the connected Odoo database (provided by decorator).
+    :param force: check out even if the db's branch matches the current one
     """
     if IS_TEST:
         return
 
     try:
-        branch = get_db_branch(server_url) or git('symbolic-ref', '-q', '--short', 'HEAD')
-        if not git('ls-remote', 'origin', branch):
-            _logger.warning("Branch '%s' doesn't exist on github.com/odoo/odoo.git, assuming 'master'", branch)
-            branch = 'master'
+        target_branch = get_db_branch(server_url)
+        current_branch = git('symbolic-ref', '-q', '--short', 'HEAD')
+        if not git('ls-remote', 'origin', target_branch):
+            _logger.warning("Branch '%s' doesn't exist on github.com/odoo/odoo.git, assuming 'master'", target_branch)
+            target_branch = 'master'
+
+        if current_branch == target_branch and not force:
+            _logger.info("No branch change detected (%s)", current_branch)
+            return
 
         # Repository updates
         shallow_lock = path_file("odoo/.git/shallow.lock")
         if shallow_lock.exists():
             shallow_lock.unlink()  # In case of previous crash/power-off, clean old lockfile
-        checkout(branch)
+        checkout(target_branch)
         update_requirements()
 
         # System updates
@@ -156,20 +162,21 @@ def update_packages():
 def misc_migration_updates():
     """Run miscellaneous updates after the code update."""
     _logger.warning("Running version migration updates")
-    if path_file('odoo', 'addons', 'point_of_sale').exists():
-        # TODO: remove this when v18.0 is deprecated (point_of_sale/tools/posbox/ -> iot_box_image/)
-        ramdisks_service = "/root_bypass_ramdisks/etc/systemd/system/ramdisks.service"
-        subprocess.run(
-            ['sudo', 'sed', '-i', 's|iot_box_image|point_of_sale/tools/posbox|g', ramdisks_service], check=False
-        )
-
-        # TODO: Remove this code when v16 is deprecated
-        with open('/home/pi/odoo/addons/point_of_sale/tools/posbox/configuration/odoo.conf', 'r+', encoding='utf-8') as f:
-            if "server_wide_modules" not in f.read():
-                f.write("server_wide_modules=hw_drivers,hw_posbox_homepage,web\n")
 
     if path_file('odoo', 'addons', 'hw_drivers').exists():
         # TODO: remove this when v18.4 is deprecated (hw_drivers/,hw_posbox_homepage/ -> iot_drivers/)
         subprocess.run(
             ['sed', '-i', 's|iot_drivers|hw_drivers,hw_posbox_homepage|g', '/home/pi/odoo.conf'], check=False
         )
+
+    # if ramdisk.service points to `setup/iot_box_builder`, we symlink it to
+    # `iot_box_image` or `point_of_sale/tools/posbox` instead
+    iot_box_builder_path = path_file('odoo', 'setup', 'iot_box_builder')
+    iot_box_image_path = path_file('odoo', 'addons', 'iot_box_image', 'configuration')
+    point_of_sale_path = path_file('odoo', 'addons', 'point_of_sale', 'tools', 'posbox', 'configuration')
+    iot_box_builder_path.mkdir(parents=True, exist_ok=True)
+    iot_box_builder_path /= "configuration"
+    if iot_box_image_path.exists():  # images <= v19.1
+        iot_box_builder_path.symlink_to(iot_box_image_path)
+    elif point_of_sale_path.exists():  # images before <=v18.0
+        iot_box_builder_path.symlink_to(point_of_sale_path)

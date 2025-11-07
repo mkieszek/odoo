@@ -118,6 +118,7 @@ class MailThread(models.AbstractModel):
     '''
     _name = 'mail.thread'
     _description = 'Email Thread'
+    _inherit = 'bus.listener.mixin'
     _mail_flat_thread = True  # link orphan messages to the first message
     _mail_thread_customer = False  # subscribe customer when being in post recipients
     _mail_post_access = 'write'  # access required on the document to post on it
@@ -1063,7 +1064,7 @@ class MailThread(models.AbstractModel):
 
             # search messages linked to email -> alias updating records
             if doc_ids and not loop_new:
-                base_msg_domain = Domain([('model', '=', model._name), ('res_id', 'in', doc_ids), ('create_date', '>=', create_date_limit)])
+                base_msg_domain = Domain([('model', '=', model._name), ('res_id', 'in', doc_ids), ('create_date', '>=', create_date_limit), ('message_type', '=', 'email')])
                 if author_id:
                     msg_domain = Domain('author_id', '=', author_id) & base_msg_domain
                 else:
@@ -5067,6 +5068,9 @@ class MailThread(models.AbstractModel):
             original_ids = res.mapped('original_id')
             res = res.filtered(lambda attachment: (attachment in svg_ids and attachment not in original_ids) or (attachment in non_svg_ids and attachment.original_id not in non_svg_ids))
         return res
+
+    def _get_store_target(self):
+        return {"bus_channel": self, "bus_subchannel": "thread"}
 
     # ------------------------------------------------------
     # CONTROLLERS SECURITY HELPERS
