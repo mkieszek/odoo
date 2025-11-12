@@ -15,7 +15,6 @@ import { makeContext } from "@web/core/context";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { Transition } from "@web/core/transition";
 import { Breadcrumbs } from "../breadcrumbs/breadcrumbs";
-import { SearchBar } from "../search_bar/search_bar";
 
 import { Component, useState, onMounted, useRef, useEffect } from "@odoo/owl";
 
@@ -91,7 +90,6 @@ export class ControlPanel extends Component {
     static template = "web.ControlPanel";
     static components = {
         Pager,
-        SearchBar,
         Dropdown,
         DropdownItem,
         Breadcrumbs,
@@ -102,6 +100,12 @@ export class ControlPanel extends Component {
     static props = {
         display: { type: Object, optional: true },
         slots: { type: Object, optional: true },
+    };
+    static defaultProps = {
+        display: {
+            actions: true,
+            buttons: true,
+        },
     };
 
     setup() {
@@ -303,7 +307,7 @@ export class ControlPanel extends Component {
      */
     get display() {
         return {
-            layoutActions: true,
+            ...this.constructor.defaultProps.display,
             ...this.props.display,
         };
     }

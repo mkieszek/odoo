@@ -158,6 +158,7 @@ class ChatbotCase(MailCommon, chatbot_common.ChatbotCase):
             lambda m: m.partner_id == self.chatbot_script.operator_partner_id
         )
         member_bot_data = {
+            "channel_role": False,
             "create_date": fields.Datetime.to_string(member_bot.create_date),
             "fetched_message_id": False,
             "id": member_bot.id,
@@ -267,6 +268,7 @@ class ChatbotCase(MailCommon, chatbot_common.ChatbotCase):
                         "type": "discuss.channel/joined",
                         "payload": {
                             "channel_id": discuss_channel.id,
+                            "invite_to_rtc_call": False,
                             "data": channel_data_join,
                             "invited_by_user_id": self.env.user.id,
                         },
@@ -284,6 +286,7 @@ class ChatbotCase(MailCommon, chatbot_common.ChatbotCase):
                             "discuss.channel": [{"id": discuss_channel.id, "member_count": 3}],
                             "discuss.channel.member": [
                                 {
+                                    "channel_role": False,
                                     "create_date": fields.Datetime.to_string(
                                         member_emp.create_date
                                     ),
@@ -326,11 +329,16 @@ class ChatbotCase(MailCommon, chatbot_common.ChatbotCase):
                         "payload": {
                             "discuss.channel": [
                                 {
-                                    "channel_member_ids": [["DELETE", [member_bot.id]]],
                                     "id": discuss_channel.id,
                                     "member_count": 2,
                                 }
-                            ]
+                            ],
+                            "discuss.channel.member": [
+                                {
+                                    "_DELETE": True,
+                                    "id": member_bot.id,
+                                }
+                            ],
                         },
                     },
                     {

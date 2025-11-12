@@ -165,6 +165,7 @@ class TestGetDiscussChannel(TestImLivechatCommon, MailCommon):
                 {
                     "id": test_user.id,
                     "is_admin": False,
+                    "is_livechat_manager": False,
                     "notification_type": "email",
                     "partner_id": test_user.partner_id.id,
                     "signature": ["markup", str(test_user.signature)],
@@ -184,6 +185,7 @@ class TestGetDiscussChannel(TestImLivechatCommon, MailCommon):
                     "partner_id": operator.partner_id.id,
                     "seen_message_id": False,
                     "channel_id": {"id": channel_info["id"], "model": "discuss.channel"},
+                    "channel_role": False,
                 },
                 {
                     "create_date": fields.Datetime.to_string(visitor_member.create_date),
@@ -203,6 +205,7 @@ class TestGetDiscussChannel(TestImLivechatCommon, MailCommon):
                     "seen_message_id": False,
                     "unpin_dt": False,
                     "channel_id": {"id": channel_info["id"], "model": "discuss.channel"},
+                    "channel_role": False,
                 },
             ],
         )
@@ -276,6 +279,7 @@ class TestGetDiscussChannel(TestImLivechatCommon, MailCommon):
                     "seen_message_id": False,
                     "unpin_dt": fields.Datetime.to_string(operator_member.unpin_dt),
                     "channel_id": {"id": channel_info["id"], "model": "discuss.channel"},
+                    "channel_role": False,
                 },
             ],
         )
@@ -286,6 +290,7 @@ class TestGetDiscussChannel(TestImLivechatCommon, MailCommon):
                 {
                     "id": operator.id,
                     "is_admin": False,
+                    "is_livechat_manager": False,
                     "notification_type": "email",
                     "partner_id": operator.partner_id.id,
                     "share": False,

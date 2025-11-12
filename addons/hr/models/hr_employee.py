@@ -60,7 +60,7 @@ class HrEmployee(models.Model):
         string="Current Employee Record",
         compute='_compute_current_version_id',
         store=True,
-        groups="hr.group_hr_user",
+        bypass_search_access=True,
     )
     current_date_version = fields.Date(
         string="Current Date Employee Record",
@@ -194,7 +194,11 @@ class HrEmployee(models.Model):
     structure_type_id = fields.Many2one(readonly=False, related='version_id.structure_type_id', inherited=True, groups="hr.group_hr_manager")
     contract_type_id = fields.Many2one(readonly=False, related='version_id.contract_type_id', inherited=True, groups="hr.group_hr_manager")
     hourly_cost = fields.Monetary('Hourly Cost', groups="hr.group_hr_user", tracking=True)
-
+    nationality_country_code = fields.Char(
+        string='Nationality',
+        related='version_id.country_id.code',
+        groups="hr.group_hr_user"
+    )
     # Direct subordinates
     parent_id = fields.Many2one('hr.employee', 'Manager', tracking=True, index=True,
                                 domain="['|', ('company_id', '=', False), ('company_id', 'in', allowed_company_ids)]")
@@ -266,6 +270,11 @@ class HrEmployee(models.Model):
     _user_uniq = models.Constraint(
         'unique (user_id, company_id)',
         'A user cannot be linked to multiple employees in the same company.',
+    )
+
+    has_country_contract_type = fields.Boolean(
+        compute='_compute_has_country_contract_type',
+        groups="hr.group_hr_user",
     )
 
     def _prepare_create_values(self, vals_list):
@@ -589,12 +598,26 @@ class HrEmployee(models.Model):
                 order='date_version desc',
                 limit=1,
             )
+            new_current_version = False
             if version:
-                employee.current_version_id = version
+                new_current_version = version
             elif employee.version_ids:
-                employee.current_version_id = employee.version_ids[0]
-            else:
-                employee.current_version_id = False
+                new_current_version = employee.version_ids[0]
+            # To not trigger computed properties if still the same version
+            if employee.current_version_id != new_current_version:
+                employee.current_version_id = new_current_version
+
+    @api.depends('company_country_id')
+    def _compute_has_country_contract_type(self):
+        count_contract_type_by_country = dict(self.env['hr.contract.type']._read_group(
+            domain=[],
+            groupby=['country_id'],
+            aggregates=['__count']
+        ))
+        for employee in self:
+            employee.has_country_contract_type = bool(
+                count_contract_type_by_country.get(employee.company_country_id)
+            )
 
     def _cron_update_current_version_id(self):
         self.search([])._compute_current_version_id()
@@ -974,15 +997,6 @@ class HrEmployee(models.Model):
             permit_no = '_' + employee.permit_no if employee.permit_no else ''
             employee.work_permit_name = "%swork_permit%s" % (name, permit_no)
 
-    @api.depends('distance_home_work', 'distance_home_work_unit')
-    def _compute_km_home_work(self):
-        for employee in self:
-            employee.km_home_work = employee.distance_home_work * 1.609 if employee.distance_home_work_unit == "miles" else employee.distance_home_work
-
-    def _inverse_km_home_work(self):
-        for employee in self:
-            employee.distance_home_work = employee.km_home_work / 1.609 if employee.distance_home_work_unit == "miles" else employee.km_home_work
-
     def _get_partner_count_depends(self):
         return ['user_id']
 
@@ -1136,6 +1150,7 @@ class HrEmployee(models.Model):
         # cache, and interpreted as an access error
         if field_names is None:
             field_names = [field.name for field in self._determine_fields_to_fetch()]
+        field_names = [f_name for f_name in field_names if f_name != 'current_version_id']
         self._check_private_fields(field_names)
         self.flush_model(field_names)
         public = self.env['hr.employee.public'].search_fetch(domain, field_names, offset, limit, order)
@@ -1152,6 +1167,7 @@ class HrEmployee(models.Model):
         # cache, and interpreted as an access error
         if field_names is None:
             field_names = [field.name for field in self._determine_fields_to_fetch()]
+        field_names = [f_name for f_name in field_names if f_name != 'current_version_id']
         self._check_private_fields(field_names)
         self.flush_recordset(field_names)
         public = self.env['hr.employee.public'].browse(self._ids)
@@ -1190,32 +1206,68 @@ class HrEmployee(models.Model):
         companies = self.env['res.company'].search([])
         employees_contract_expiring = self.env['hr.employee']
         employees_work_permit_expiring = self.env['hr.employee']
+        today = fields.Date.today()
 
         for company in companies:
+            # Employees with contracts expiring soon
             employees_contract_expiring += self.env['hr.employee'].search([
                 ('company_id', '=', company.id),
                 ('contract_date_start', '!=', False),
-                ('contract_date_start', '<', fields.Date.today()),
-                ('contract_date_end', '=', fields.Date.today() + relativedelta(days=company.contract_expiration_notice_period)),
+                ('contract_date_start', '<', today),
+                ('contract_date_end', '>=', today),
+                ('contract_date_end', '<=', today + relativedelta(days=company.contract_expiration_notice_period)),
             ])
 
+            # Employees with work permits expiring soon
             employees_work_permit_expiring += self.env['hr.employee'].search([
                 ('company_id', '=', company.id),
                 ('work_permit_expiration_date', '!=', False),
-                ('work_permit_expiration_date', '=', fields.Date.today() + relativedelta(days=company.work_permit_expiration_notice_period)),
+                ('work_permit_expiration_date', '>=', today),
+                ('work_permit_expiration_date', '<=', today + relativedelta(days=company.work_permit_expiration_notice_period)),
             ])
 
-        for employee in employees_contract_expiring:
-            employee.with_context(mail_activity_quick_update=True).activity_schedule(
-                'mail.mail_activity_data_todo', employee.contract_date_end,
-                _("The contract of %s is about to expire.", employee.name),
-                user_id=employee.hr_responsible_id.id or self.env.uid)
+        todo_type = self.env.ref('mail.mail_activity_data_todo')
 
+        # Existing activities
+        existing_activities_contract = employees_contract_expiring.activity_ids.filtered(
+            lambda a: a.technical_usage == 'hr_expiring_contract'
+        )
+        existing_activities_permit = employees_work_permit_expiring.activity_ids.filtered(
+            lambda a: a.technical_usage == 'hr_expiring_work_permit'
+        )
+
+        existing_activities_index_contract = {
+            (a.res_id, a.date_deadline, a.user_id.id): a for a in existing_activities_contract
+        }
+        existing_activities_index_permit = {
+            (a.res_id, a.date_deadline, a.user_id.id): a for a in existing_activities_permit
+        }
+
+        # Create contract expiry activities
+        for employee in employees_contract_expiring:
+            activity_responsible = employee.hr_responsible_id.id or self.env.uid
+            key = (employee.id, employee.contract_date_end, activity_responsible)
+            if key not in existing_activities_index_contract:
+                employee.with_context(mail_activity_quick_update=True).activity_schedule(
+                    activity_type_id=todo_type.id,
+                    date_deadline=employee.contract_date_end,
+                    summary=self.env._("The contract of %(employee_name)s is about to expire.", employee_name=employee.name),
+                    user_id=activity_responsible,
+                    technical_usage='hr_expiring_contract',
+                )
+
+        # Create work permit expiry activities
         for employee in employees_work_permit_expiring:
-            employee.with_context(mail_activity_quick_update=True).activity_schedule(
-                'mail.mail_activity_data_todo', employee.work_permit_expiration_date,
-                _("The work permit of %s is about to expire.", employee.name),
-                user_id=employee.hr_responsible_id.id or self.env.uid)
+            activity_responsible = employee.hr_responsible_id.id or self.env.uid
+            key = (employee.id, employee.work_permit_expiration_date, activity_responsible)
+            if key not in existing_activities_index_permit:
+                employee.with_context(mail_activity_quick_update=True).activity_schedule(
+                    activity_type_id=todo_type.id,
+                    date_deadline=employee.work_permit_expiration_date,
+                    summary=self.env._("The work permit of %(employee_name)s is about to expire.", employee_name=employee.name),
+                    user_id=activity_responsible,
+                    technical_usage='hr_expiring_work_permit',
+                )
 
         return True
 

@@ -45,6 +45,7 @@ import {
 } from "@odoo/owl";
 import { FetchRecordError } from "@web/model/relational_model/errors";
 import { effect } from "@web/core/utils/reactive";
+import { ConnectionLostError } from "@web/core/network/rpc";
 
 const viewRegistry = registry.category("views");
 
@@ -144,6 +145,7 @@ export class FormController extends Component {
         Compiler: Function,
         archInfo: Object,
         buttonTemplate: String,
+        buttonDialogTemplate: String,
         preventCreate: { type: Boolean, optional: true },
         preventEdit: { type: Boolean, optional: true },
         onDiscard: { type: Function, optional: true },
@@ -427,6 +429,9 @@ export class FormController extends Component {
     async onWillSaveRecord() {}
 
     async onSaveError(error, { discard, retry }, leaving) {
+        if (error instanceof ConnectionLostError) {
+            return false;
+        }
         const suggestedCompany = error.data?.context?.suggested_company;
         const activeCompanyIds = user.activeCompanies.map((c) => c.id);
         if (

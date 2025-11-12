@@ -22,7 +22,7 @@ class ChannelActionDialog extends Component {
     `;
 }
 
-registerThreadAction("set-favorite", {
+registerThreadAction("add-to-favorites", {
     /**
      * @param {Object} param0
      * @param {import("models").DiscussChannel} param0.channel
@@ -33,7 +33,7 @@ registerThreadAction("set-favorite", {
         !channel.self_member_id.is_favorite &&
         !owner.isDiscussContent,
     icon: "fa fa-fw fa-star",
-    name: _t("Set favorite"),
+    name: _t("Add to Favorites"),
     /**
      * @param {Object} param0
      * @param {import("models").DiscussChannel} param0.channel
@@ -49,7 +49,7 @@ registerThreadAction("set-favorite", {
     sequence: 5, // before notification-settings
     sequenceGroup: 30,
 });
-registerThreadAction("unset-favorite", {
+registerThreadAction("remove-from-favorites", {
     /**
      * @param {Object} param0
      * @param {import("models").DiscussChannel} param0.channel
@@ -57,7 +57,7 @@ registerThreadAction("unset-favorite", {
     condition: ({ channel, owner }) =>
         channel?.self_member_id?.is_favorite && !owner.isDiscussContent,
     icon: "fa fa-fw fa-star-o",
-    name: _t("Unset favorite"),
+    name: _t("Remove from Favorites"),
     /**
      * @param {Object} param0
      * @param {import("models").DiscussChannel} param0.channel
@@ -76,6 +76,7 @@ registerThreadAction("unset-favorite", {
 registerThreadAction("notification-settings", {
     actionPanelClose: ({ action }) => action.popover?.close(),
     actionPanelComponent: NotificationSettings,
+    actionPanelComponentProps: ({ thread }) => ({ thread }),
     actionPanelOpen({ owner, store, thread }) {
         if (owner.isDiscussSidebarChannelActions || owner.env.inMeetingView) {
             store.env.services.dialog?.add(ChannelActionDialog, {
@@ -113,6 +114,7 @@ registerThreadAction("notification-settings", {
 });
 registerThreadAction("attachments", {
     actionPanelComponent: AttachmentPanel,
+    actionPanelComponentProps: ({ thread }) => ({ thread }),
     condition: ({ owner, thread }) =>
         thread?.hasAttachmentPanel &&
         (!owner.props.chatWindow || owner.props.chatWindow.isOpen) &&
@@ -125,7 +127,10 @@ registerThreadAction("attachments", {
 registerThreadAction("invite-people", {
     actionPanelClose: ({ action }) => action.popover?.close(),
     actionPanelComponent: ChannelInvitation,
-    actionPanelComponentProps: ({ action }) => ({ close: () => action.actionPanelClose() }),
+    actionPanelComponentProps: ({ action, thread }) => ({
+        close: () => action.actionPanelClose(),
+        thread,
+    }),
     actionPanelOpen({ owner, store, thread }) {
         if (owner.isDiscussSidebarChannelActions) {
             store.env.services.dialog?.add(ChannelActionDialog, {
@@ -170,12 +175,13 @@ registerThreadAction("member-list", {
         }
     },
     actionPanelComponent: ChannelMemberList,
-    actionPanelComponentProps: ({ actions }) => ({
+    actionPanelComponentProps: ({ actions, thread }) => ({
         openChannelInvitePanel({ keepPrevious } = {}) {
             actions.actions
                 .find(({ id }) => id === "invite-people")
                 ?.actionPanelOpen({ keepPrevious });
         },
+        thread,
     }),
     actionPanelOpen: ({ owner, store }) => {
         if (owner.env.inDiscussApp) {
@@ -207,8 +213,8 @@ registerThreadAction("mark-read", {
 registerThreadAction("delete-thread", {
     actionPanelClose: ({ action }) => action.popover?.close(),
     actionPanelComponent: DeleteThreadDialog,
-    actionPanelComponentProps({ action }) {
-        return { close: () => action.actionPanelClose() };
+    actionPanelComponentProps({ action, thread }) {
+        return { close: () => action.actionPanelClose(), thread };
     },
     actionPanelOuterClass: "bg-100",
     condition({ owner, store, thread }) {
